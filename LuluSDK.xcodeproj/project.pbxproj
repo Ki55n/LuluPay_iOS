@@ -13,45 +13,46 @@
 		7DB84EDE2D3AC05900A2C2D6 /* LuluSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DB84ED02D3AC05800A2C2D6 /* LuluSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7DB84EEE2D3AC1CB00A2C2D6 /* MyStoryboardLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB84EED2D3AC1CB00A2C2D6 /* MyStoryboardLoader.swift */; };
 		7DB84F342D3ACA8D00A2C2D6 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DB84F332D3ACA8C00A2C2D6 /* Media.xcassets */; };
-		B8D287E92D49E9D500EF0F59 /* CardsMangementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287BA2D49E9D500EF0F59 /* CardsMangementViewController.swift */; };
-		B8D287EA2D49E9D500EF0F59 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287BB2D49E9D500EF0F59 /* DashboardViewController.swift */; };
-		B8D287EB2D49E9D500EF0F59 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287BC2D49E9D500EF0F59 /* ProfileViewController.swift */; };
-		B8D287EC2D49E9D500EF0F59 /* RequestAuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287BD2D49E9D500EF0F59 /* RequestAuthorizationViewController.swift */; };
-		B8D287ED2D49E9D500EF0F59 /* RequestNewCardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287BE2D49E9D500EF0F59 /* RequestNewCardController.swift */; };
-		B8D287EE2D49E9D500EF0F59 /* RequestSuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287BF2D49E9D500EF0F59 /* RequestSuccessViewController.swift */; };
-		B8D287EF2D49E9D500EF0F59 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287C02D49E9D500EF0F59 /* SettingsViewController.swift */; };
-		B8D287F02D49E9D500EF0F59 /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287C12D49E9D500EF0F59 /* TabViewController.swift */; };
-		B8D287F12D49E9D500EF0F59 /* TransferMoneyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287C22D49E9D500EF0F59 /* TransferMoneyViewController.swift */; };
-		B8D287F22D49E9D500EF0F59 /* ButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287C42D49E9D500EF0F59 /* ButtonCell.swift */; };
-		B8D287F32D49E9D500EF0F59 /* CardBalanceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287C52D49E9D500EF0F59 /* CardBalanceCell.swift */; };
-		B8D287F42D49E9D500EF0F59 /* CardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287C62D49E9D500EF0F59 /* CardCell.swift */; };
-		B8D287F52D49E9D500EF0F59 /* CustomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287C72D49E9D500EF0F59 /* CustomHeaderView.swift */; };
-		B8D287F62D49E9D500EF0F59 /* ExchangeRateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287C82D49E9D500EF0F59 /* ExchangeRateCell.swift */; };
-		B8D287F72D49E9D500EF0F59 /* HeaderViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287C92D49E9D500EF0F59 /* HeaderViewCell.swift */; };
-		B8D287F82D49E9D500EF0F59 /* InstantAccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287CA2D49E9D500EF0F59 /* InstantAccountCell.swift */; };
-		B8D287F92D49E9D500EF0F59 /* NumberPadCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287CB2D49E9D500EF0F59 /* NumberPadCell.swift */; };
-		B8D287FA2D49E9D500EF0F59 /* PinEntryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287CC2D49E9D500EF0F59 /* PinEntryCell.swift */; };
-		B8D287FB2D49E9D500EF0F59 /* ProfileTCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287CD2D49E9D500EF0F59 /* ProfileTCell.swift */; };
-		B8D287FC2D49E9D500EF0F59 /* RequestMoneyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287CE2D49E9D500EF0F59 /* RequestMoneyCell.swift */; };
-		B8D287FD2D49E9D500EF0F59 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287CF2D49E9D500EF0F59 /* SettingsCell.swift */; };
-		B8D287FE2D49E9D500EF0F59 /* TitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287D02D49E9D500EF0F59 /* TitleCell.swift */; };
-		B8D287FF2D49E9D500EF0F59 /* TransferCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287D12D49E9D500EF0F59 /* TransferCell.swift */; };
-		B8D288002D49E9D500EF0F59 /* ButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8D287D32D49E9D500EF0F59 /* ButtonCell.xib */; };
-		B8D288012D49E9D500EF0F59 /* CardBalanceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8D287D42D49E9D500EF0F59 /* CardBalanceCell.xib */; };
-		B8D288022D49E9D500EF0F59 /* CardCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8D287D52D49E9D500EF0F59 /* CardCell.xib */; };
-		B8D288032D49E9D500EF0F59 /* CustomHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8D287D62D49E9D500EF0F59 /* CustomHeaderView.xib */; };
-		B8D288042D49E9D500EF0F59 /* ExchangeRateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8D287D72D49E9D500EF0F59 /* ExchangeRateCell.xib */; };
-		B8D288052D49E9D500EF0F59 /* HeaderViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8D287D82D49E9D500EF0F59 /* HeaderViewCell.xib */; };
-		B8D288062D49E9D500EF0F59 /* InstantAccountCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8D287D92D49E9D500EF0F59 /* InstantAccountCell.xib */; };
-		B8D288072D49E9D500EF0F59 /* NumberPadCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8D287DA2D49E9D500EF0F59 /* NumberPadCell.xib */; };
-		B8D288082D49E9D500EF0F59 /* PinEntryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8D287DB2D49E9D500EF0F59 /* PinEntryCell.xib */; };
-		B8D288092D49E9D500EF0F59 /* ProfileTCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8D287DC2D49E9D500EF0F59 /* ProfileTCell.xib */; };
-		B8D2880A2D49E9D500EF0F59 /* RequestMoneyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8D287DD2D49E9D500EF0F59 /* RequestMoneyCell.xib */; };
-		B8D2880B2D49E9D500EF0F59 /* SettingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8D287DE2D49E9D500EF0F59 /* SettingsCell.xib */; };
-		B8D2880C2D49E9D500EF0F59 /* TitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8D287DF2D49E9D500EF0F59 /* TitleCell.xib */; };
-		B8D2880D2D49E9D500EF0F59 /* TransferCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8D287E02D49E9D500EF0F59 /* TransferCell.xib */; };
-		B8D2880E2D49E9D500EF0F59 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D287E42D49E9D500EF0F59 /* Model.swift */; };
-		B8D288122D49EAEB00EF0F59 /* Lulu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B8D288112D49EAEB00EF0F59 /* Lulu.storyboard */; };
+		B86952552D49FEA70088B538 /* Lulu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B86952262D49FEA70088B538 /* Lulu.storyboard */; };
+		B86952562D49FEA70088B538 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B86952282D49FEA70088B538 /* Main.storyboard */; };
+		B86952572D49FEA70088B538 /* CardsMangementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B869522A2D49FEA70088B538 /* CardsMangementViewController.swift */; };
+		B86952582D49FEA70088B538 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B869522B2D49FEA70088B538 /* DashboardViewController.swift */; };
+		B86952592D49FEA70088B538 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B869522C2D49FEA70088B538 /* ProfileViewController.swift */; };
+		B869525A2D49FEA70088B538 /* RequestAuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B869522D2D49FEA70088B538 /* RequestAuthorizationViewController.swift */; };
+		B869525B2D49FEA70088B538 /* RequestNewCardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B869522E2D49FEA70088B538 /* RequestNewCardController.swift */; };
+		B869525C2D49FEA70088B538 /* RequestSuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B869522F2D49FEA70088B538 /* RequestSuccessViewController.swift */; };
+		B869525D2D49FEA70088B538 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952302D49FEA70088B538 /* SettingsViewController.swift */; };
+		B869525E2D49FEA70088B538 /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952312D49FEA70088B538 /* TabViewController.swift */; };
+		B869525F2D49FEA70088B538 /* TransferMoneyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952322D49FEA70088B538 /* TransferMoneyViewController.swift */; };
+		B86952602D49FEA70088B538 /* ButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952342D49FEA70088B538 /* ButtonCell.swift */; };
+		B86952612D49FEA70088B538 /* CardBalanceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952352D49FEA70088B538 /* CardBalanceCell.swift */; };
+		B86952622D49FEA70088B538 /* CardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952362D49FEA70088B538 /* CardCell.swift */; };
+		B86952632D49FEA70088B538 /* CustomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952372D49FEA70088B538 /* CustomHeaderView.swift */; };
+		B86952642D49FEA70088B538 /* ExchangeRateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952382D49FEA70088B538 /* ExchangeRateCell.swift */; };
+		B86952652D49FEA70088B538 /* HeaderViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952392D49FEA70088B538 /* HeaderViewCell.swift */; };
+		B86952662D49FEA70088B538 /* InstantAccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B869523A2D49FEA70088B538 /* InstantAccountCell.swift */; };
+		B86952672D49FEA70088B538 /* NumberPadCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B869523B2D49FEA70088B538 /* NumberPadCell.swift */; };
+		B86952682D49FEA70088B538 /* PinEntryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B869523C2D49FEA70088B538 /* PinEntryCell.swift */; };
+		B86952692D49FEA70088B538 /* ProfileTCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B869523D2D49FEA70088B538 /* ProfileTCell.swift */; };
+		B869526A2D49FEA70088B538 /* RequestMoneyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B869523E2D49FEA70088B538 /* RequestMoneyCell.swift */; };
+		B869526B2D49FEA70088B538 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B869523F2D49FEA70088B538 /* SettingsCell.swift */; };
+		B869526C2D49FEA70088B538 /* TitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952402D49FEA70088B538 /* TitleCell.swift */; };
+		B869526D2D49FEA70088B538 /* TransferCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952412D49FEA70088B538 /* TransferCell.swift */; };
+		B869526E2D49FEA70088B538 /* ButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B86952432D49FEA70088B538 /* ButtonCell.xib */; };
+		B869526F2D49FEA70088B538 /* CardBalanceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B86952442D49FEA70088B538 /* CardBalanceCell.xib */; };
+		B86952702D49FEA70088B538 /* CardCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B86952452D49FEA70088B538 /* CardCell.xib */; };
+		B86952712D49FEA70088B538 /* CustomHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B86952462D49FEA70088B538 /* CustomHeaderView.xib */; };
+		B86952722D49FEA70088B538 /* ExchangeRateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B86952472D49FEA70088B538 /* ExchangeRateCell.xib */; };
+		B86952732D49FEA70088B538 /* HeaderViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B86952482D49FEA70088B538 /* HeaderViewCell.xib */; };
+		B86952742D49FEA70088B538 /* InstantAccountCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B86952492D49FEA70088B538 /* InstantAccountCell.xib */; };
+		B86952752D49FEA70088B538 /* NumberPadCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B869524A2D49FEA70088B538 /* NumberPadCell.xib */; };
+		B86952762D49FEA70088B538 /* PinEntryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B869524B2D49FEA70088B538 /* PinEntryCell.xib */; };
+		B86952772D49FEA70088B538 /* ProfileTCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B869524C2D49FEA70088B538 /* ProfileTCell.xib */; };
+		B86952782D49FEA70088B538 /* RequestMoneyCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B869524D2D49FEA70088B538 /* RequestMoneyCell.xib */; };
+		B86952792D49FEA70088B538 /* SettingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B869524E2D49FEA70088B538 /* SettingsCell.xib */; };
+		B869527A2D49FEA70088B538 /* TitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B869524F2D49FEA70088B538 /* TitleCell.xib */; };
+		B869527B2D49FEA70088B538 /* TransferCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B86952502D49FEA70088B538 /* TransferCell.xib */; };
+		B869527C2D49FEA70088B538 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952532D49FEA70088B538 /* Model.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,45 +73,46 @@
 		7DB84EDC2D3AC05900A2C2D6 /* LuluSDKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuluSDKTests.swift; sourceTree = "<group>"; };
 		7DB84EED2D3AC1CB00A2C2D6 /* MyStoryboardLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyStoryboardLoader.swift; sourceTree = "<group>"; };
 		7DB84F332D3ACA8C00A2C2D6 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
-		B8D287BA2D49E9D500EF0F59 /* CardsMangementViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardsMangementViewController.swift; sourceTree = "<group>"; };
-		B8D287BB2D49E9D500EF0F59 /* DashboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
-		B8D287BC2D49E9D500EF0F59 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
-		B8D287BD2D49E9D500EF0F59 /* RequestAuthorizationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestAuthorizationViewController.swift; sourceTree = "<group>"; };
-		B8D287BE2D49E9D500EF0F59 /* RequestNewCardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestNewCardController.swift; sourceTree = "<group>"; };
-		B8D287BF2D49E9D500EF0F59 /* RequestSuccessViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestSuccessViewController.swift; sourceTree = "<group>"; };
-		B8D287C02D49E9D500EF0F59 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		B8D287C12D49E9D500EF0F59 /* TabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
-		B8D287C22D49E9D500EF0F59 /* TransferMoneyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransferMoneyViewController.swift; sourceTree = "<group>"; };
-		B8D287C42D49E9D500EF0F59 /* ButtonCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonCell.swift; sourceTree = "<group>"; };
-		B8D287C52D49E9D500EF0F59 /* CardBalanceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardBalanceCell.swift; sourceTree = "<group>"; };
-		B8D287C62D49E9D500EF0F59 /* CardCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardCell.swift; sourceTree = "<group>"; };
-		B8D287C72D49E9D500EF0F59 /* CustomHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomHeaderView.swift; sourceTree = "<group>"; };
-		B8D287C82D49E9D500EF0F59 /* ExchangeRateCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeRateCell.swift; sourceTree = "<group>"; };
-		B8D287C92D49E9D500EF0F59 /* HeaderViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderViewCell.swift; sourceTree = "<group>"; };
-		B8D287CA2D49E9D500EF0F59 /* InstantAccountCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstantAccountCell.swift; sourceTree = "<group>"; };
-		B8D287CB2D49E9D500EF0F59 /* NumberPadCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberPadCell.swift; sourceTree = "<group>"; };
-		B8D287CC2D49E9D500EF0F59 /* PinEntryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinEntryCell.swift; sourceTree = "<group>"; };
-		B8D287CD2D49E9D500EF0F59 /* ProfileTCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTCell.swift; sourceTree = "<group>"; };
-		B8D287CE2D49E9D500EF0F59 /* RequestMoneyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestMoneyCell.swift; sourceTree = "<group>"; };
-		B8D287CF2D49E9D500EF0F59 /* SettingsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
-		B8D287D02D49E9D500EF0F59 /* TitleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleCell.swift; sourceTree = "<group>"; };
-		B8D287D12D49E9D500EF0F59 /* TransferCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransferCell.swift; sourceTree = "<group>"; };
-		B8D287D32D49E9D500EF0F59 /* ButtonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ButtonCell.xib; sourceTree = "<group>"; };
-		B8D287D42D49E9D500EF0F59 /* CardBalanceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardBalanceCell.xib; sourceTree = "<group>"; };
-		B8D287D52D49E9D500EF0F59 /* CardCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardCell.xib; sourceTree = "<group>"; };
-		B8D287D62D49E9D500EF0F59 /* CustomHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomHeaderView.xib; sourceTree = "<group>"; };
-		B8D287D72D49E9D500EF0F59 /* ExchangeRateCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExchangeRateCell.xib; sourceTree = "<group>"; };
-		B8D287D82D49E9D500EF0F59 /* HeaderViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HeaderViewCell.xib; sourceTree = "<group>"; };
-		B8D287D92D49E9D500EF0F59 /* InstantAccountCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InstantAccountCell.xib; sourceTree = "<group>"; };
-		B8D287DA2D49E9D500EF0F59 /* NumberPadCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NumberPadCell.xib; sourceTree = "<group>"; };
-		B8D287DB2D49E9D500EF0F59 /* PinEntryCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PinEntryCell.xib; sourceTree = "<group>"; };
-		B8D287DC2D49E9D500EF0F59 /* ProfileTCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileTCell.xib; sourceTree = "<group>"; };
-		B8D287DD2D49E9D500EF0F59 /* RequestMoneyCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RequestMoneyCell.xib; sourceTree = "<group>"; };
-		B8D287DE2D49E9D500EF0F59 /* SettingsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsCell.xib; sourceTree = "<group>"; };
-		B8D287DF2D49E9D500EF0F59 /* TitleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TitleCell.xib; sourceTree = "<group>"; };
-		B8D287E02D49E9D500EF0F59 /* TransferCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TransferCell.xib; sourceTree = "<group>"; };
-		B8D287E42D49E9D500EF0F59 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
-		B8D288112D49EAEB00EF0F59 /* Lulu.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Lulu.storyboard; path = ../../../../../../../ASP/Lulu.storyboard; sourceTree = "<group>"; };
+		B86952262D49FEA70088B538 /* Lulu.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Lulu.storyboard; sourceTree = "<group>"; };
+		B86952272D49FEA70088B538 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		B869522A2D49FEA70088B538 /* CardsMangementViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardsMangementViewController.swift; sourceTree = "<group>"; };
+		B869522B2D49FEA70088B538 /* DashboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
+		B869522C2D49FEA70088B538 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		B869522D2D49FEA70088B538 /* RequestAuthorizationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestAuthorizationViewController.swift; sourceTree = "<group>"; };
+		B869522E2D49FEA70088B538 /* RequestNewCardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestNewCardController.swift; sourceTree = "<group>"; };
+		B869522F2D49FEA70088B538 /* RequestSuccessViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestSuccessViewController.swift; sourceTree = "<group>"; };
+		B86952302D49FEA70088B538 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		B86952312D49FEA70088B538 /* TabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
+		B86952322D49FEA70088B538 /* TransferMoneyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransferMoneyViewController.swift; sourceTree = "<group>"; };
+		B86952342D49FEA70088B538 /* ButtonCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonCell.swift; sourceTree = "<group>"; };
+		B86952352D49FEA70088B538 /* CardBalanceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardBalanceCell.swift; sourceTree = "<group>"; };
+		B86952362D49FEA70088B538 /* CardCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardCell.swift; sourceTree = "<group>"; };
+		B86952372D49FEA70088B538 /* CustomHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomHeaderView.swift; sourceTree = "<group>"; };
+		B86952382D49FEA70088B538 /* ExchangeRateCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExchangeRateCell.swift; sourceTree = "<group>"; };
+		B86952392D49FEA70088B538 /* HeaderViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderViewCell.swift; sourceTree = "<group>"; };
+		B869523A2D49FEA70088B538 /* InstantAccountCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstantAccountCell.swift; sourceTree = "<group>"; };
+		B869523B2D49FEA70088B538 /* NumberPadCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberPadCell.swift; sourceTree = "<group>"; };
+		B869523C2D49FEA70088B538 /* PinEntryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinEntryCell.swift; sourceTree = "<group>"; };
+		B869523D2D49FEA70088B538 /* ProfileTCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTCell.swift; sourceTree = "<group>"; };
+		B869523E2D49FEA70088B538 /* RequestMoneyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestMoneyCell.swift; sourceTree = "<group>"; };
+		B869523F2D49FEA70088B538 /* SettingsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
+		B86952402D49FEA70088B538 /* TitleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleCell.swift; sourceTree = "<group>"; };
+		B86952412D49FEA70088B538 /* TransferCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransferCell.swift; sourceTree = "<group>"; };
+		B86952432D49FEA70088B538 /* ButtonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ButtonCell.xib; sourceTree = "<group>"; };
+		B86952442D49FEA70088B538 /* CardBalanceCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardBalanceCell.xib; sourceTree = "<group>"; };
+		B86952452D49FEA70088B538 /* CardCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CardCell.xib; sourceTree = "<group>"; };
+		B86952462D49FEA70088B538 /* CustomHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomHeaderView.xib; sourceTree = "<group>"; };
+		B86952472D49FEA70088B538 /* ExchangeRateCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExchangeRateCell.xib; sourceTree = "<group>"; };
+		B86952482D49FEA70088B538 /* HeaderViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HeaderViewCell.xib; sourceTree = "<group>"; };
+		B86952492D49FEA70088B538 /* InstantAccountCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InstantAccountCell.xib; sourceTree = "<group>"; };
+		B869524A2D49FEA70088B538 /* NumberPadCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NumberPadCell.xib; sourceTree = "<group>"; };
+		B869524B2D49FEA70088B538 /* PinEntryCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PinEntryCell.xib; sourceTree = "<group>"; };
+		B869524C2D49FEA70088B538 /* ProfileTCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileTCell.xib; sourceTree = "<group>"; };
+		B869524D2D49FEA70088B538 /* RequestMoneyCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RequestMoneyCell.xib; sourceTree = "<group>"; };
+		B869524E2D49FEA70088B538 /* SettingsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsCell.xib; sourceTree = "<group>"; };
+		B869524F2D49FEA70088B538 /* TitleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TitleCell.xib; sourceTree = "<group>"; };
+		B86952502D49FEA70088B538 /* TransferCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TransferCell.xib; sourceTree = "<group>"; };
+		B86952532D49FEA70088B538 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,10 +138,10 @@
 			isa = PBXGroup;
 			children = (
 				7DB84F332D3ACA8C00A2C2D6 /* Media.xcassets */,
-				B8D287E52D49E9D500EF0F59 /* Model */,
-				B8D287E32D49E9D500EF0F59 /* Services */,
-				B8D287E22D49E9D500EF0F59 /* View */,
-				B8D287E62D49E9D500EF0F59 /* ViewModel */,
+				B86952542D49FEA70088B538 /* Model */,
+				B86952252D49FEA70088B538 /* Services */,
+				B86952522D49FEA70088B538 /* View */,
+				B86952242D49FEA70088B538 /* ViewModel */,
 				7DB84ECF2D3AC05800A2C2D6 /* LuluSDK */,
 				7DB84EDB2D3AC05900A2C2D6 /* LuluSDKTests */,
 				7DB84ECE2D3AC05800A2C2D6 /* Products */,
@@ -173,107 +175,108 @@
 			path = LuluSDKTests;
 			sourceTree = "<group>";
 		};
-		B8D287B92D49E9D500EF0F59 /* Storyboards */ = {
-			isa = PBXGroup;
-			children = (
-				B8D288112D49EAEB00EF0F59 /* Lulu.storyboard */,
-			);
-			path = Storyboards;
-			sourceTree = "<group>";
-		};
-		B8D287C32D49E9D500EF0F59 /* Viewcontrollers */ = {
-			isa = PBXGroup;
-			children = (
-				B8D287BA2D49E9D500EF0F59 /* CardsMangementViewController.swift */,
-				B8D287BB2D49E9D500EF0F59 /* DashboardViewController.swift */,
-				B8D287BC2D49E9D500EF0F59 /* ProfileViewController.swift */,
-				B8D287BD2D49E9D500EF0F59 /* RequestAuthorizationViewController.swift */,
-				B8D287BE2D49E9D500EF0F59 /* RequestNewCardController.swift */,
-				B8D287BF2D49E9D500EF0F59 /* RequestSuccessViewController.swift */,
-				B8D287C02D49E9D500EF0F59 /* SettingsViewController.swift */,
-				B8D287C12D49E9D500EF0F59 /* TabViewController.swift */,
-				B8D287C22D49E9D500EF0F59 /* TransferMoneyViewController.swift */,
-			);
-			path = Viewcontrollers;
-			sourceTree = "<group>";
-		};
-		B8D287D22D49E9D500EF0F59 /* xib Class */ = {
-			isa = PBXGroup;
-			children = (
-				B8D287C42D49E9D500EF0F59 /* ButtonCell.swift */,
-				B8D287C52D49E9D500EF0F59 /* CardBalanceCell.swift */,
-				B8D287C62D49E9D500EF0F59 /* CardCell.swift */,
-				B8D287C72D49E9D500EF0F59 /* CustomHeaderView.swift */,
-				B8D287C82D49E9D500EF0F59 /* ExchangeRateCell.swift */,
-				B8D287C92D49E9D500EF0F59 /* HeaderViewCell.swift */,
-				B8D287CA2D49E9D500EF0F59 /* InstantAccountCell.swift */,
-				B8D287CB2D49E9D500EF0F59 /* NumberPadCell.swift */,
-				B8D287CC2D49E9D500EF0F59 /* PinEntryCell.swift */,
-				B8D287CD2D49E9D500EF0F59 /* ProfileTCell.swift */,
-				B8D287CE2D49E9D500EF0F59 /* RequestMoneyCell.swift */,
-				B8D287CF2D49E9D500EF0F59 /* SettingsCell.swift */,
-				B8D287D02D49E9D500EF0F59 /* TitleCell.swift */,
-				B8D287D12D49E9D500EF0F59 /* TransferCell.swift */,
-			);
-			path = "xib Class";
-			sourceTree = "<group>";
-		};
-		B8D287E12D49E9D500EF0F59 /* xibs */ = {
-			isa = PBXGroup;
-			children = (
-				B8D287D32D49E9D500EF0F59 /* ButtonCell.xib */,
-				B8D287D42D49E9D500EF0F59 /* CardBalanceCell.xib */,
-				B8D287D52D49E9D500EF0F59 /* CardCell.xib */,
-				B8D287D62D49E9D500EF0F59 /* CustomHeaderView.xib */,
-				B8D287D72D49E9D500EF0F59 /* ExchangeRateCell.xib */,
-				B8D287D82D49E9D500EF0F59 /* HeaderViewCell.xib */,
-				B8D287D92D49E9D500EF0F59 /* InstantAccountCell.xib */,
-				B8D287DA2D49E9D500EF0F59 /* NumberPadCell.xib */,
-				B8D287DB2D49E9D500EF0F59 /* PinEntryCell.xib */,
-				B8D287DC2D49E9D500EF0F59 /* ProfileTCell.xib */,
-				B8D287DD2D49E9D500EF0F59 /* RequestMoneyCell.xib */,
-				B8D287DE2D49E9D500EF0F59 /* SettingsCell.xib */,
-				B8D287DF2D49E9D500EF0F59 /* TitleCell.xib */,
-				B8D287E02D49E9D500EF0F59 /* TransferCell.xib */,
-			);
-			path = xibs;
-			sourceTree = "<group>";
-		};
-		B8D287E22D49E9D500EF0F59 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				B8D287B92D49E9D500EF0F59 /* Storyboards */,
-				B8D287C32D49E9D500EF0F59 /* Viewcontrollers */,
-				B8D287D22D49E9D500EF0F59 /* xib Class */,
-				B8D287E12D49E9D500EF0F59 /* xibs */,
-			);
-			name = View;
-			path = ../../LuluPay_iOS_test/LuluPay_iOS_Testing/Sample/View;
-			sourceTree = "<group>";
-		};
-		B8D287E32D49E9D500EF0F59 /* Services */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "\U0010Services";
-			path = "../../LuluPay_iOS_test/LuluPay_iOS_Testing/Sample/\U0010Services";
-			sourceTree = "<group>";
-		};
-		B8D287E52D49E9D500EF0F59 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				B8D287E42D49E9D500EF0F59 /* Model.swift */,
-			);
-			name = Model;
-			path = ../../LuluPay_iOS_test/LuluPay_iOS_Testing/Sample/Model;
-			sourceTree = "<group>";
-		};
-		B8D287E62D49E9D500EF0F59 /* ViewModel */ = {
+		B86952242D49FEA70088B538 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = ViewModel;
-			path = ../../LuluPay_iOS_test/LuluPay_iOS_Testing/Sample/ViewModel;
+			path = "../../Test Sdk App/Sample/ViewModel";
+			sourceTree = "<group>";
+		};
+		B86952252D49FEA70088B538 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "\U0010Services";
+			path = "../../Test Sdk App/Sample/\U0010Services";
+			sourceTree = "<group>";
+		};
+		B86952292D49FEA70088B538 /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				B86952262D49FEA70088B538 /* Lulu.storyboard */,
+				B86952282D49FEA70088B538 /* Main.storyboard */,
+			);
+			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		B86952332D49FEA70088B538 /* Viewcontrollers */ = {
+			isa = PBXGroup;
+			children = (
+				B869522A2D49FEA70088B538 /* CardsMangementViewController.swift */,
+				B869522B2D49FEA70088B538 /* DashboardViewController.swift */,
+				B869522C2D49FEA70088B538 /* ProfileViewController.swift */,
+				B869522D2D49FEA70088B538 /* RequestAuthorizationViewController.swift */,
+				B869522E2D49FEA70088B538 /* RequestNewCardController.swift */,
+				B869522F2D49FEA70088B538 /* RequestSuccessViewController.swift */,
+				B86952302D49FEA70088B538 /* SettingsViewController.swift */,
+				B86952312D49FEA70088B538 /* TabViewController.swift */,
+				B86952322D49FEA70088B538 /* TransferMoneyViewController.swift */,
+			);
+			path = Viewcontrollers;
+			sourceTree = "<group>";
+		};
+		B86952422D49FEA70088B538 /* xib Class */ = {
+			isa = PBXGroup;
+			children = (
+				B86952342D49FEA70088B538 /* ButtonCell.swift */,
+				B86952352D49FEA70088B538 /* CardBalanceCell.swift */,
+				B86952362D49FEA70088B538 /* CardCell.swift */,
+				B86952372D49FEA70088B538 /* CustomHeaderView.swift */,
+				B86952382D49FEA70088B538 /* ExchangeRateCell.swift */,
+				B86952392D49FEA70088B538 /* HeaderViewCell.swift */,
+				B869523A2D49FEA70088B538 /* InstantAccountCell.swift */,
+				B869523B2D49FEA70088B538 /* NumberPadCell.swift */,
+				B869523C2D49FEA70088B538 /* PinEntryCell.swift */,
+				B869523D2D49FEA70088B538 /* ProfileTCell.swift */,
+				B869523E2D49FEA70088B538 /* RequestMoneyCell.swift */,
+				B869523F2D49FEA70088B538 /* SettingsCell.swift */,
+				B86952402D49FEA70088B538 /* TitleCell.swift */,
+				B86952412D49FEA70088B538 /* TransferCell.swift */,
+			);
+			path = "xib Class";
+			sourceTree = "<group>";
+		};
+		B86952512D49FEA70088B538 /* xibs */ = {
+			isa = PBXGroup;
+			children = (
+				B86952432D49FEA70088B538 /* ButtonCell.xib */,
+				B86952442D49FEA70088B538 /* CardBalanceCell.xib */,
+				B86952452D49FEA70088B538 /* CardCell.xib */,
+				B86952462D49FEA70088B538 /* CustomHeaderView.xib */,
+				B86952472D49FEA70088B538 /* ExchangeRateCell.xib */,
+				B86952482D49FEA70088B538 /* HeaderViewCell.xib */,
+				B86952492D49FEA70088B538 /* InstantAccountCell.xib */,
+				B869524A2D49FEA70088B538 /* NumberPadCell.xib */,
+				B869524B2D49FEA70088B538 /* PinEntryCell.xib */,
+				B869524C2D49FEA70088B538 /* ProfileTCell.xib */,
+				B869524D2D49FEA70088B538 /* RequestMoneyCell.xib */,
+				B869524E2D49FEA70088B538 /* SettingsCell.xib */,
+				B869524F2D49FEA70088B538 /* TitleCell.xib */,
+				B86952502D49FEA70088B538 /* TransferCell.xib */,
+			);
+			path = xibs;
+			sourceTree = "<group>";
+		};
+		B86952522D49FEA70088B538 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B86952292D49FEA70088B538 /* Storyboards */,
+				B86952332D49FEA70088B538 /* Viewcontrollers */,
+				B86952422D49FEA70088B538 /* xib Class */,
+				B86952512D49FEA70088B538 /* xibs */,
+			);
+			name = View;
+			path = "../../Test Sdk App/Sample/View";
+			sourceTree = "<group>";
+		};
+		B86952542D49FEA70088B538 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B86952532D49FEA70088B538 /* Model.swift */,
+			);
+			name = Model;
+			path = "../../Test Sdk App/Sample/Model";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -368,22 +371,23 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B8D288072D49E9D500EF0F59 /* NumberPadCell.xib in Resources */,
-				B8D288042D49E9D500EF0F59 /* ExchangeRateCell.xib in Resources */,
-				B8D2880D2D49E9D500EF0F59 /* TransferCell.xib in Resources */,
-				B8D2880B2D49E9D500EF0F59 /* SettingsCell.xib in Resources */,
-				B8D288092D49E9D500EF0F59 /* ProfileTCell.xib in Resources */,
-				B8D288012D49E9D500EF0F59 /* CardBalanceCell.xib in Resources */,
-				B8D2880A2D49E9D500EF0F59 /* RequestMoneyCell.xib in Resources */,
+				B869527A2D49FEA70088B538 /* TitleCell.xib in Resources */,
+				B86952732D49FEA70088B538 /* HeaderViewCell.xib in Resources */,
+				B86952742D49FEA70088B538 /* InstantAccountCell.xib in Resources */,
+				B869527B2D49FEA70088B538 /* TransferCell.xib in Resources */,
+				B86952762D49FEA70088B538 /* PinEntryCell.xib in Resources */,
+				B86952562D49FEA70088B538 /* Main.storyboard in Resources */,
+				B86952772D49FEA70088B538 /* ProfileTCell.xib in Resources */,
+				B86952752D49FEA70088B538 /* NumberPadCell.xib in Resources */,
+				B86952782D49FEA70088B538 /* RequestMoneyCell.xib in Resources */,
+				B86952702D49FEA70088B538 /* CardCell.xib in Resources */,
+				B86952552D49FEA70088B538 /* Lulu.storyboard in Resources */,
+				B86952792D49FEA70088B538 /* SettingsCell.xib in Resources */,
 				7DB84F342D3ACA8D00A2C2D6 /* Media.xcassets in Resources */,
-				B8D288122D49EAEB00EF0F59 /* Lulu.storyboard in Resources */,
-				B8D288022D49E9D500EF0F59 /* CardCell.xib in Resources */,
-				B8D288032D49E9D500EF0F59 /* CustomHeaderView.xib in Resources */,
-				B8D288082D49E9D500EF0F59 /* PinEntryCell.xib in Resources */,
-				B8D288002D49E9D500EF0F59 /* ButtonCell.xib in Resources */,
-				B8D288052D49E9D500EF0F59 /* HeaderViewCell.xib in Resources */,
-				B8D288062D49E9D500EF0F59 /* InstantAccountCell.xib in Resources */,
-				B8D2880C2D49E9D500EF0F59 /* TitleCell.xib in Resources */,
+				B86952722D49FEA70088B538 /* ExchangeRateCell.xib in Resources */,
+				B869526F2D49FEA70088B538 /* CardBalanceCell.xib in Resources */,
+				B869526E2D49FEA70088B538 /* ButtonCell.xib in Resources */,
+				B86952712D49FEA70088B538 /* CustomHeaderView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,32 +405,32 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B8D287FF2D49E9D500EF0F59 /* TransferCell.swift in Sources */,
-				B8D287FD2D49E9D500EF0F59 /* SettingsCell.swift in Sources */,
-				B8D287F62D49E9D500EF0F59 /* ExchangeRateCell.swift in Sources */,
-				B8D287F32D49E9D500EF0F59 /* CardBalanceCell.swift in Sources */,
-				B8D287FA2D49E9D500EF0F59 /* PinEntryCell.swift in Sources */,
+				B869526D2D49FEA70088B538 /* TransferCell.swift in Sources */,
+				B869526B2D49FEA70088B538 /* SettingsCell.swift in Sources */,
+				B86952642D49FEA70088B538 /* ExchangeRateCell.swift in Sources */,
+				B86952612D49FEA70088B538 /* CardBalanceCell.swift in Sources */,
+				B86952682D49FEA70088B538 /* PinEntryCell.swift in Sources */,
 				7DB84ED22D3AC05800A2C2D6 /* LuluSDK.docc in Sources */,
 				7DB84EEE2D3AC1CB00A2C2D6 /* MyStoryboardLoader.swift in Sources */,
-				B8D287FB2D49E9D500EF0F59 /* ProfileTCell.swift in Sources */,
-				B8D287EC2D49E9D500EF0F59 /* RequestAuthorizationViewController.swift in Sources */,
-				B8D287EB2D49E9D500EF0F59 /* ProfileViewController.swift in Sources */,
-				B8D287E92D49E9D500EF0F59 /* CardsMangementViewController.swift in Sources */,
-				B8D287F72D49E9D500EF0F59 /* HeaderViewCell.swift in Sources */,
-				B8D287FC2D49E9D500EF0F59 /* RequestMoneyCell.swift in Sources */,
-				B8D287FE2D49E9D500EF0F59 /* TitleCell.swift in Sources */,
-				B8D287ED2D49E9D500EF0F59 /* RequestNewCardController.swift in Sources */,
-				B8D287F82D49E9D500EF0F59 /* InstantAccountCell.swift in Sources */,
-				B8D287F42D49E9D500EF0F59 /* CardCell.swift in Sources */,
-				B8D287EE2D49E9D500EF0F59 /* RequestSuccessViewController.swift in Sources */,
-				B8D287EA2D49E9D500EF0F59 /* DashboardViewController.swift in Sources */,
-				B8D2880E2D49E9D500EF0F59 /* Model.swift in Sources */,
-				B8D287F52D49E9D500EF0F59 /* CustomHeaderView.swift in Sources */,
-				B8D287F92D49E9D500EF0F59 /* NumberPadCell.swift in Sources */,
-				B8D287F02D49E9D500EF0F59 /* TabViewController.swift in Sources */,
-				B8D287EF2D49E9D500EF0F59 /* SettingsViewController.swift in Sources */,
-				B8D287F12D49E9D500EF0F59 /* TransferMoneyViewController.swift in Sources */,
-				B8D287F22D49E9D500EF0F59 /* ButtonCell.swift in Sources */,
+				B86952692D49FEA70088B538 /* ProfileTCell.swift in Sources */,
+				B869525A2D49FEA70088B538 /* RequestAuthorizationViewController.swift in Sources */,
+				B86952592D49FEA70088B538 /* ProfileViewController.swift in Sources */,
+				B86952572D49FEA70088B538 /* CardsMangementViewController.swift in Sources */,
+				B86952652D49FEA70088B538 /* HeaderViewCell.swift in Sources */,
+				B869526A2D49FEA70088B538 /* RequestMoneyCell.swift in Sources */,
+				B869526C2D49FEA70088B538 /* TitleCell.swift in Sources */,
+				B869525B2D49FEA70088B538 /* RequestNewCardController.swift in Sources */,
+				B86952662D49FEA70088B538 /* InstantAccountCell.swift in Sources */,
+				B86952622D49FEA70088B538 /* CardCell.swift in Sources */,
+				B869525C2D49FEA70088B538 /* RequestSuccessViewController.swift in Sources */,
+				B86952582D49FEA70088B538 /* DashboardViewController.swift in Sources */,
+				B869527C2D49FEA70088B538 /* Model.swift in Sources */,
+				B86952632D49FEA70088B538 /* CustomHeaderView.swift in Sources */,
+				B86952672D49FEA70088B538 /* NumberPadCell.swift in Sources */,
+				B869525E2D49FEA70088B538 /* TabViewController.swift in Sources */,
+				B869525D2D49FEA70088B538 /* SettingsViewController.swift in Sources */,
+				B869525F2D49FEA70088B538 /* TransferMoneyViewController.swift in Sources */,
+				B86952602D49FEA70088B538 /* ButtonCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -447,6 +451,17 @@
 			targetProxy = 7DB84ED92D3AC05800A2C2D6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		B86952282D49FEA70088B538 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B86952272D49FEA70088B538 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		7DB84EDF2D3AC05900A2C2D6 /* Debug */ = {
