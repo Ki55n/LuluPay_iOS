@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		317432A42D4B51D4001AD0BD /* BranchSearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317432972D4B51D4001AD0BD /* BranchSearchModel.swift */; };
+		317432A52D4B51D4001AD0BD /* GetCodesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317432982D4B51D4001AD0BD /* GetCodesModel.swift */; };
+		317432A62D4B51D4001AD0BD /* MasterBanksModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317432992D4B51D4001AD0BD /* MasterBanksModel.swift */; };
+		317432A72D4B51D5001AD0BD /* RatesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3174329A2D4B51D4001AD0BD /* RatesModel.swift */; };
+		317432A82D4B51D5001AD0BD /* ServiceCorriderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3174329B2D4B51D4001AD0BD /* ServiceCorriderModel.swift */; };
+		317432A92D4B51D5001AD0BD /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3174329D2D4B51D4001AD0BD /* LoginModel.swift */; };
+		317432AA2D4B51D5001AD0BD /* CreateTransactionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3174329F2D4B51D4001AD0BD /* CreateTransactionModel.swift */; };
+		317432AB2D4B51D5001AD0BD /* QuoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317432A02D4B51D4001AD0BD /* QuoteModel.swift */; };
 		7DB84ED22D3AC05800A2C2D6 /* LuluSDK.docc in Sources */ = {isa = PBXBuildFile; fileRef = 7DB84ED12D3AC05800A2C2D6 /* LuluSDK.docc */; };
 		7DB84ED82D3AC05800A2C2D6 /* LuluSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DB84ECD2D3AC05800A2C2D6 /* LuluSDK.framework */; };
 		7DB84EDD2D3AC05900A2C2D6 /* LuluSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB84EDC2D3AC05900A2C2D6 /* LuluSDKTests.swift */; };
@@ -66,6 +74,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		317432972D4B51D4001AD0BD /* BranchSearchModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BranchSearchModel.swift; sourceTree = "<group>"; };
+		317432982D4B51D4001AD0BD /* GetCodesModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetCodesModel.swift; sourceTree = "<group>"; };
+		317432992D4B51D4001AD0BD /* MasterBanksModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterBanksModel.swift; sourceTree = "<group>"; };
+		3174329A2D4B51D4001AD0BD /* RatesModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatesModel.swift; sourceTree = "<group>"; };
+		3174329B2D4B51D4001AD0BD /* ServiceCorriderModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceCorriderModel.swift; sourceTree = "<group>"; };
+		3174329D2D4B51D4001AD0BD /* LoginModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
+		3174329F2D4B51D4001AD0BD /* CreateTransactionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateTransactionModel.swift; sourceTree = "<group>"; };
+		317432A02D4B51D4001AD0BD /* QuoteModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuoteModel.swift; sourceTree = "<group>"; };
 		7DB84ECD2D3AC05800A2C2D6 /* LuluSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LuluSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DB84ED02D3AC05800A2C2D6 /* LuluSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LuluSDK.h; sourceTree = "<group>"; };
 		7DB84ED12D3AC05800A2C2D6 /* LuluSDK.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = LuluSDK.docc; sourceTree = "<group>"; };
@@ -134,6 +150,53 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3174329C2D4B51D4001AD0BD /* Codes and Master */ = {
+			isa = PBXGroup;
+			children = (
+				317432972D4B51D4001AD0BD /* BranchSearchModel.swift */,
+				317432982D4B51D4001AD0BD /* GetCodesModel.swift */,
+				317432992D4B51D4001AD0BD /* MasterBanksModel.swift */,
+				3174329A2D4B51D4001AD0BD /* RatesModel.swift */,
+				3174329B2D4B51D4001AD0BD /* ServiceCorriderModel.swift */,
+			);
+			path = "Codes and Master";
+			sourceTree = "<group>";
+		};
+		3174329E2D4B51D4001AD0BD /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				3174329D2D4B51D4001AD0BD /* LoginModel.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		317432A12D4B51D4001AD0BD /* PK - PKR */ = {
+			isa = PBXGroup;
+			children = (
+				3174329F2D4B51D4001AD0BD /* CreateTransactionModel.swift */,
+				317432A02D4B51D4001AD0BD /* QuoteModel.swift */,
+			);
+			path = "PK - PKR";
+			sourceTree = "<group>";
+		};
+		317432A22D4B51D4001AD0BD /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3174329C2D4B51D4001AD0BD /* Codes and Master */,
+				3174329E2D4B51D4001AD0BD /* Login */,
+				317432A12D4B51D4001AD0BD /* PK - PKR */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		317432A32D4B51D4001AD0BD /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				317432A22D4B51D4001AD0BD /* Model */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
 		7DB84EC32D3AC05800A2C2D6 = {
 			isa = PBXGroup;
 			children = (
@@ -156,6 +219,7 @@
 		7DB84ECF2D3AC05800A2C2D6 /* LuluSDK */ = {
 			isa = PBXGroup;
 			children = (
+				317432A32D4B51D4001AD0BD /* Presentation */,
 				B869532F2D4A05B90088B538 /* Services */,
 				B86953062D4A05AD0088B538 /* View */,
 				B86953072D4A05AD0088B538 /* ViewModel */,
@@ -402,9 +466,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				B869531A2D4A05AD0088B538 /* NumberPadCell.swift in Sources */,
+				317432A42D4B51D4001AD0BD /* BranchSearchModel.swift in Sources */,
 				B86953162D4A05AD0088B538 /* CustomHeaderView.swift in Sources */,
+				317432AA2D4B51D5001AD0BD /* CreateTransactionModel.swift in Sources */,
+				317432A62D4B51D4001AD0BD /* MasterBanksModel.swift in Sources */,
 				B86953192D4A05AD0088B538 /* InstantAccountCell.swift in Sources */,
 				B869530D2D4A05AD0088B538 /* RequestAuthorizationViewController.swift in Sources */,
+				317432A52D4B51D4001AD0BD /* GetCodesModel.swift in Sources */,
 				B86953132D4A05AD0088B538 /* ButtonCell.swift in Sources */,
 				B86953182D4A05AD0088B538 /* HeaderViewCell.swift in Sources */,
 				B869530C2D4A05AD0088B538 /* ProfileViewController.swift in Sources */,
@@ -412,12 +480,16 @@
 				B869530F2D4A05AD0088B538 /* RequestSuccessViewController.swift in Sources */,
 				B86953102D4A05AD0088B538 /* SettingsViewController.swift in Sources */,
 				B86953172D4A05AD0088B538 /* ExchangeRateCell.swift in Sources */,
+				317432A82D4B51D5001AD0BD /* ServiceCorriderModel.swift in Sources */,
 				B86953152D4A05AD0088B538 /* CardCell.swift in Sources */,
+				317432A72D4B51D5001AD0BD /* RatesModel.swift in Sources */,
 				B869531D2D4A05AD0088B538 /* RequestMoneyCell.swift in Sources */,
 				B869530E2D4A05AD0088B538 /* RequestNewCardController.swift in Sources */,
 				B86953202D4A05AD0088B538 /* TransferCell.swift in Sources */,
 				B869531C2D4A05AD0088B538 /* ProfileTCell.swift in Sources */,
+				317432A92D4B51D5001AD0BD /* LoginModel.swift in Sources */,
 				B869531E2D4A05AD0088B538 /* SettingsCell.swift in Sources */,
+				317432AB2D4B51D5001AD0BD /* QuoteModel.swift in Sources */,
 				B86952D92D4A059E0088B538 /* Model.swift in Sources */,
 				B86953112D4A05AD0088B538 /* TabViewController.swift in Sources */,
 				B869530A2D4A05AD0088B538 /* CardsMangementViewController.swift in Sources */,
