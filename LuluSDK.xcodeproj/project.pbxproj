@@ -15,6 +15,8 @@
 		317432A92D4B51D5001AD0BD /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3174329D2D4B51D4001AD0BD /* LoginModel.swift */; };
 		317432AA2D4B51D5001AD0BD /* CreateTransactionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3174329F2D4B51D4001AD0BD /* CreateTransactionModel.swift */; };
 		317432AB2D4B51D5001AD0BD /* QuoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 317432A02D4B51D4001AD0BD /* QuoteModel.swift */; };
+		7D43C8312D4D502B00C841C2 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D43C8302D4D502B00C841C2 /* APIService.swift */; };
+		7D43C8332D4D510B00C841C2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D43C8322D4D510B00C841C2 /* LoginViewController.swift */; };
 		7DB84ED22D3AC05800A2C2D6 /* LuluSDK.docc in Sources */ = {isa = PBXBuildFile; fileRef = 7DB84ED12D3AC05800A2C2D6 /* LuluSDK.docc */; };
 		7DB84ED82D3AC05800A2C2D6 /* LuluSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DB84ECD2D3AC05800A2C2D6 /* LuluSDK.framework */; };
 		7DB84EDD2D3AC05900A2C2D6 /* LuluSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB84EDC2D3AC05900A2C2D6 /* LuluSDKTests.swift */; };
@@ -23,7 +25,6 @@
 		7DB84F342D3ACA8D00A2C2D6 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DB84F332D3ACA8C00A2C2D6 /* Media.xcassets */; };
 		B86952D92D4A059E0088B538 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952D72D4A059E0088B538 /* Model.swift */; };
 		B86953082D4A05AD0088B538 /* Lulu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B86952DA2D4A05AD0088B538 /* Lulu.storyboard */; };
-		B86953092D4A05AD0088B538 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B86952DC2D4A05AD0088B538 /* Main.storyboard */; };
 		B869530A2D4A05AD0088B538 /* CardsMangementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952DE2D4A05AD0088B538 /* CardsMangementViewController.swift */; };
 		B869530B2D4A05AD0088B538 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952DF2D4A05AD0088B538 /* DashboardViewController.swift */; };
 		B869530C2D4A05AD0088B538 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952E02D4A05AD0088B538 /* ProfileViewController.swift */; };
@@ -82,6 +83,8 @@
 		3174329D2D4B51D4001AD0BD /* LoginModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
 		3174329F2D4B51D4001AD0BD /* CreateTransactionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateTransactionModel.swift; sourceTree = "<group>"; };
 		317432A02D4B51D4001AD0BD /* QuoteModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuoteModel.swift; sourceTree = "<group>"; };
+		7D43C8302D4D502B00C841C2 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		7D43C8322D4D510B00C841C2 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		7DB84ECD2D3AC05800A2C2D6 /* LuluSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LuluSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DB84ED02D3AC05800A2C2D6 /* LuluSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LuluSDK.h; sourceTree = "<group>"; };
 		7DB84ED12D3AC05800A2C2D6 /* LuluSDK.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = LuluSDK.docc; sourceTree = "<group>"; };
@@ -91,7 +94,6 @@
 		7DB84F332D3ACA8C00A2C2D6 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		B86952D72D4A059E0088B538 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		B86952DA2D4A05AD0088B538 /* Lulu.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Lulu.storyboard; sourceTree = "<group>"; };
-		B86952DB2D4A05AD0088B538 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B86952DE2D4A05AD0088B538 /* CardsMangementViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardsMangementViewController.swift; sourceTree = "<group>"; };
 		B86952DF2D4A05AD0088B538 /* DashboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		B86952E02D4A05AD0088B538 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -197,6 +199,14 @@
 			path = Presentation;
 			sourceTree = "<group>";
 		};
+		7D43C82F2D4D500300C841C2 /* APIServices */ = {
+			isa = PBXGroup;
+			children = (
+				7D43C8302D4D502B00C841C2 /* APIService.swift */,
+			);
+			path = APIServices;
+			sourceTree = "<group>";
+		};
 		7DB84EC32D3AC05800A2C2D6 = {
 			isa = PBXGroup;
 			children = (
@@ -219,6 +229,7 @@
 		7DB84ECF2D3AC05800A2C2D6 /* LuluSDK */ = {
 			isa = PBXGroup;
 			children = (
+				7D43C82F2D4D500300C841C2 /* APIServices */,
 				317432A32D4B51D4001AD0BD /* Presentation */,
 				B869532F2D4A05B90088B538 /* Services */,
 				B86953062D4A05AD0088B538 /* View */,
@@ -251,7 +262,6 @@
 			isa = PBXGroup;
 			children = (
 				B86952DA2D4A05AD0088B538 /* Lulu.storyboard */,
-				B86952DC2D4A05AD0088B538 /* Main.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -268,6 +278,7 @@
 				B86952E42D4A05AD0088B538 /* SettingsViewController.swift */,
 				B86952E52D4A05AD0088B538 /* TabViewController.swift */,
 				B86952E62D4A05AD0088B538 /* TransferMoneyViewController.swift */,
+				7D43C8322D4D510B00C841C2 /* LoginViewController.swift */,
 			);
 			path = Viewcontrollers;
 			sourceTree = "<group>";
@@ -436,7 +447,6 @@
 				B86953272D4A05AD0088B538 /* InstantAccountCell.xib in Resources */,
 				B869532E2D4A05AD0088B538 /* TransferCell.xib in Resources */,
 				B86953292D4A05AD0088B538 /* PinEntryCell.xib in Resources */,
-				B86953092D4A05AD0088B538 /* Main.storyboard in Resources */,
 				B869532A2D4A05AD0088B538 /* ProfileTCell.xib in Resources */,
 				B86953282D4A05AD0088B538 /* NumberPadCell.xib in Resources */,
 				B869532B2D4A05AD0088B538 /* RequestMoneyCell.xib in Resources */,
@@ -465,7 +475,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D43C8332D4D510B00C841C2 /* LoginViewController.swift in Sources */,
 				B869531A2D4A05AD0088B538 /* NumberPadCell.swift in Sources */,
+				7D43C8312D4D502B00C841C2 /* APIService.swift in Sources */,
 				317432A42D4B51D4001AD0BD /* BranchSearchModel.swift in Sources */,
 				B86953162D4A05AD0088B538 /* CustomHeaderView.swift in Sources */,
 				317432AA2D4B51D5001AD0BD /* CreateTransactionModel.swift in Sources */,
@@ -519,17 +531,6 @@
 			targetProxy = 7DB84ED92D3AC05800A2C2D6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		B86952DC2D4A05AD0088B538 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B86952DB2D4A05AD0088B538 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		7DB84EDF2D3AC05900A2C2D6 /* Debug */ = {

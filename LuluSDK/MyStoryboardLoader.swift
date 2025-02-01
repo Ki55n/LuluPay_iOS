@@ -22,4 +22,9 @@ public class MyStoryboardLoader {
         }
         return viewController
     }
+    
+    public static func getStoryboard(name: String) -> UIStoryboard? {
+            let bundle = Bundle(for: MyStoryboardLoader.self)
+            return UIStoryboard(name: name, bundle: bundle)
+}
 }

@@ -18,15 +18,20 @@ class DashboardViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let bundle = Bundle(identifier: "com.finance.LuluSDK") {
+            // Register custom cells
+            tableView.register(UINib(nibName: "HeaderViewCell", bundle: bundle), forCellReuseIdentifier: "cellHeader")
+            tableView.register(UINib(nibName: "ExchangeRateCell", bundle: bundle), forCellReuseIdentifier: "rateExchange")
+            tableView.register(UINib(nibName: "TransferCell", bundle: bundle), forCellReuseIdentifier: "cellTransfer")
 
-        // Register custom cells
-        tableView.register(UINib(nibName: "HeaderViewCell", bundle: nil), forCellReuseIdentifier: "cellHeader")
-        tableView.register(UINib(nibName: "ExchangeRateCell", bundle: nil), forCellReuseIdentifier: "rateExchange")
-//        tableView.register(UINib(nibName: "cellCardBalance", bundle: nil), forCellReuseIdentifier: "CardBalanceCell")
-        tableView.register(UINib(nibName: "TransferCell", bundle: nil), forCellReuseIdentifier: "cellTransfer")
+            tableView.delegate = self
+            tableView.dataSource = self
+        } else {
+            print("Error: SDK Bundle not found.")
+        }
 
-        tableView.delegate = self
-        tableView.dataSource = self
+        
         
     }
     
@@ -119,7 +124,7 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
         
         // Perform actions when viewTransfer is tapped
         print("viewTransfer tapped: \(view)")
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TransferMoneyViewController") as! TransferMoneyViewController
+        let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "TransferMoneyViewController") as! TransferMoneyViewController
         navigationController?.pushViewController(vc, animated: true)
 
         // Example: Navigate to another screen

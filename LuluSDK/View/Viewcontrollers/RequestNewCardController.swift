@@ -20,37 +20,43 @@ class RequestNewCardController: UIViewController,UITableViewDelegate,UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Register header view
-        let headerNib = UINib(nibName: "CustomHeaderView", bundle: nil)
-        tblList.register(headerNib, forHeaderFooterViewReuseIdentifier: "CustomHeaderView")
-
-        let TitlecellNib = UINib(nibName: "TitleCell", bundle: nil)
-        tblList.register(TitlecellNib, forCellReuseIdentifier: "cellTitle")
-
-        let InstantcellNib = UINib(nibName: "InstantAccountCell", bundle: nil)
-        tblList.register(InstantcellNib, forCellReuseIdentifier: "cellInstant")
-     
-        let ButtoncellNib = UINib(nibName: "Buttoncell", bundle: nil)
-        tblList.register(ButtoncellNib, forCellReuseIdentifier: "cellButton")
         
-        let TermscellNib = UINib(nibName: "Termscell", bundle: nil)
-        tblList.register(TermscellNib, forCellReuseIdentifier: "cellTerms")
+        if let bundle = Bundle(identifier: "com.finance.LuluSDK") {
+            // Register header view
+            let headerNib = UINib(nibName: "CustomHeaderView", bundle: bundle)
+            tblList.register(headerNib, forHeaderFooterViewReuseIdentifier: "CustomHeaderView")
 
-        
-        if let headerView = Bundle.main.loadNibNamed("CustomHeaderView", owner: self, options: nil)?.first as? CustomHeaderView {
-            headerView.lblTitle.text = "Request a new card" // Customize the header text
-            headerView.btnBack.addTarget(self, action: #selector(self.moveBack), for: .touchUpInside)
-            headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 150)
+            let TitlecellNib = UINib(nibName: "TitleCell", bundle: bundle)
+            tblList.register(TitlecellNib, forCellReuseIdentifier: "cellTitle")
 
-            tblList.tableHeaderView = headerView
+            let InstantcellNib = UINib(nibName: "InstantAccountCell", bundle: bundle)
+            tblList.register(InstantcellNib, forCellReuseIdentifier: "cellInstant")
+         
+            let ButtoncellNib = UINib(nibName: "Buttoncell", bundle: bundle)
+            tblList.register(ButtoncellNib, forCellReuseIdentifier: "cellButton")
+            
+            let TermscellNib = UINib(nibName: "Termscell", bundle: bundle)
+            tblList.register(TermscellNib, forCellReuseIdentifier: "cellTerms")
+            
+            if let headerView = bundle.loadNibNamed("CustomHeaderView", owner: self, options: nil)?.first as? CustomHeaderView {
+                headerView.lblTitle.text = "Request a new card" // Customize the header text
+                headerView.btnBack.addTarget(self, action: #selector(self.moveBack), for: .touchUpInside)
+                headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 150)
 
-            let backgroundView = UIView()
-            backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: 160)
-            backgroundView.backgroundColor = UIColor(named: "customCyanColor") // Set your desired background color here
-            view.addSubview(backgroundView)
-            view.bringSubviewToFront(tblList)
+                tblList.tableHeaderView = headerView
 
+                let backgroundView = UIView()
+                backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: 160)
+                backgroundView.backgroundColor = UIColor(named: "customCyanColor") // Set your desired background color here
+                view.addSubview(backgroundView)
+                view.bringSubviewToFront(tblList)
+
+            }
         }
+        
+
+        
+       
         
         tblList.bounces = false
         // Add the custom background view to the table view
@@ -163,7 +169,7 @@ class RequestNewCardController: UIViewController,UITableViewDelegate,UITableView
     @objc func submitButtonTapped() {
         print("Submit button tapped")
         // Handle form submission
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "RequestAuthorizationViewController") as! RequestAuthorizationViewController
+        let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "RequestAuthorizationViewController") as! RequestAuthorizationViewController
         navigationController?.pushViewController(vc, animated: true)
 
     }

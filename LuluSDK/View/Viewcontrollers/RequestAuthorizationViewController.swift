@@ -19,7 +19,7 @@ class RequestAuthorizationViewController: UIViewController, UITableViewDataSourc
                 }
             }
             if pinCell.pin.count == 4 && !pinCell.pin.contains("") && !pinCell.pin.isEmpty {
-                let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "RequestSuccessViewController") as! RequestSuccessViewController
+                let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "RequestSuccessViewController") as! RequestSuccessViewController
                 navigationController?.pushViewController(vc, animated: true)
 
             }
@@ -44,31 +44,38 @@ class RequestAuthorizationViewController: UIViewController, UITableViewDataSourc
     override func viewDidLoad() {
         super.viewDidLoad()
         // Register header view
-        let headerNib = UINib(nibName: "CustomHeaderView", bundle: nil)
-        tblList.register(headerNib, forHeaderFooterViewReuseIdentifier: "CustomHeaderView")
-
-        let TitlecellNib = UINib(nibName: "TitleCell", bundle: nil)
-        tblList.register(TitlecellNib, forCellReuseIdentifier: "cellTitle")
-      
-        tblList.register(UINib(nibName: "NumberPadCell", bundle: nil), forCellReuseIdentifier: "NumberPadCell")
         
-        tblList.register(UINib(nibName: "PinEntryCell", bundle: nil), forCellReuseIdentifier: "cellPin")
-        tblList.register(UINib(nibName: "ButtonCell", bundle: nil), forCellReuseIdentifier: "cellbutton")
+        if let bundle = Bundle(identifier: "com.finance.LuluSDK") {
+            let headerNib = UINib(nibName: "CustomHeaderView", bundle: bundle)
+            tblList.register(headerNib, forHeaderFooterViewReuseIdentifier: "CustomHeaderView")
 
-        if let headerView = Bundle.main.loadNibNamed("CustomHeaderView", owner: self, options: nil)?.first as? CustomHeaderView {
-            headerView.lblTitle.text = "Request a new card" // Customize the header text
-            headerView.btnBack.addTarget(self, action: #selector(self.moveBack), for: .touchUpInside)
-            headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 150)
+            let TitlecellNib = UINib(nibName: "TitleCell", bundle: bundle)
+            tblList.register(TitlecellNib, forCellReuseIdentifier: "cellTitle")
+          
+            tblList.register(UINib(nibName: "NumberPadCell", bundle: bundle), forCellReuseIdentifier: "NumberPadCell")
+            
+            tblList.register(UINib(nibName: "PinEntryCell", bundle: bundle), forCellReuseIdentifier: "cellPin")
+            tblList.register(UINib(nibName: "ButtonCell", bundle: bundle), forCellReuseIdentifier: "cellbutton")
+            
+            if let headerView = bundle.loadNibNamed("CustomHeaderView", owner: self, options: nil)?.first as? CustomHeaderView {
+                headerView.lblTitle.text = "Request a new card" // Customize the header text
+                headerView.btnBack.addTarget(self, action: #selector(self.moveBack), for: .touchUpInside)
+                headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 150)
 
-            tblList.tableHeaderView = headerView
+                tblList.tableHeaderView = headerView
 
-            let backgroundView = UIView()
-            backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: 160)
-            backgroundView.backgroundColor = UIColor(named: "customCyanColor") // Set your desired background color here
-            view.addSubview(backgroundView)
-            view.bringSubviewToFront(tblList)
+                let backgroundView = UIView()
+                backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: 160)
+                backgroundView.backgroundColor = UIColor(named: "customCyanColor") // Set your desired background color here
+                view.addSubview(backgroundView)
+                view.bringSubviewToFront(tblList)
 
+            }
         }
+        
+
+        
+        
         
         tblList.bounces = false
         // Add the custom background view to the table view
