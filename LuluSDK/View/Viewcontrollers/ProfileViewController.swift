@@ -20,28 +20,33 @@ class ProfileViewController: UIViewController,UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let headerNib = UINib(nibName: "CustomHeaderView", bundle: nil)
-        tblList.register(headerNib, forHeaderFooterViewReuseIdentifier: "CustomHeaderView")
-        let cellNib = UINib(nibName: "ProfileTCell", bundle: nil)
-        tblList.register(cellNib, forCellReuseIdentifier: "profileCell")
-        let settingcellNib = UINib(nibName: "SettingsCell", bundle: nil)
-        tblList.register(settingcellNib, forCellReuseIdentifier: "settingsCell")
-        let profilecellNib = UINib(nibName: "ProfileTCell", bundle: nil)
-        tblList.register(profilecellNib, forCellReuseIdentifier: "profileCell")
+        if let bundle = Bundle(identifier: "com.finance.LuluSDK") {
+            let headerNib = UINib(nibName: "CustomHeaderView", bundle: bundle)
+            tblList.register(headerNib, forHeaderFooterViewReuseIdentifier: "CustomHeaderView")
+            let cellNib = UINib(nibName: "ProfileTCell", bundle: bundle)
+            tblList.register(cellNib, forCellReuseIdentifier: "profileCell")
+            let settingcellNib = UINib(nibName: "SettingsCell", bundle: bundle)
+            tblList.register(settingcellNib, forCellReuseIdentifier: "settingsCell")
+            let profilecellNib = UINib(nibName: "ProfileTCell", bundle: bundle)
+            tblList.register(profilecellNib, forCellReuseIdentifier: "profileCell")
+            
+            if let headerView = bundle.loadNibNamed("CustomHeaderView", owner: self, options: nil)?.first as? CustomHeaderView {
+                headerView.lblTitle.text = "Profile" // Customize the header text
+                headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 150)
 
-        if let headerView = Bundle.main.loadNibNamed("CustomHeaderView", owner: self, options: nil)?.first as? CustomHeaderView {
-            headerView.lblTitle.text = "Profile" // Customize the header text
-            headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 150)
+                tblList.tableHeaderView = headerView
 
-            tblList.tableHeaderView = headerView
+                let backgroundView = UIView()
+                backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: tblList.frame.height/5)
+                backgroundView.backgroundColor = UIColor(named: "customCyanColor") // Set your desired background color here
+                view.addSubview(backgroundView)
+                view.bringSubviewToFront(tblList)
 
-            let backgroundView = UIView()
-            backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: tblList.frame.height/5)
-            backgroundView.backgroundColor = UIColor(named: "customCyanColor") // Set your desired background color here
-            view.addSubview(backgroundView)
-            view.bringSubviewToFront(tblList)
-
+            }
         }
+        
+
+       
         
         tblList.bounces = false
         // Add the custom background view to the table view

@@ -12,23 +12,25 @@ class TransferMoneyViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(UINib(nibName: "RequestMoneyCell", bundle: nil), forCellReuseIdentifier: "cellReq")
-        
-        if let headerView = Bundle.main.loadNibNamed("CustomHeaderView", owner: self, options: nil)?.first as? CustomHeaderView {
-            headerView.lblTitle.text = "Transfer Money" // Customize the header text
-            headerView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 150)
-            headerView.btnBack.addTarget(self, action: #selector(self.moveBack), for: .touchUpInside)
-            tableView.tableHeaderView = headerView
+        if let bundle = Bundle(identifier: "com.finance.LuluSDK") {
+            tableView.register(UINib(nibName: "RequestMoneyCell", bundle: bundle), forCellReuseIdentifier: "cellReq")
             
-            let backgroundView = UIView()
-            backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tableView.frame.width, height: tableView.frame.height/5)
-            backgroundView.backgroundColor = UIColor(named: "customCyanColor") // Set your desired background color here
-            view.addSubview(backgroundView)
-            view.bringSubviewToFront(tableView)
+            
+            if let headerView = bundle.loadNibNamed("CustomHeaderView", owner: self, options: nil)?.first as? CustomHeaderView {
+                headerView.lblTitle.text = "Transfer Money" // Customize the header text
+                headerView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 150)
+                headerView.btnBack.addTarget(self, action: #selector(self.moveBack), for: .touchUpInside)
+                tableView.tableHeaderView = headerView
+                
+                let backgroundView = UIView()
+                backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tableView.frame.width, height: tableView.frame.height/5)
+                backgroundView.backgroundColor = UIColor(named: "customCyanColor") // Set your desired background color here
+                view.addSubview(backgroundView)
+                view.bringSubviewToFront(tableView)
+                
+            }
             
         }
-        
-        
         
         
         

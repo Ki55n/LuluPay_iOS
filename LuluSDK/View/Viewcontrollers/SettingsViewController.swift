@@ -30,26 +30,32 @@ class SettingsViewController: UIViewController,UITableViewDelegate, UITableViewD
         
 //        setStatusBar(backgroundColor: UIColor(named: "customCyanColor") ?? .white, style: .darkContent)
         // Register header view
-        let headerNib = UINib(nibName: "CustomHeaderView", bundle: nil)
-        tblList.register(headerNib, forHeaderFooterViewReuseIdentifier: "CustomHeaderView")
-
-        // Register cell
-        let cellNib = UINib(nibName: "SettingsCell", bundle: nil)
-        tblList.register(cellNib, forCellReuseIdentifier: "settingsCell")
         
-        if let headerView = Bundle.main.loadNibNamed("CustomHeaderView", owner: self, options: nil)?.first as? CustomHeaderView {
-            headerView.lblTitle.text = "Settings" // Customize the header text
-            headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 150)
+        if let bundle = Bundle(identifier: "com.finance.LuluSDK") {
+            let headerNib = UINib(nibName: "CustomHeaderView", bundle: bundle)
+            tblList.register(headerNib, forHeaderFooterViewReuseIdentifier: "CustomHeaderView")
 
-            tblList.tableHeaderView = headerView
+            // Register cell
+            let cellNib = UINib(nibName: "SettingsCell", bundle: bundle)
+            tblList.register(cellNib, forCellReuseIdentifier: "settingsCell")
+            
+            if let headerView = bundle.loadNibNamed("CustomHeaderView", owner: self, options: nil)?.first as? CustomHeaderView {
+                headerView.lblTitle.text = "Settings" // Customize the header text
+                headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 150)
 
-            let backgroundView = UIView()
-            backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: tblList.frame.height/5)
-            backgroundView.backgroundColor = UIColor(named: "customCyanColor") // Set your desired background color here
-            view.addSubview(backgroundView)
-            view.bringSubviewToFront(tblList)
+                tblList.tableHeaderView = headerView
 
+                let backgroundView = UIView()
+                backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: tblList.frame.height/5)
+                backgroundView.backgroundColor = UIColor(named: "customCyanColor") // Set your desired background color here
+                view.addSubview(backgroundView)
+                view.bringSubviewToFront(tblList)
+
+            }
+            
         }
+       
+        
         
         
        

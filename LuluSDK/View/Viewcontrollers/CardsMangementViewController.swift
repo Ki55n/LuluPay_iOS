@@ -17,31 +17,37 @@ class CardsMangementViewController: UIViewController,UITableViewDelegate, UITabl
         
         arrList = [["id":"1","card_number":"12345 678980"]]
         // Register header view
-        let headerNib = UINib(nibName: "CustomHeaderView", bundle: nil)
-        tblList.register(headerNib, forHeaderFooterViewReuseIdentifier: "CustomHeaderView")
-
-        // Register cell
-        let cellNib = UINib(nibName: "SettingsCell", bundle: nil)
-        tblList.register(cellNib, forCellReuseIdentifier: "settingsCell")
-       
-        // Register cell
-        let cardcellNib = UINib(nibName: "CardCell", bundle: nil)
-        tblList.register(cardcellNib, forCellReuseIdentifier: "cellCard")
-       
-        if let headerView = Bundle.main.loadNibNamed("CustomHeaderView", owner: self, options: nil)?.first as? CustomHeaderView {
-            headerView.lblTitle.text = "LuLu Virtual Cards" // Customize the header text
-            headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 100)
-
-            tblList.tableHeaderView = headerView
-
-            let backgroundView = UIView()
-            backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: 160)
-            backgroundView.backgroundColor = UIColor(named: "customCyanColor") // Set your desired background color here
-            view.addSubview(backgroundView)
-            view.bringSubviewToFront(tblList)
-
-        }
         
+        if let bundle = Bundle(identifier: "com.finance.LuluSDK") {
+            // Register custom cells
+            let headerNib = UINib(nibName: "CustomHeaderView", bundle: bundle)
+            tblList.register(headerNib, forHeaderFooterViewReuseIdentifier: "CustomHeaderView")
+
+            // Register cell
+            let cellNib = UINib(nibName: "SettingsCell", bundle: bundle)
+            tblList.register(cellNib, forCellReuseIdentifier: "settingsCell")
+           
+            // Register cell
+            let cardcellNib = UINib(nibName: "CardCell", bundle: bundle)
+            tblList.register(cardcellNib, forCellReuseIdentifier: "cellCard")
+            
+            if let headerView = bundle.loadNibNamed("CustomHeaderView", owner: self, options: nil)?.first as? CustomHeaderView {
+                headerView.lblTitle.text = "LuLu Virtual Cards" // Customize the header text
+                headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 100)
+
+                tblList.tableHeaderView = headerView
+
+                let backgroundView = UIView()
+                backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: 160)
+                backgroundView.backgroundColor = UIColor(named: "customCyanColor") // Set your desired background color here
+                view.addSubview(backgroundView)
+                view.bringSubviewToFront(tblList)
+
+            }
+        } else {
+            print("Error: SDK Bundle not found.")
+        }
+
         tblList.bounces = false
         // Add the custom background view to the table view
         tblList.backgroundColor = .clear
@@ -105,7 +111,7 @@ class CardsMangementViewController: UIViewController,UITableViewDelegate, UITabl
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0{
-            let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "RequestNewCardController") as! RequestNewCardController
+            let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "RequestNewCardController") as! RequestNewCardController
             navigationController?.pushViewController(vc, animated: true)
         }
     }
