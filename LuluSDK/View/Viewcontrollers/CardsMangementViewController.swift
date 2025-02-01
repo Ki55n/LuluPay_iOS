@@ -10,7 +10,7 @@ import UIKit
 class CardsMangementViewController: UIViewController,UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var tblList: UITableView!
     
-    
+
     var arrList = [[String:String]]()
     override func viewDidLoad() {
         super.viewDidLoad()
