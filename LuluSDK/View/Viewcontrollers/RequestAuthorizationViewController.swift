@@ -20,6 +20,7 @@ class RequestAuthorizationViewController: UIViewController, UITableViewDataSourc
             }
             if pinCell.pin.count == 4 && !pinCell.pin.contains("") && !pinCell.pin.isEmpty {
                 let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "RequestSuccessViewController") as! RequestSuccessViewController
+                vc.hidesBottomBarWhenPushed = true
                 navigationController?.pushViewController(vc, animated: true)
 
             }
@@ -62,11 +63,22 @@ class RequestAuthorizationViewController: UIViewController, UITableViewDataSourc
                 headerView.btnBack.addTarget(self, action: #selector(self.moveBack), for: .touchUpInside)
                 headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 150)
 
-                tblList.tableHeaderView = headerView
+                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
+                    headerView.viewMain.backgroundColor = customColor
+                } else {
+                    headerView.viewMain.backgroundColor = .cyan// Fallback color if custom color isn't found
+                }
 
+                
+                tblList.tableHeaderView = headerView
+                
                 let backgroundView = UIView()
-                backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: 160)
-                backgroundView.backgroundColor = UIColor(named: "customCyanColor") // Set your desired background color here
+                backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: tblList.frame.height/5)
+                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
+                    backgroundView.backgroundColor = customColor
+                } else {
+                    backgroundView.backgroundColor = .cyan // Fallback color if custom color isn't found
+                }
                 view.addSubview(backgroundView)
                 view.bringSubviewToFront(tblList)
 
@@ -125,6 +137,7 @@ class RequestAuthorizationViewController: UIViewController, UITableViewDataSourc
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellbutton", for: indexPath) as? ButtonCell else {
                     return UITableViewCell()
                 }
+                cell.btnCancel.isHidden = true
                 cell.btnTitle.setTitle("Forgot PIN?", for: .normal)
                 cell.btnTitle.setTitleColor(UIColor(named: "forgotPin"), for: .normal)
                 cell.btnTitle.backgroundColor = UIColor.white

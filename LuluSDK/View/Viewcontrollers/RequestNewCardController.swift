@@ -43,11 +43,22 @@ class RequestNewCardController: UIViewController,UITableViewDelegate,UITableView
                 headerView.btnBack.addTarget(self, action: #selector(self.moveBack), for: .touchUpInside)
                 headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 150)
 
-                tblList.tableHeaderView = headerView
+                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
+                    headerView.viewMain.backgroundColor = customColor
+                } else {
+                    headerView.viewMain.backgroundColor = .cyan// Fallback color if custom color isn't found
+                }
 
+                
+                tblList.tableHeaderView = headerView
+                
                 let backgroundView = UIView()
-                backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: 160)
-                backgroundView.backgroundColor = UIColor(named: "customCyanColor") // Set your desired background color here
+                backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: tblList.frame.height/5)
+                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
+                    backgroundView.backgroundColor = customColor
+                } else {
+                    backgroundView.backgroundColor = .cyan // Fallback color if custom color isn't found
+                }
                 view.addSubview(backgroundView)
                 view.bringSubviewToFront(tblList)
 
@@ -170,6 +181,7 @@ class RequestNewCardController: UIViewController,UITableViewDelegate,UITableView
         print("Submit button tapped")
         // Handle form submission
         let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "RequestAuthorizationViewController") as! RequestAuthorizationViewController
+        vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
 
     }

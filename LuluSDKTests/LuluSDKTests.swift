@@ -32,5 +32,33 @@ final class LuluSDKTests: XCTestCase {
             // Put the code you want to measure the time of here.
         }
     }
+    func testCustomHeaderViewLoading() throws {
+        // Ensure the correct bundle identifier
+        guard let bundle = Bundle(identifier: "com.finance.LuluSDK") else {
+            XCTFail("Bundle not found")
+            return
+        }
+        
+        // Load the nib and instantiate the view
+        guard let headerView = UINib(nibName: "CustomHeaderView", bundle: bundle)
+            .instantiate(withOwner: nil, options: nil)
+            .first as? CustomHeaderView else {
+            XCTFail("Failed to load CustomHeaderView from nib")
+            return
+        }
+
+        // Assert that the view and its subviews are properly connected
+        XCTAssertNotNil(headerView, "CustomHeaderView should not be nil")
+        XCTAssertNotNil(headerView.lblTitle, "lblTitle outlet should be connected")
+        XCTAssertNotNil(headerView.btnBack, "btnBack outlet should be connected")
+        
+        // Test default or configured values
+        headerView.lblTitle.text = "Test Title"
+        XCTAssertEqual(headerView.lblTitle.text, "Test Title", "lblTitle should display the correct text")
+    }
+    func testBundleIdentifierExists() {
+        let bundle = Bundle(identifier: "com.finance.LuluSDK")
+        XCTAssertNotNil(bundle, "Bundle should exist for identifier com.finance.LuluSDK")
+    }
 
 }

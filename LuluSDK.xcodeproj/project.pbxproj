@@ -23,6 +23,8 @@
 		7DB84EDE2D3AC05900A2C2D6 /* LuluSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DB84ED02D3AC05800A2C2D6 /* LuluSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7DB84EEE2D3AC1CB00A2C2D6 /* MyStoryboardLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB84EED2D3AC1CB00A2C2D6 /* MyStoryboardLoader.swift */; };
 		7DB84F342D3ACA8D00A2C2D6 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DB84F332D3ACA8C00A2C2D6 /* Media.xcassets */; };
+		B83048CB2D4E59AB00353003 /* RecentTransactionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B83048C92D4E59AB00353003 /* RecentTransactionCell.swift */; };
+		B83048CC2D4E59AB00353003 /* RecentTransactionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B83048CA2D4E59AB00353003 /* RecentTransactionCell.xib */; };
 		B86952D92D4A059E0088B538 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952D72D4A059E0088B538 /* Model.swift */; };
 		B86953082D4A05AD0088B538 /* Lulu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B86952DA2D4A05AD0088B538 /* Lulu.storyboard */; };
 		B869530A2D4A05AD0088B538 /* CardsMangementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952DE2D4A05AD0088B538 /* CardsMangementViewController.swift */; };
@@ -62,6 +64,26 @@
 		B869532C2D4A05AD0088B538 /* SettingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B86953022D4A05AD0088B538 /* SettingsCell.xib */; };
 		B869532D2D4A05AD0088B538 /* TitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B86953032D4A05AD0088B538 /* TitleCell.xib */; };
 		B869532E2D4A05AD0088B538 /* TransferCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B86953042D4A05AD0088B538 /* TransferCell.xib */; };
+		B8C07C912D51E1A4008D506B /* ContactListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07C902D51E1A4008D506B /* ContactListViewController.swift */; };
+		B8C07C942D51E231008D506B /* ContactListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8C07C932D51E231008D506B /* ContactListTableViewCell.xib */; };
+		B8C07C952D51E231008D506B /* ContactListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07C922D51E231008D506B /* ContactListTableViewCell.swift */; };
+		B8C07C982D51E3E1008D506B /* SearchCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8C07C972D51E3E1008D506B /* SearchCell.xib */; };
+		B8C07C992D51E3E1008D506B /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07C962D51E3E1008D506B /* SearchCell.swift */; };
+		B8C07C9B2D51EB77008D506B /* SendReqMoneyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07C9A2D51EB77008D506B /* SendReqMoneyViewController.swift */; };
+		B8C07C9E2D52093A008D506B /* TextFieldCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8C07C9D2D52093A008D506B /* TextFieldCell.xib */; };
+		B8C07C9F2D52093A008D506B /* TextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07C9C2D52093A008D506B /* TextFieldCell.swift */; };
+		B8C07CA22D520A00008D506B /* ReferenceCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8C07CA12D520A00008D506B /* ReferenceCell.xib */; };
+		B8C07CA32D520A00008D506B /* ReferenceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07CA02D520A00008D506B /* ReferenceCell.swift */; };
+		B8C07CA62D524E6B008D506B /* PaymentDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07CA42D524E6B008D506B /* PaymentDetailCell.swift */; };
+		B8C07CA72D524E6B008D506B /* PaymentDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8C07CA52D524E6B008D506B /* PaymentDetailCell.xib */; };
+		B8C07CAE2D52500D008D506B /* TransactionDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07CAC2D52500D008D506B /* TransactionDetailCell.swift */; };
+		B8C07CAF2D52500D008D506B /* TransactionDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8C07CAD2D52500D008D506B /* TransactionDetailCell.xib */; };
+		B8C07CB12D525193008D506B /* PaymentDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07CB02D525193008D506B /* PaymentDetailsViewController.swift */; };
+		B8C07CB42D5257AA008D506B /* ConfirmPayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07CB22D5257AA008D506B /* ConfirmPayCell.swift */; };
+		B8C07CB52D5257AA008D506B /* ConfirmPayCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8C07CB32D5257AA008D506B /* ConfirmPayCell.xib */; };
+		B8C07CB72D5262CB008D506B /* ConfirmPayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07CB62D5262CB008D506B /* ConfirmPayViewController.swift */; };
+		B8C07CB92D5264DF008D506B /* PaySuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07CB82D5264DF008D506B /* PaySuccessViewController.swift */; };
+		B8C07CBB2D5266F3008D506B /* ShareReceiptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07CBA2D5266F3008D506B /* ShareReceiptViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,6 +114,8 @@
 		7DB84EDC2D3AC05900A2C2D6 /* LuluSDKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuluSDKTests.swift; sourceTree = "<group>"; };
 		7DB84EED2D3AC1CB00A2C2D6 /* MyStoryboardLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyStoryboardLoader.swift; sourceTree = "<group>"; };
 		7DB84F332D3ACA8C00A2C2D6 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		B83048C92D4E59AB00353003 /* RecentTransactionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentTransactionCell.swift; sourceTree = "<group>"; };
+		B83048CA2D4E59AB00353003 /* RecentTransactionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecentTransactionCell.xib; sourceTree = "<group>"; };
 		B86952D72D4A059E0088B538 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		B86952DA2D4A05AD0088B538 /* Lulu.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Lulu.storyboard; sourceTree = "<group>"; };
 		B86952DE2D4A05AD0088B538 /* CardsMangementViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardsMangementViewController.swift; sourceTree = "<group>"; };
@@ -131,6 +155,26 @@
 		B86953022D4A05AD0088B538 /* SettingsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsCell.xib; sourceTree = "<group>"; };
 		B86953032D4A05AD0088B538 /* TitleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TitleCell.xib; sourceTree = "<group>"; };
 		B86953042D4A05AD0088B538 /* TransferCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TransferCell.xib; sourceTree = "<group>"; };
+		B8C07C902D51E1A4008D506B /* ContactListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListViewController.swift; sourceTree = "<group>"; };
+		B8C07C922D51E231008D506B /* ContactListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListTableViewCell.swift; sourceTree = "<group>"; };
+		B8C07C932D51E231008D506B /* ContactListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContactListTableViewCell.xib; sourceTree = "<group>"; };
+		B8C07C962D51E3E1008D506B /* SearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
+		B8C07C972D51E3E1008D506B /* SearchCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchCell.xib; sourceTree = "<group>"; };
+		B8C07C9A2D51EB77008D506B /* SendReqMoneyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendReqMoneyViewController.swift; sourceTree = "<group>"; };
+		B8C07C9C2D52093A008D506B /* TextFieldCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldCell.swift; sourceTree = "<group>"; };
+		B8C07C9D2D52093A008D506B /* TextFieldCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextFieldCell.xib; sourceTree = "<group>"; };
+		B8C07CA02D520A00008D506B /* ReferenceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferenceCell.swift; sourceTree = "<group>"; };
+		B8C07CA12D520A00008D506B /* ReferenceCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ReferenceCell.xib; sourceTree = "<group>"; };
+		B8C07CA42D524E6B008D506B /* PaymentDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentDetailCell.swift; sourceTree = "<group>"; };
+		B8C07CA52D524E6B008D506B /* PaymentDetailCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PaymentDetailCell.xib; sourceTree = "<group>"; };
+		B8C07CAC2D52500D008D506B /* TransactionDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailCell.swift; sourceTree = "<group>"; };
+		B8C07CAD2D52500D008D506B /* TransactionDetailCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransactionDetailCell.xib; sourceTree = "<group>"; };
+		B8C07CB02D525193008D506B /* PaymentDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentDetailsViewController.swift; sourceTree = "<group>"; };
+		B8C07CB22D5257AA008D506B /* ConfirmPayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPayCell.swift; sourceTree = "<group>"; };
+		B8C07CB32D5257AA008D506B /* ConfirmPayCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ConfirmPayCell.xib; sourceTree = "<group>"; };
+		B8C07CB62D5262CB008D506B /* ConfirmPayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPayViewController.swift; sourceTree = "<group>"; };
+		B8C07CB82D5264DF008D506B /* PaySuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaySuccessViewController.swift; sourceTree = "<group>"; };
+		B8C07CBA2D5266F3008D506B /* ShareReceiptViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareReceiptViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -278,7 +322,13 @@
 				B86952E42D4A05AD0088B538 /* SettingsViewController.swift */,
 				B86952E52D4A05AD0088B538 /* TabViewController.swift */,
 				B86952E62D4A05AD0088B538 /* TransferMoneyViewController.swift */,
+				B8C07C902D51E1A4008D506B /* ContactListViewController.swift */,
 				7D43C8322D4D510B00C841C2 /* LoginViewController.swift */,
+				B8C07C9A2D51EB77008D506B /* SendReqMoneyViewController.swift */,
+				B8C07CB02D525193008D506B /* PaymentDetailsViewController.swift */,
+				B8C07CB62D5262CB008D506B /* ConfirmPayViewController.swift */,
+				B8C07CB82D5264DF008D506B /* PaySuccessViewController.swift */,
+				B8C07CBA2D5266F3008D506B /* ShareReceiptViewController.swift */,
 			);
 			path = Viewcontrollers;
 			sourceTree = "<group>";
@@ -292,7 +342,6 @@
 				B86952EB2D4A05AD0088B538 /* CustomHeaderView.swift */,
 				B86952EC2D4A05AD0088B538 /* ExchangeRateCell.swift */,
 				B86952ED2D4A05AD0088B538 /* HeaderViewCell.swift */,
-				B86952EE2D4A05AD0088B538 /* InstantAccountCell.swift */,
 				B86952EF2D4A05AD0088B538 /* NumberPadCell.swift */,
 				B86952F02D4A05AD0088B538 /* PinEntryCell.swift */,
 				B86952F12D4A05AD0088B538 /* ProfileTCell.swift */,
@@ -300,6 +349,15 @@
 				B86952F32D4A05AD0088B538 /* SettingsCell.swift */,
 				B86952F42D4A05AD0088B538 /* TitleCell.swift */,
 				B86952F52D4A05AD0088B538 /* TransferCell.swift */,
+				B83048C92D4E59AB00353003 /* RecentTransactionCell.swift */,
+				B8C07C962D51E3E1008D506B /* SearchCell.swift */,
+				B8C07C9C2D52093A008D506B /* TextFieldCell.swift */,
+				B8C07CA02D520A00008D506B /* ReferenceCell.swift */,
+				B8C07CA42D524E6B008D506B /* PaymentDetailCell.swift */,
+				B8C07C922D51E231008D506B /* ContactListTableViewCell.swift */,
+				B8C07CAC2D52500D008D506B /* TransactionDetailCell.swift */,
+				B86952EE2D4A05AD0088B538 /* InstantAccountCell.swift */,
+				B8C07CB22D5257AA008D506B /* ConfirmPayCell.swift */,
 			);
 			path = "xib Class";
 			sourceTree = "<group>";
@@ -321,6 +379,14 @@
 				B86953022D4A05AD0088B538 /* SettingsCell.xib */,
 				B86953032D4A05AD0088B538 /* TitleCell.xib */,
 				B86953042D4A05AD0088B538 /* TransferCell.xib */,
+				B83048CA2D4E59AB00353003 /* RecentTransactionCell.xib */,
+				B8C07C932D51E231008D506B /* ContactListTableViewCell.xib */,
+				B8C07C972D51E3E1008D506B /* SearchCell.xib */,
+				B8C07C9D2D52093A008D506B /* TextFieldCell.xib */,
+				B8C07CA12D520A00008D506B /* ReferenceCell.xib */,
+				B8C07CA52D524E6B008D506B /* PaymentDetailCell.xib */,
+				B8C07CAD2D52500D008D506B /* TransactionDetailCell.xib */,
+				B8C07CB32D5257AA008D506B /* ConfirmPayCell.xib */,
 			);
 			path = xibs;
 			sourceTree = "<group>";
@@ -442,20 +508,28 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B8C07C942D51E231008D506B /* ContactListTableViewCell.xib in Resources */,
 				B869532D2D4A05AD0088B538 /* TitleCell.xib in Resources */,
+				B8C07CA22D520A00008D506B /* ReferenceCell.xib in Resources */,
+				B8C07CB52D5257AA008D506B /* ConfirmPayCell.xib in Resources */,
+				B8C07CA72D524E6B008D506B /* PaymentDetailCell.xib in Resources */,
 				B86953262D4A05AD0088B538 /* HeaderViewCell.xib in Resources */,
 				B86953272D4A05AD0088B538 /* InstantAccountCell.xib in Resources */,
 				B869532E2D4A05AD0088B538 /* TransferCell.xib in Resources */,
 				B86953292D4A05AD0088B538 /* PinEntryCell.xib in Resources */,
 				B869532A2D4A05AD0088B538 /* ProfileTCell.xib in Resources */,
+				B8C07C9E2D52093A008D506B /* TextFieldCell.xib in Resources */,
 				B86953282D4A05AD0088B538 /* NumberPadCell.xib in Resources */,
 				B869532B2D4A05AD0088B538 /* RequestMoneyCell.xib in Resources */,
 				B86953232D4A05AD0088B538 /* CardCell.xib in Resources */,
 				B86953082D4A05AD0088B538 /* Lulu.storyboard in Resources */,
 				B869532C2D4A05AD0088B538 /* SettingsCell.xib in Resources */,
 				7DB84F342D3ACA8D00A2C2D6 /* Media.xcassets in Resources */,
+				B83048CC2D4E59AB00353003 /* RecentTransactionCell.xib in Resources */,
 				B86953252D4A05AD0088B538 /* ExchangeRateCell.xib in Resources */,
+				B8C07CAF2D52500D008D506B /* TransactionDetailCell.xib in Resources */,
 				B86953222D4A05AD0088B538 /* CardBalanceCell.xib in Resources */,
+				B8C07C982D51E3E1008D506B /* SearchCell.xib in Resources */,
 				B86953212D4A05AD0088B538 /* ButtonCell.xib in Resources */,
 				B86953242D4A05AD0088B538 /* CustomHeaderView.xib in Resources */,
 			);
@@ -476,16 +550,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D43C8332D4D510B00C841C2 /* LoginViewController.swift in Sources */,
+				B8C07C992D51E3E1008D506B /* SearchCell.swift in Sources */,
 				B869531A2D4A05AD0088B538 /* NumberPadCell.swift in Sources */,
+				B8C07CA62D524E6B008D506B /* PaymentDetailCell.swift in Sources */,
 				7D43C8312D4D502B00C841C2 /* APIService.swift in Sources */,
 				317432A42D4B51D4001AD0BD /* BranchSearchModel.swift in Sources */,
+				B8C07CB42D5257AA008D506B /* ConfirmPayCell.swift in Sources */,
+				B8C07C9F2D52093A008D506B /* TextFieldCell.swift in Sources */,
 				B86953162D4A05AD0088B538 /* CustomHeaderView.swift in Sources */,
 				317432AA2D4B51D5001AD0BD /* CreateTransactionModel.swift in Sources */,
 				317432A62D4B51D4001AD0BD /* MasterBanksModel.swift in Sources */,
+				B8C07C9B2D51EB77008D506B /* SendReqMoneyViewController.swift in Sources */,
+				B8C07CAE2D52500D008D506B /* TransactionDetailCell.swift in Sources */,
 				B86953192D4A05AD0088B538 /* InstantAccountCell.swift in Sources */,
 				B869530D2D4A05AD0088B538 /* RequestAuthorizationViewController.swift in Sources */,
+				B8C07CA32D520A00008D506B /* ReferenceCell.swift in Sources */,
 				317432A52D4B51D4001AD0BD /* GetCodesModel.swift in Sources */,
 				B86953132D4A05AD0088B538 /* ButtonCell.swift in Sources */,
+				B8C07C912D51E1A4008D506B /* ContactListViewController.swift in Sources */,
 				B86953182D4A05AD0088B538 /* HeaderViewCell.swift in Sources */,
 				B869530C2D4A05AD0088B538 /* ProfileViewController.swift in Sources */,
 				B869531F2D4A05AD0088B538 /* TitleCell.swift in Sources */,
@@ -497,19 +579,25 @@
 				317432A72D4B51D5001AD0BD /* RatesModel.swift in Sources */,
 				B869531D2D4A05AD0088B538 /* RequestMoneyCell.swift in Sources */,
 				B869530E2D4A05AD0088B538 /* RequestNewCardController.swift in Sources */,
+				B8C07CB92D5264DF008D506B /* PaySuccessViewController.swift in Sources */,
 				B86953202D4A05AD0088B538 /* TransferCell.swift in Sources */,
 				B869531C2D4A05AD0088B538 /* ProfileTCell.swift in Sources */,
+				B8C07CB72D5262CB008D506B /* ConfirmPayViewController.swift in Sources */,
 				317432A92D4B51D5001AD0BD /* LoginModel.swift in Sources */,
 				B869531E2D4A05AD0088B538 /* SettingsCell.swift in Sources */,
 				317432AB2D4B51D5001AD0BD /* QuoteModel.swift in Sources */,
+				B8C07CB12D525193008D506B /* PaymentDetailsViewController.swift in Sources */,
 				B86952D92D4A059E0088B538 /* Model.swift in Sources */,
 				B86953112D4A05AD0088B538 /* TabViewController.swift in Sources */,
+				B8C07CBB2D5266F3008D506B /* ShareReceiptViewController.swift in Sources */,
+				B83048CB2D4E59AB00353003 /* RecentTransactionCell.swift in Sources */,
 				B869530A2D4A05AD0088B538 /* CardsMangementViewController.swift in Sources */,
 				B86953122D4A05AD0088B538 /* TransferMoneyViewController.swift in Sources */,
 				B869530B2D4A05AD0088B538 /* DashboardViewController.swift in Sources */,
 				7DB84ED22D3AC05800A2C2D6 /* LuluSDK.docc in Sources */,
 				B86953142D4A05AD0088B538 /* CardBalanceCell.swift in Sources */,
 				B869531B2D4A05AD0088B538 /* PinEntryCell.swift in Sources */,
+				B8C07C952D51E231008D506B /* ContactListTableViewCell.swift in Sources */,
 				7DB84EEE2D3AC1CB00A2C2D6 /* MyStoryboardLoader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

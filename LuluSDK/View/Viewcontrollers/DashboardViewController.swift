@@ -10,12 +10,8 @@ import UIKit
 class DashboardViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
-    var exchangeRates = [
-        ExchangeRate(flag: "pkr", currency: "PKR", buy: "86,246", sell: "85,583"),
-        ExchangeRate(flag: "inr", currency: "INR", buy: "86,246", sell: "85,583"),
-        ExchangeRate(flag: "egp", currency: "EGP", buy: "86,246", sell: "85,583")
-    ]
-    
+    var exchangeRates = [ExchangeRate]()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -24,77 +20,105 @@ class DashboardViewController: UIViewController {
             tableView.register(UINib(nibName: "HeaderViewCell", bundle: bundle), forCellReuseIdentifier: "cellHeader")
             tableView.register(UINib(nibName: "ExchangeRateCell", bundle: bundle), forCellReuseIdentifier: "rateExchange")
             tableView.register(UINib(nibName: "TransferCell", bundle: bundle), forCellReuseIdentifier: "cellTransfer")
+            tableView.register(UINib(nibName: "RecentTransactionCell", bundle: bundle), forCellReuseIdentifier: "cellTransaction")
+
+            let TitlecellNib = UINib(nibName: "TitleCell", bundle: bundle)
+            tableView.register(TitlecellNib, forCellReuseIdentifier: "cellTitle")
 
             tableView.delegate = self
             tableView.dataSource = self
         } else {
             print("Error: SDK Bundle not found.")
         }
-
-        
-        
+        exchangeRates = [
+            ExchangeRate(flag: flagEmoji(for: "PK"), currency: "PKR", buy: "86,246", sell: "85,583"),
+            ExchangeRate(flag: flagEmoji(for: "IN"), currency: "INR", buy: "86,246", sell: "85,583"),
+            ExchangeRate(flag: flagEmoji(for: "EG"), currency: "EGP", buy: "86,246", sell: "85,583")
+        ]
+    
     }
     
+    func flagEmoji(for countryCode: String) -> String {
+        let base: UInt32 = 127397 // Regional Indicator Symbol base code
+        var flagString = ""
+        
+        for scalar in countryCode.uppercased().unicodeScalars {
+            guard let unicodeValue = UnicodeScalar(base + scalar.value) else { continue }
+            flagString.append(String(unicodeValue))
+        }
+        
+        return flagString
+    }
 
     
 
 }
 extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3 // Header, Card, Exchange Rates
+        return 4 // Header, Card, Exchange Rates
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 || section == 2{
+        if section == 0 || section == 1{
             return 1 // Header and Card have one cell each
         }
-        else {
+        else if section == 2{
             return exchangeRates.count
         }// Exchange Rates is dynamic
+        else{
+            return 2
+        }
        
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
-        case 0: // Header Section
+        case 0:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellHeader", for: indexPath) as? HeaderViewCell else {
                 fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
             }
             cell.greetingLabel.text = "Welcome John Doe!"
-//            cell.profileImageView.backgroundColor = .red
             return cell
-            
-        // Uncomment this section if you decide to use the CardBalanceCell
-    //    case 1: // Card Balance Section
-    //        let cell = tableView.dequeueReusableCell(withIdentifier: "cellCardBalance", for: indexPath) as! CardBalanceCell
-    //        cell.accountBalanceLabel.text = "Account Balance"
-    //        cell.balanceValueLabel.text = "****"
-    //        cell.cardLogoImageView.image = UIImage(named: "cardLogo")
-    //        return cell
             
         case 1:
-            // Exchange Rates Section
-            let cell = tableView.dequeueReusableCell(withIdentifier: "rateExchange", for: indexPath) as! ExchangeRateCell
-            let rate = exchangeRates[indexPath.row]
-            
-            // Show header only for the first row
-            cell.viewHeader.isHidden = indexPath.row != 0
-            cell.flagImageView.image = UIImage(named: rate.flag)
-            cell.currencyLabel.text = rate.currency
-            cell.buyRateLabel.text = rate.buy
-            cell.sellRateLabel.text = rate.sell
-            return cell
-            
-        case 2:
-            // Exchange Rates Section
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellTransfer", for: indexPath) as! TransferCell
-            // Add Tap Gesture Recognizer to `viewTransfer`
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleViewTransferTap(_:)))
             cell.viewTransfer.isUserInteractionEnabled = true
             cell.viewTransfer.addGestureRecognizer(tapGesture)
-
-            
             return cell
+
+        case 2:
+            if indexPath.row == 0 {
+                let titleCell = tableView.dequeueReusableCell(withIdentifier: "cellTitle", for: indexPath) as! TitleCell
+                titleCell.lblTitle.text = "Exchange Rates"
+                return titleCell
+            } else if indexPath.row < exchangeRates.count {
+                let rateCell = tableView.dequeueReusableCell(withIdentifier: "rateExchange", for: indexPath) as! ExchangeRateCell
+                let rate = exchangeRates[indexPath.row]
+                if indexPath.row == 1{
+                    rateCell.viewHeader.isHidden = false
+                }else{
+                    rateCell.viewHeader.isHidden = true
+                }
+                rateCell.flagImageView.image = UIImage(named: rate.flag)
+                rateCell.currencyLabel.text = rate.currency
+                rateCell.buyRateLabel.text = rate.buy
+                rateCell.sellRateLabel.text = rate.sell
+                return rateCell
+            } else {
+                return UITableViewCell() // Fallback for unexpected rows
+            }
+
+        case 3:
+            if indexPath.row == 0 {
+                let titleCell = tableView.dequeueReusableCell(withIdentifier: "cellTitle", for: indexPath) as! TitleCell
+                titleCell.lblTitle.text = "Recent Transactions"
+                return titleCell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellTransaction", for: indexPath) as! RecentTransactionCell
+                
+                return cell
+            }
 
         default:
             return UITableViewCell()
@@ -111,9 +135,21 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
         case 0:
             return 60
         case 1:
-            return indexPath.row == 0 ? 60 : 30
-        case 2:
             return 110
+        case 2:
+            if indexPath.row == 0{
+               return 40
+            }else if indexPath.row == 1{
+                return 60
+            }else{
+                return 30
+            }
+        case 3:
+            if indexPath.row == 0{
+               return 40
+            }else{
+                return 80
+            }
         default:
             return 30
         }
@@ -125,6 +161,7 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
         // Perform actions when viewTransfer is tapped
         print("viewTransfer tapped: \(view)")
         let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "TransferMoneyViewController") as! TransferMoneyViewController
+        vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
 
         // Example: Navigate to another screen

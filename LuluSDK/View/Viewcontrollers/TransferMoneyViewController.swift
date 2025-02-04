@@ -15,16 +15,27 @@ class TransferMoneyViewController: UIViewController {
         if let bundle = Bundle(identifier: "com.finance.LuluSDK") {
             tableView.register(UINib(nibName: "RequestMoneyCell", bundle: bundle), forCellReuseIdentifier: "cellReq")
             
-            
             if let headerView = bundle.loadNibNamed("CustomHeaderView", owner: self, options: nil)?.first as? CustomHeaderView {
+
                 headerView.lblTitle.text = "Transfer Money" // Customize the header text
-                headerView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 150)
+                headerView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 110)
                 headerView.btnBack.addTarget(self, action: #selector(self.moveBack), for: .touchUpInside)
+                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
+                    headerView.viewMain.backgroundColor = customColor
+                } else {
+                    headerView.viewMain.backgroundColor = .cyan// Fallback color if custom color isn't found
+                }
+
+                
                 tableView.tableHeaderView = headerView
                 
                 let backgroundView = UIView()
                 backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tableView.frame.width, height: tableView.frame.height/5)
-                backgroundView.backgroundColor = UIColor(named: "customCyanColor") // Set your desired background color here
+                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
+                    backgroundView.backgroundColor = customColor
+                } else {
+                    backgroundView.backgroundColor = .cyan // Fallback color if custom color isn't found
+                }
                 view.addSubview(backgroundView)
                 view.bringSubviewToFront(tableView)
                 
@@ -108,8 +119,14 @@ extension TransferMoneyViewController: UITableViewDelegate, UITableViewDataSourc
         //            return UITableViewCell()
         
     }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "ContactListViewController") as! ContactListViewController
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
+
+    }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 120
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0{

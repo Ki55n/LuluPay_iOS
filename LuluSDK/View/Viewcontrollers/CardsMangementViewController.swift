@@ -33,13 +33,24 @@ class CardsMangementViewController: UIViewController,UITableViewDelegate, UITabl
             
             if let headerView = bundle.loadNibNamed("CustomHeaderView", owner: self, options: nil)?.first as? CustomHeaderView {
                 headerView.lblTitle.text = "LuLu Virtual Cards" // Customize the header text
-                headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 100)
+                headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 110)
 
+                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
+                    headerView.viewMain.backgroundColor = customColor
+                } else {
+                    headerView.viewMain.backgroundColor = .cyan// Fallback color if custom color isn't found
+                }
+
+                
                 tblList.tableHeaderView = headerView
-
+                
                 let backgroundView = UIView()
-                backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: 160)
-                backgroundView.backgroundColor = UIColor(named: "customCyanColor") // Set your desired background color here
+                backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: tblList.frame.height/5)
+                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
+                    backgroundView.backgroundColor = customColor
+                } else {
+                    backgroundView.backgroundColor = .cyan // Fallback color if custom color isn't found
+                }
                 view.addSubview(backgroundView)
                 view.bringSubviewToFront(tblList)
 
@@ -112,6 +123,7 @@ class CardsMangementViewController: UIViewController,UITableViewDelegate, UITabl
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0{
             let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "RequestNewCardController") as! RequestNewCardController
+            vc.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(vc, animated: true)
         }
     }
