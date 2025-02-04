@@ -8,7 +8,8 @@
 import UIKit
 
 class DashboardViewController: UIViewController {
-    
+    var getCodeInfo: GetCodesData?
+    var getServiceCorriderInfo: [ServiceCorriderData]?
     @IBOutlet weak var tableView: UITableView!
     var exchangeRates = [ExchangeRate]()
 
@@ -160,9 +161,62 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
         
         // Perform actions when viewTransfer is tapped
         print("viewTransfer tapped: \(view)")
-        let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "TransferMoneyViewController") as! TransferMoneyViewController
-        vc.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(vc, animated: true)
+        
+        let url = "https://drap-sandbox.digitnine.com/raas/masters/v1/codes?"
+
+        let headers = [
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
+        ]
+
+        let parameters: [String: String] = [:]
+
+        APIService.shared.request(url: url, method: .get, parameters: parameters, headers: headers) { result in
+            switch result {
+            case .success(let data):
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("Response: \(responseString)")
+                    DispatchQueue.main.async {
+                        let jsonDecoder = JSONDecoder()
+                        self.getCodeInfo = try? jsonDecoder.decode(GetCodesData.self, from: data)
+                        UserManager.shared.getCodesData = self.getCodeInfo
+                        print("UserManager.shared.getCodesData: ", UserManager.shared.getCodesData ?? nil)
+                        let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/service-corridor"
+                        
+                        let headers1 = [
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
+                        ]
+                        
+                        let parameters1: [String: String] = [:]
+                        
+                        APIService.shared.request(url: url1, method: .get, parameters: parameters1, headers: headers1) { result in
+                            switch result {
+                            case .success(let data):
+                                if let responseString = String(data: data, encoding: .utf8) {
+                                    print("Response: \(responseString)")
+                                    DispatchQueue.main.async {
+                                        let jsonDecoder = JSONDecoder()
+                                        self.getServiceCorriderInfo = try? jsonDecoder.decode([ServiceCorriderData].self, from: data)
+                                        UserManager.shared.getServiceCorridorData = self.getServiceCorriderInfo
+                                        print("UserManager.shared.getServiceCorridorData: ", UserManager.shared.getServiceCorridorData ?? [])
+                                        let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "TransferMoneyViewController") as! TransferMoneyViewController
+                                        self.navigationController?.pushViewController(vc, animated: true)
+                                    }
+                                    
+                                }
+                            case .failure(let error):
+                                print("Error: \(error.localizedDescription)")
+                            }
+                        }
+                    }
+                }
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+        
+        
 
         // Example: Navigate to another screen
         // navigationController?.pushViewController(NextViewController(), animated: true)
