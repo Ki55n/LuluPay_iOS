@@ -11,7 +11,7 @@ class LoginViewController: UIViewController {
     
     @IBOutlet weak var usernameTF: UITextField!
     @IBOutlet weak var passwordTF: UITextField!
-
+    var loginInfo: LoginModel?
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -39,14 +39,18 @@ class LoginViewController: UIViewController {
             case .success(let data):
                 if let responseString = String(data: data, encoding: .utf8) {
                     print("Response: \(responseString)")
-                    
-                    let storyboard = MyStoryboardLoader.getStoryboard(name: "Lulu")
-                    // Instantiate the initial view controller
-                    guard let tabbarVC = storyboard?.instantiateViewController(withIdentifier: "mainTabbar") as? UITabBarController else {
-                        fatalError("Could not instantiate initial view controller from MyStoryboard.")
+                    DispatchQueue.main.async {
+                        let jsonDecoder = JSONDecoder()
+                        self.loginInfo = try? jsonDecoder.decode(LoginModel.self, from: data)
+                        UserManager.shared.loginModel = self.loginInfo
+                        let storyboard = MyStoryboardLoader.getStoryboard(name: "Lulu")
+                        // Instantiate the initial view controller
+                        guard let tabbarVC = storyboard?.instantiateViewController(withIdentifier: "mainTabbar") as? UITabBarController else {
+                            fatalError("Could not instantiate initial view controller from MyStoryboard.")
+                        }
+                        self.navigationController?.navigationBar.isHidden = true
+                        self.navigationController?.pushViewController(tabbarVC, animated: true)
                     }
-                    self.navigationController?.navigationBar.isHidden = true
-                    self.navigationController?.pushViewController(tabbarVC, animated: true)
                     
                 }
             case .failure(let error):
