@@ -9,7 +9,12 @@ import UIKit
 
 class ContactListViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
-
+    var relationships: [Relationships] = []
+    // Filtered list based on search text
+    var filteredRelationships: [Relationships] = []
+    let searchController = UISearchController(searchResultsController: nil)
+    // Flag to indicate if search is active
+    var isSearching: Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -56,6 +61,16 @@ class ContactListViewController: UIViewController {
         tableView.dataSource = self
         tableView.clipsToBounds = false
         
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search by name or code"
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+        
+        // Load relationships data from UserManager
+        if let loadedRelationships = UserManager.shared.getCodesData?.relationships {
+            relationships = loadedRelationships
+        }
 
     }
     @objc func moveBack(){
@@ -149,7 +164,8 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource 
         case 0:
             return 1
         case 1:
-            return 2
+            let listCount = isSearching ? filteredRelationships.count : relationships.count
+            return 1 + listCount
         case 2:
             return 1
         default:
@@ -182,9 +198,11 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource 
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellContact", for: indexPath) as? ContactListTableViewCell else {
                     fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
                 }
-                cell.lblName.text = "Rogers"
-                cell.lblAccountNumber.text = "1234 **** ****"
                 //            cell.profileImageView.backgroundColor = .red
+                let index = indexPath.row - 1
+                let relationship: Relationships = isSearching ? filteredRelationships[index] : relationships[index]
+                cell.lblName.text = relationship.name
+                cell.lblAccountNumber.text = relationship.code
                 return cell
 
             }
@@ -205,9 +223,12 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "SendReqMoneyViewController") as! SendReqMoneyViewController
-        vc.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(vc, animated: true)
+        if indexPath.section == 1 && indexPath.row > 0 {
+            if let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "SendReqMoneyViewController") as? SendReqMoneyViewController {
+                vc.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(vc, animated: true)
+            }
+        }
 
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -249,4 +270,22 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource 
         
     }
     
+}
+
+extension ContactListViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchText = searchController.searchBar.text?.lowercased() ?? ""
+        
+        if searchText.isEmpty {
+            isSearching = false
+            filteredRelationships.removeAll()
+        } else {
+            isSearching = true
+            filteredRelationships = relationships.filter { relationship in
+                return relationship.name?.lowercased().contains(searchText) ?? false ||
+                       relationship.code?.lowercased().contains(searchText) ?? false
+            }
+        }
+        tableView.reloadData()
+    }
 }
