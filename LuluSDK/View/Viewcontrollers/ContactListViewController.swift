@@ -63,7 +63,11 @@ class ContactListViewController: UIViewController {
     }
 
     @objc func addContact(){
-        addContactView()
+        //addContactView()
+        let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "SendMoneyViewController") as! SendMoneyViewController
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
+
     }
     
     

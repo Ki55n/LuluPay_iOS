@@ -248,6 +248,36 @@
             </objects>
             <point key="canvasLocation" x="432" y="238"/>
         </scene>
+        <!--Send Money View Controller-->
+        <scene sceneID="nuk-5P-Qrg">
+            <objects>
+                <viewController storyboardIdentifier="SendMoneyViewController" id="q3t-mO-LXr" customClass="SendMoneyViewController" customModule="LuluSDK" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Gl5-7p-J0e">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="WNS-gq-4iK">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="lyG-N6-3GT"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="WNS-gq-4iK" firstAttribute="top" secondItem="lyG-N6-3GT" secondAttribute="top" id="A2G-ay-ccg"/>
+                            <constraint firstItem="WNS-gq-4iK" firstAttribute="leading" secondItem="lyG-N6-3GT" secondAttribute="leading" id="TnC-13-Z72"/>
+                            <constraint firstItem="lyG-N6-3GT" firstAttribute="bottom" secondItem="WNS-gq-4iK" secondAttribute="bottom" id="eRR-q1-ZSi"/>
+                            <constraint firstItem="lyG-N6-3GT" firstAttribute="trailing" secondItem="WNS-gq-4iK" secondAttribute="trailing" id="eZG-mt-4M4"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="WNS-gq-4iK" id="dB5-37-95j"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZJZ-tW-MoZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2353" y="-2204"/>
+        </scene>
         <!--Transfer Money View Controller-->
         <scene sceneID="ogQ-pc-sTG">
             <objects>

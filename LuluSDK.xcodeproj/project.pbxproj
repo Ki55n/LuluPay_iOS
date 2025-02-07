@@ -26,6 +26,7 @@
 		7DB84F342D3ACA8D00A2C2D6 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DB84F332D3ACA8C00A2C2D6 /* Media.xcassets */; };
 		B83048CB2D4E59AB00353003 /* RecentTransactionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B83048C92D4E59AB00353003 /* RecentTransactionCell.swift */; };
 		B83048CC2D4E59AB00353003 /* RecentTransactionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B83048CA2D4E59AB00353003 /* RecentTransactionCell.xib */; };
+		B8513EA72D54B76200E431F0 /* SendMoneyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8513EA62D54B76200E431F0 /* SendMoneyViewController.swift */; };
 		B86952D92D4A059E0088B538 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952D72D4A059E0088B538 /* Model.swift */; };
 		B86953082D4A05AD0088B538 /* Lulu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B86952DA2D4A05AD0088B538 /* Lulu.storyboard */; };
 		B869530A2D4A05AD0088B538 /* CardsMangementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86952DE2D4A05AD0088B538 /* CardsMangementViewController.swift */; };
@@ -118,6 +119,8 @@
 		7DB84F332D3ACA8C00A2C2D6 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 		B83048C92D4E59AB00353003 /* RecentTransactionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentTransactionCell.swift; sourceTree = "<group>"; };
 		B83048CA2D4E59AB00353003 /* RecentTransactionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecentTransactionCell.xib; sourceTree = "<group>"; };
+		B8513EA52D54997200E431F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B8513EA62D54B76200E431F0 /* SendMoneyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMoneyViewController.swift; sourceTree = "<group>"; };
 		B86952D72D4A059E0088B538 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		B86952DA2D4A05AD0088B538 /* Lulu.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Lulu.storyboard; sourceTree = "<group>"; };
 		B86952DE2D4A05AD0088B538 /* CardsMangementViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardsMangementViewController.swift; sourceTree = "<group>"; };
@@ -283,6 +286,7 @@
 		7DB84ECF2D3AC05800A2C2D6 /* LuluSDK */ = {
 			isa = PBXGroup;
 			children = (
+				B8513EA52D54997200E431F0 /* Info.plist */,
 				31FEF1552D510AB5004611F1 /* UserManager */,
 				7D43C82F2D4D500300C841C2 /* APIServices */,
 				317432A32D4B51D4001AD0BD /* Presentation */,
@@ -340,6 +344,7 @@
 				B8C07CB62D5262CB008D506B /* ConfirmPayViewController.swift */,
 				B8C07CB82D5264DF008D506B /* PaySuccessViewController.swift */,
 				B8C07CBA2D5266F3008D506B /* ShareReceiptViewController.swift */,
+				B8513EA62D54B76200E431F0 /* SendMoneyViewController.swift */,
 			);
 			path = Viewcontrollers;
 			sourceTree = "<group>";
@@ -577,6 +582,7 @@
 				B869530D2D4A05AD0088B538 /* RequestAuthorizationViewController.swift in Sources */,
 				B8C07CA32D520A00008D506B /* ReferenceCell.swift in Sources */,
 				317432A52D4B51D4001AD0BD /* GetCodesModel.swift in Sources */,
+				B8513EA72D54B76200E431F0 /* SendMoneyViewController.swift in Sources */,
 				B86953132D4A05AD0088B538 /* ButtonCell.swift in Sources */,
 				B8C07C912D51E1A4008D506B /* ContactListViewController.swift in Sources */,
 				B86953182D4A05AD0088B538 /* HeaderViewCell.swift in Sources */,
@@ -771,6 +777,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LuluSDK/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -805,6 +812,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LuluSDK/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";

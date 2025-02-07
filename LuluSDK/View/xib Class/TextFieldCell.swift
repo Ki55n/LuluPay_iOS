@@ -13,7 +13,9 @@ class TextFieldCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-
+    override func prepareForReuse() {
+        txtFieldAmount.text = ""
+    }
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
