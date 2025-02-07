@@ -8,8 +8,8 @@
 import UIKit
 
 class DashboardViewController: UIViewController {
-    var getCodeInfo: GetCodesData?
-    var getServiceCorriderInfo: [ServiceCorriderData]?
+    var getCodeInfo: GetCodesModel?
+    var getServiceCorriderInfo: ServiceCorriderModel?
     @IBOutlet weak var tableView: UITableView!
     var exchangeRates = [ExchangeRate]()
 
@@ -178,8 +178,8 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
                     print("Response: \(responseString)")
                     DispatchQueue.main.async {
                         let jsonDecoder = JSONDecoder()
-                        self.getCodeInfo = try? jsonDecoder.decode(GetCodesData.self, from: data)
-                        UserManager.shared.getCodesData = self.getCodeInfo
+                        self.getCodeInfo = try? jsonDecoder.decode(GetCodesModel.self, from: data)
+                        UserManager.shared.getCodesData = self.getCodeInfo?.data
                         print("UserManager.shared.getCodesData: ", UserManager.shared.getCodesData ?? nil)
                         let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/service-corridor"
                         
@@ -197,8 +197,8 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
                                     print("Response: \(responseString)")
                                     DispatchQueue.main.async {
                                         let jsonDecoder = JSONDecoder()
-                                        self.getServiceCorriderInfo = try? jsonDecoder.decode([ServiceCorriderData].self, from: data)
-                                        UserManager.shared.getServiceCorridorData = self.getServiceCorriderInfo
+                                        self.getServiceCorriderInfo = try? jsonDecoder.decode(ServiceCorriderModel.self, from: data)
+                                        UserManager.shared.getServiceCorridorData = self.getServiceCorriderInfo?.data
                                         print("UserManager.shared.getServiceCorridorData: ", UserManager.shared.getServiceCorridorData ?? [])
                                         let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "TransferMoneyViewController") as! TransferMoneyViewController
                                         self.navigationController?.pushViewController(vc, animated: true)

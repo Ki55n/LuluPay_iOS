@@ -79,6 +79,7 @@ extension TransferMoneyViewController: UITableViewDelegate, UITableViewDataSourc
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellReq", for: indexPath) as? RequestMoneyCell else {
             fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
         }
+        print("send & request money")
         cell.lblTitle.text = "Send Money"
         //            cell.profileImageView.backgroundColor = .red
         return cell
