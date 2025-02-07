@@ -120,9 +120,26 @@ class SendMoneyViewController: UIViewController {
 //    }
 
     @objc func Submit() {
-        guard let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "PaySuccessViewController") as? PaySuccessViewController else { return }
-        vc.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(vc, animated: true)
+        let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/accounts/validation?receiving_country_code=PK&receiving_mode=BANK&first_name=first name&middle_name=middle name&last_name=last name&iso_code=ALFHPKKA068&iban=PK12ABCD1234567891234567"
+
+        let headers1 = [
+//                            "Content-Type": "application/x-www-form-urlencoded",
+            "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
+        ]
+        APIService.shared.request(url: url1, method: .get, parameters: [:], headers: headers1) { result in
+            switch result {
+            case .success(let data):
+                if let responseString = String(data: data, encoding: .utf8) {
+                    guard let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "PaySuccessViewController") as? PaySuccessViewController else { return }
+                    vc.hidesBottomBarWhenPushed = true
+                    self.navigationController?.pushViewController(vc, animated: true)
+                    print("Response: \(responseString)")
+                }
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+        
     }
 
 //    private func configurePicker(for textField: UITextField?, picker: UIPickerView?, data: [String]) {
