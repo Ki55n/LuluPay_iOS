@@ -44,7 +44,7 @@ class ProfileViewController: UIViewController,UITableViewDelegate, UITableViewDa
                 tblList.tableHeaderView = headerView
                 
                 let backgroundView = UIView()
-                backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: tblList.frame.height/5)
+                backgroundView.frame = CGRect(x: 0, y: headerView.frame.minY, width: tblList.frame.width, height: tblList.frame.height/2)
                 if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
                     backgroundView.backgroundColor = customColor
                 } else {
@@ -60,6 +60,7 @@ class ProfileViewController: UIViewController,UITableViewDelegate, UITableViewDa
        
         
         tblList.bounces = false
+        tblList.sectionHeaderTopPadding = 0
         // Add the custom background view to the table view
         tblList.backgroundColor = .clear
         tblList.delegate = self

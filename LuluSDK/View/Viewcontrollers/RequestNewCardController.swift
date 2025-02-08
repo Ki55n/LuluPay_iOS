@@ -41,7 +41,7 @@ class RequestNewCardController: UIViewController,UITableViewDelegate,UITableView
             if let headerView = bundle.loadNibNamed("CustomHeaderView", owner: self, options: nil)?.first as? CustomHeaderView {
                 headerView.lblTitle.text = "Request a new card" // Customize the header text
                 headerView.btnBack.addTarget(self, action: #selector(self.moveBack), for: .touchUpInside)
-                headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 150)
+                headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 110)
 
                 if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
                     headerView.viewMain.backgroundColor = customColor
@@ -196,10 +196,10 @@ class RequestNewCardController: UIViewController,UITableViewDelegate,UITableView
     }
         func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
             if section == 0{
-                let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tblList.frame.width, height: 30))
+                let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tblList.frame.width, height: 100))
                 headerView.backgroundColor = UIColor.white
                 
-                let cornerRadius: CGFloat = 15
+                let cornerRadius: CGFloat = 30
                 headerView.layer.cornerRadius = cornerRadius
                 headerView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
                 headerView.layer.masksToBounds = true

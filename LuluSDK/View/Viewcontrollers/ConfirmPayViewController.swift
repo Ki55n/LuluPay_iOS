@@ -34,7 +34,9 @@ class ConfirmPayViewController: UIViewController {
                 tableView.tableHeaderView = headerView
                 
                 let backgroundView = UIView()
-                backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tableView.frame.width, height: tableView.frame.height/5)
+                backgroundView.frame = CGRect(x: 0, y: headerView.frame.minY, width: tableView.frame.width, height: tableView.frame.height/2)                
+                
+               
                 if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
                     backgroundView.backgroundColor = customColor
                 } else {
@@ -55,6 +57,11 @@ class ConfirmPayViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.clipsToBounds = false
+        tableView.sectionHeaderTopPadding = 0
+        tableView.sectionHeaderHeight = 0
+        tableView.sectionFooterHeight = 0
+        tableView.contentInset = .zero
+
 
 
     }
@@ -182,10 +189,10 @@ extension ConfirmPayViewController: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0{
-            let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 20))
+            let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 40))
             headerView.backgroundColor = UIColor.white
             
-            let cornerRadius: CGFloat = 15
+            let cornerRadius: CGFloat = 20
             headerView.layer.cornerRadius = cornerRadius
             headerView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             headerView.layer.masksToBounds = true
@@ -196,7 +203,7 @@ extension ConfirmPayViewController: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0{
-            return 30
+            return 40
         }else{
             return 0
         }

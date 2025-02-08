@@ -61,7 +61,7 @@ class RequestAuthorizationViewController: UIViewController, UITableViewDataSourc
             if let headerView = bundle.loadNibNamed("CustomHeaderView", owner: self, options: nil)?.first as? CustomHeaderView {
                 headerView.lblTitle.text = "Request a new card" // Customize the header text
                 headerView.btnBack.addTarget(self, action: #selector(self.moveBack), for: .touchUpInside)
-                headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 150)
+                headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 110)
 
                 if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
                     headerView.viewMain.backgroundColor = customColor

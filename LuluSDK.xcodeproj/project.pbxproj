@@ -86,6 +86,7 @@
 		B8C07CB72D5262CB008D506B /* ConfirmPayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07CB62D5262CB008D506B /* ConfirmPayViewController.swift */; };
 		B8C07CB92D5264DF008D506B /* PaySuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07CB82D5264DF008D506B /* PaySuccessViewController.swift */; };
 		B8C07CBB2D5266F3008D506B /* ShareReceiptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07CBA2D5266F3008D506B /* ShareReceiptViewController.swift */; };
+		B8D7619C2D561ACC001F9852 /* LoadingIndicatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D7619B2D561ACC001F9852 /* LoadingIndicatorManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -180,6 +181,7 @@
 		B8C07CB62D5262CB008D506B /* ConfirmPayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPayViewController.swift; sourceTree = "<group>"; };
 		B8C07CB82D5264DF008D506B /* PaySuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaySuccessViewController.swift; sourceTree = "<group>"; };
 		B8C07CBA2D5266F3008D506B /* ShareReceiptViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareReceiptViewController.swift; sourceTree = "<group>"; };
+		B8D7619B2D561ACC001F9852 /* LoadingIndicatorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicatorManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -428,6 +430,7 @@
 		B869532F2D4A05B90088B538 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				B8D7619B2D561ACC001F9852 /* LoadingIndicatorManager.swift */,
 			);
 			path = "\U0010Services";
 			sourceTree = "<group>";
@@ -615,6 +618,7 @@
 				7DB84ED22D3AC05800A2C2D6 /* LuluSDK.docc in Sources */,
 				B86953142D4A05AD0088B538 /* CardBalanceCell.swift in Sources */,
 				B869531B2D4A05AD0088B538 /* PinEntryCell.swift in Sources */,
+				B8D7619C2D561ACC001F9852 /* LoadingIndicatorManager.swift in Sources */,
 				B8C07C952D51E231008D506B /* ContactListTableViewCell.swift in Sources */,
 				7DB84EEE2D3AC1CB00A2C2D6 /* MyStoryboardLoader.swift in Sources */,
 			);

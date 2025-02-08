@@ -30,7 +30,7 @@ class TransferMoneyViewController: UIViewController {
                 tableView.tableHeaderView = headerView
                 
                 let backgroundView = UIView()
-                backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tableView.frame.width, height: tableView.frame.height/5)
+                backgroundView.frame = CGRect(x: 0, y: headerView.frame.minY, width: tableView.frame.width, height: 160)
                 if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
                     backgroundView.backgroundColor = customColor
                 } else {
@@ -51,6 +51,8 @@ class TransferMoneyViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.clipsToBounds = false
+        tableView.sectionHeaderTopPadding = 0
+
         
     }
     @objc func moveBack(){
@@ -81,6 +83,24 @@ extension TransferMoneyViewController: UITableViewDelegate, UITableViewDataSourc
         }
         print("send & request money")
         cell.lblTitle.text = "Send Money"
+        
+        let cornerRadius: CGFloat = 30
+        cell.layer.cornerRadius = cornerRadius
+        cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        cell.layer.masksToBounds = true
+        
+        cell.contentView.layer.cornerRadius = cornerRadius
+        cell.contentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        cell.contentView.layer.masksToBounds = true
+        
+        cell.viewmain.layer.cornerRadius = cornerRadius
+        cell.viewmain.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        cell.viewmain.layer.masksToBounds = true
+
+        
+        cell.backgroundColor = .clear
+        cell.contentView.backgroundColor = .clear
+
         //            cell.profileImageView.backgroundColor = .red
         return cell
         
@@ -127,14 +147,14 @@ extension TransferMoneyViewController: UITableViewDelegate, UITableViewDataSourc
 
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 120
+        return 130
     }
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+  /*  func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0{
-            let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 30))
+            let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 100))
             headerView.backgroundColor = UIColor.white
             
-            let cornerRadius: CGFloat = 15
+            let cornerRadius: CGFloat = 30
             headerView.layer.cornerRadius = cornerRadius
             headerView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             headerView.layer.masksToBounds = true
@@ -150,6 +170,11 @@ extension TransferMoneyViewController: UITableViewDelegate, UITableViewDataSourc
             return 0
         }
         
+    } */
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return nil
     }
-    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+       return CGFloat.leastNormalMagnitude
+    }
 }

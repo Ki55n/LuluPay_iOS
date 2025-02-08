@@ -33,8 +33,10 @@ class LoginViewController: UIViewController {
             "client_id": "cdp_app",
             "client_secret": "mSh18BPiMZeQqFfOvWhgv8wzvnNVbj3Y"
         ]
+        LoadingIndicatorManager.shared.showLoading(on: self.view)
 
         APIService.shared.request(url: url, method: .post, parameters: parameters, headers: headers) { result in
+
             switch result {
             case .success(let data):
                 if let responseString = String(data: data, encoding: .utf8) {
@@ -62,6 +64,10 @@ class LoginViewController: UIViewController {
 //                            "iban": "PK12ABCD1234567891234567"
 //                        ]
                         APIService.shared.request(url: url1, method: .get, parameters: [:], headers: headers1) { result in
+                            DispatchQueue.main.async {
+                                LoadingIndicatorManager.shared.hideLoading(on: self.view)
+                            }
+
                             switch result {
                             case .success(let data):
                                 if let responseString = String(data: data, encoding: .utf8) {

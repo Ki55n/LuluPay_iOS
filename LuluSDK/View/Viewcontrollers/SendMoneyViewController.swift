@@ -77,6 +77,12 @@ class SendMoneyViewController: UIViewController {
         tableView.dataSource = self
         tableView.bounces = false
         tableView.clipsToBounds = false
+        tableView.sectionHeaderTopPadding = 0
+        tableView.sectionHeaderHeight = 0
+        tableView.sectionFooterHeight = 0
+        tableView.contentInset = .zero
+
+
     }
     
     private func setupHeaderView() {

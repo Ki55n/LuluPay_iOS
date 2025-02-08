@@ -45,7 +45,7 @@ class CardsMangementViewController: UIViewController,UITableViewDelegate, UITabl
                 tblList.tableHeaderView = headerView
                 
                 let backgroundView = UIView()
-                backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: tblList.frame.height/5)
+                backgroundView.frame = CGRect(x: 0, y: headerView.frame.minY, width: tblList.frame.width, height: tblList.frame.height/5)
                 if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
                     backgroundView.backgroundColor = customColor
                 } else {
@@ -60,6 +60,7 @@ class CardsMangementViewController: UIViewController,UITableViewDelegate, UITabl
         }
 
         tblList.bounces = false
+        tblList.sectionHeaderTopPadding = 0
         // Add the custom background view to the table view
         tblList.backgroundColor = .clear
         tblList.delegate = self
@@ -137,10 +138,10 @@ class CardsMangementViewController: UIViewController,UITableViewDelegate, UITabl
     }
         func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
             if section == 0{
-                let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tblList.frame.width, height: 30))
+                let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tblList.frame.width, height: 40))
                 headerView.backgroundColor = UIColor.white
                 
-                let cornerRadius: CGFloat = 15
+                let cornerRadius: CGFloat = 20
                 headerView.layer.cornerRadius = cornerRadius
                 headerView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
                 headerView.layer.masksToBounds = true
@@ -149,12 +150,20 @@ class CardsMangementViewController: UIViewController,UITableViewDelegate, UITabl
             }
             return nil
         }
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0{
-            return 30
+            return 40
         }else{
             return 0
         }
         
     }
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return nil
+    }
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+       return CGFloat.leastNormalMagnitude
+    }
+
 }

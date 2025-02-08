@@ -39,7 +39,7 @@ class ContactListViewController: UIViewController {
                 tableView.tableHeaderView = headerView
                 
                 let backgroundView = UIView()
-                backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tableView.frame.width, height: tableView.frame.height/5)
+                backgroundView.frame = CGRect(x: 0, y: headerView.frame.minY, width: tableView.frame.width, height: 190)
                 if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
                     backgroundView.backgroundColor = customColor
                 } else {
@@ -56,10 +56,15 @@ class ContactListViewController: UIViewController {
         
         tableView.bounces = false
         // Add the custom background view to the table view
-        tableView.backgroundColor = .clear
+        tableView.backgroundColor = UIColor(named: "customCyanColor")
         tableView.delegate = self
         tableView.dataSource = self
         tableView.clipsToBounds = false
+        tableView.sectionHeaderTopPadding = 0
+        tableView.sectionHeaderHeight = 0
+        tableView.sectionFooterHeight = 0
+        tableView.contentInset = .zero
+
         
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -238,7 +243,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section{
         case 0:
-            return 100
+            return 70
         case 1:
             if indexPath.row == 0{
                 return 50
@@ -253,10 +258,10 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource 
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0{
-            let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 20))
+            let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 40))
             headerView.backgroundColor = UIColor.white
             
-            let cornerRadius: CGFloat = 15
+            let cornerRadius: CGFloat = 20
             headerView.layer.cornerRadius = cornerRadius
             headerView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             headerView.layer.masksToBounds = true
@@ -265,15 +270,20 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource 
         }
         return nil
     }
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return nil
+    }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0{
-            return 30
+            return 40
         }else{
             return 0
         }
         
     }
-    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+       return CGFloat.leastNormalMagnitude
+    }
 }
 
 extension ContactListViewController: UISearchResultsUpdating {

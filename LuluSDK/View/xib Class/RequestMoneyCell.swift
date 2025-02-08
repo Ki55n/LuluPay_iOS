@@ -10,7 +10,7 @@ import UIKit
 class RequestMoneyCell: UITableViewCell {
     @IBOutlet weak var imgMoney:UIImageView!
     @IBOutlet weak var lblTitle:UILabel!
-    
+    @IBOutlet weak var viewmain:UIView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

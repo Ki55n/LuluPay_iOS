@@ -170,8 +170,9 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
         ]
 
         let parameters: [String: String] = [:]
-
+        LoadingIndicatorManager.shared.showLoading(on: self.view)
         APIService.shared.request(url: url, method: .get, parameters: parameters, headers: headers) { result in
+
             switch result {
             case .success(let data):
                 if let responseString = String(data: data, encoding: .utf8) {
@@ -189,8 +190,12 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
                         ]
                         
                         let parameters1: [String: String] = [:]
-                        
+                        LoadingIndicatorManager.shared.showLoading(on: self.view)
                         APIService.shared.request(url: url1, method: .get, parameters: parameters1, headers: headers1) { result in
+                            DispatchQueue.main.async {
+                                LoadingIndicatorManager.shared.hideLoading(on: self.view)
+                            }
+
                             switch result {
                             case .success(let data):
                                 if let responseString = String(data: data, encoding: .utf8) {
