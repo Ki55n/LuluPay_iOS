@@ -46,12 +46,7 @@ class LoginViewController: UIViewController {
                         self.loginInfo = try? jsonDecoder.decode(LoginModel.self, from: data)
                         UserManager.shared.loginModel = self.loginInfo
                         
-                        let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/accounts/validation?receiving_country_code=PK&receiving_mode=BANK&first_name=first name&middle_name=middle name&last_name=last name&iso_code=ALFHPKKA068&iban=PK12ABCD1234567891234567"
-
-                        let headers1 = [
-//                            "Content-Type": "application/x-www-form-urlencoded",
-                            "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
-                        ]
+                        
 
 //                        let parameters1 = [
 //                                           
@@ -63,15 +58,7 @@ class LoginViewController: UIViewController {
 //                            "iso_code": "ALFHPKKA068",
 //                            "iban": "PK12ABCD1234567891234567"
 //                        ]
-                        APIService.shared.request(url: url1, method: .get, parameters: [:], headers: headers1) { result in
-                            DispatchQueue.main.async {
-                                LoadingIndicatorManager.shared.hideLoading(on: self.view)
-                            }
-
-                            switch result {
-                            case .success(let data):
-                                if let responseString = String(data: data, encoding: .utf8) {
-                                    print("Response: \(responseString)")
+                        
                                     let storyboard = MyStoryboardLoader.getStoryboard(name: "Lulu")
                                     // Instantiate the initial view controller
                                     guard let tabbarVC = storyboard?.instantiateViewController(withIdentifier: "mainTabbar") as? UITabBarController else {
@@ -79,11 +66,7 @@ class LoginViewController: UIViewController {
                                     }
                                     self.navigationController?.navigationBar.isHidden = true
                                     self.navigationController?.pushViewController(tabbarVC, animated: true)
-                                }
-                            case .failure(let error):
-                                print("Error: \(error.localizedDescription)")
-                            }
-                        }
+                                
                     }
                     
                 }
