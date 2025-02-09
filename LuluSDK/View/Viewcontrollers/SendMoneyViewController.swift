@@ -6,6 +6,7 @@ struct ReceiverDetails {
     var lastName: String
     var phoneNumber: String
     var country: String
+    var country_code: String
     var receiveMode: String
     var accountType: String
     var swiftCode: String
@@ -18,7 +19,24 @@ struct ReceiverDetails {
 class SendMoneyViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
-    var countryList: [String] { ["BD", "EG", "IN", "PH"] }
+    var countryList: [(name: String, code: String)] = [
+        ("China", "CH"),
+        ("Egypt", "EG"),
+        ("India", "IN"),
+        ("Pakistan", "PK"),
+        ("Philippines", "PH"),
+        ("Sri Lanka", "SL")
+    ]
+    
+    let countryPhonePatterns: [String: String] = [
+        "China": "^(?:\\+86)1[1-9]\\d{9}$", // +86
+        "Egypt": "^(?:\\+20)1[0-2,5]{1}[0-9]{8}$", // +20
+        "India": "^(?:\\+91)[6-9]\\d{9}$", // +91
+        "Pakistan": "^(?:\\+92)3[0-9]{9}$", // +92
+        "Philippines": "^(?:\\+63)9[0-9]{9}$", // +63
+        "Sri Lanka": "^(?:\\+94)7[0-9]{8}$" // +94
+    ]
+
     var receiveModeList: [String] { ["Bank", "Cash Pickup"] }
     var accountTypeList: [String] { ["Savings"] }
     var instrumentList: [String] { ["Remittance"] }
@@ -27,8 +45,10 @@ class SendMoneyViewController: UIViewController {
     var showAccountType: Bool = false
     var showRoutingField:Bool = false
     var showAccountNumberField:Bool = false
+    var showSwiftCodeField:Bool = false
+
     var selectedCountry: String? // Track selected country
-    var receiverDetails = ReceiverDetails(firstName: "", middleName: "", lastName: "", phoneNumber: "", country: "", receiveMode: "", accountType: "", swiftCode: "", iban: "", routingCode: "", accountNumber: "", chooseInstrument: "")
+    var receiverDetails = ReceiverDetails(firstName: "", middleName: "", lastName: "", phoneNumber: "", country: "", country_code: "", receiveMode: "", accountType: "", swiftCode: "", iban: "", routingCode: "", accountNumber: "", chooseInstrument: "")
     var firstNameField: UITextField?
     var middleNameField: UITextField?
     var lastNameField: UITextField?
@@ -46,12 +66,15 @@ class SendMoneyViewController: UIViewController {
     var accountTypePicker : UIPickerView?
     var chooseInstrumentPicker:UIPickerView?
     
+    var allTextFields: [UITextField?] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupTableView()
         setupHeaderView()
-        
+        allTextFields = [firstNameField, middleNameField, lastNameField, phoneNumberField, countryField, receiveModeField, ibanField, swiftCodeField, accountNumberField, routingCodeField, chooseAccountTypeField, chooseInstrumentField]
+
          firstNameField?.delegate = self
          middleNameField?.delegate = self
          lastNameField?.delegate = self
@@ -65,8 +88,32 @@ class SendMoneyViewController: UIViewController {
         routingCodeField?.delegate = self
         chooseInstrumentField?.delegate = self
         
+
     }
-    
+    func addDoneButtonToTextField(_ textField: UITextField?) {
+        guard let textField = textField else { return }
+
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(dismissKeyboard))
+
+        toolbar.setItems([flexibleSpace, doneButton], animated: false)
+        toolbar.isUserInteractionEnabled = true
+
+        textField.inputAccessoryView = toolbar
+    }
+
+    // Function to dismiss keyboard
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        
+    }
+
     private func setupTableView() {
         if let bundle = Bundle(identifier: "com.finance.LuluSDK") {
             tableView.register(UINib(nibName: "TextFieldCell", bundle: bundle), forCellReuseIdentifier: "cellTextField")
@@ -124,30 +171,67 @@ class SendMoneyViewController: UIViewController {
 ////            }
 //        }
 //    }
+    func isPhoneNumberValid(for country: String, phoneNumber: String) -> Bool {
+        guard let pattern = countryPhonePatterns[country] else { return false }
+        let regex = try? NSRegularExpression(pattern: pattern)
+        let range = NSRange(location: 0, length: phoneNumber.count)
+        return regex?.firstMatch(in: phoneNumber, options: [], range: range) != nil
+    }
 
     @objc func Submit() {
-        let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/accounts/validation?receiving_country_code=PK&receiving_mode=BANK&first_name=first name&middle_name=middle name&last_name=last name&iso_code=ALFHPKKA068&iban=PK12ABCD1234567891234567"
+        if receiverDetails.firstName.isEmpty{
+            showToast(message: "First Name field is required")
+        }else if receiverDetails.lastName.isEmpty{
+            showToast(message: "Last Name field is required")
+        }else if receiverDetails.phoneNumber.isEmpty{
+            showToast(message: "Phone Number field is required")
+        }else if !isPhoneNumberValid(for: receiverDetails.country, phoneNumber: receiverDetails.phoneNumber) {
+            showToast(message: "Invalid phone number for \(receiverDetails.country)")
+        }else if (receiverDetails.iban.isEmpty&&showIbanField) || (receiverDetails.accountNumber.isEmpty&&showAccountNumberField){
+            showToast(message: "Receiver account number or iban is required!")
+        }else if receiverDetails.accountType.isEmpty && showAccountType{
+            showToast(message: "Receiver account type is required!")
+        }else if receiverDetails.chooseInstrument.isEmpty{
+            showToast(message: "Instrument is required!")
+        }else if receiverDetails.swiftCode.isEmpty&&showSwiftCodeField{
+            showToast(message: "Swift/iso code is required!")
+        }else if receiverDetails.routingCode.isEmpty&&showRoutingField{
+            showToast(message: "Routing code is required!")
+        }
+        else{
+            let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/accounts/validation?receiving_country_code=PK&receiving_mode=BANK&first_name=first name&middle_name=middle name&last_name=last name&iso_code=ALFHPKKA068&iban=PK12ABCD1234567891234567"
+            let params = ["first_name":receiverDetails.firstName,"last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country,"receiving_mode":self.receiverDetails.receiveMode,"iso_code":receiverDetails.swiftCode,"iban":receiverDetails.iban,"route_code":receiverDetails.routingCode,"account_number":receiverDetails.accountNumber,"account_type":receiverDetails.accountType]
+            let filteredParams = params.compactMapValues { $0.isEmpty == true ? nil : $0 }
 
-        let headers1 = [
-//                            "Content-Type": "application/x-www-form-urlencoded",
-            "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
-        ]
-        APIService.shared.request(url: url1, method: .get, parameters: [:], headers: headers1) { result in
-            switch result {
-            case .success(let data):
-                if let responseString = String(data: data, encoding: .utf8) {
-                    guard let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "PaySuccessViewController") as? PaySuccessViewController else { return }
-                    vc.hidesBottomBarWhenPushed = true
-                    self.navigationController?.pushViewController(vc, animated: true)
-                    print("Response: \(responseString)")
+            print(params)
+
+            let headers1 = [
+    //                            "Content-Type": "application/x-www-form-urlencoded",
+                "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
+            ]
+            LoadingIndicatorManager.shared.showLoading(on: self.view)
+            APIService.shared.request(url: url1, method: .get, parameters: filteredParams, headers: headers1) { result in
+                DispatchQueue.main.async {
+                    LoadingIndicatorManager.shared.hideLoading(on: self.view)
                 }
-            case .failure(let error):
-                print("Error: \(error.localizedDescription)")
+                switch result {
+                case .success(let data):
+                    if let responseString = String(data: data, encoding: .utf8) {
+                        UserManager.shared.getReceiverData = self.receiverDetails
+                        guard let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "SendReqMoneyViewController") as? SendReqMoneyViewController else { return }
+                        vc.hidesBottomBarWhenPushed = true
+                        self.navigationController?.pushViewController(vc, animated: true)
+                        print("Response: \(responseString)")
+                    }
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
+                }
             }
+
         }
         
     }
-
+    
 //    private func configurePicker(for textField: UITextField?, picker: UIPickerView?, data: [String]) {
 //        guard let textField = textField, let picker = picker else { return }
 //        picker.delegate = self
@@ -247,12 +331,21 @@ class SendMoneyViewController: UIViewController {
     @objc private func dismissCountryPicker() {
         countryField?.resignFirstResponder()
         if countryField?.text == ""{
-            countryField?.text = countryList[0]
-            receiverDetails.country = countryList[0]
+            countryField?.text = countryList[0].name
+            receiverDetails.country = countryList[0].name
+            receiverDetails.country_code = countryList[0].code
+
+            var selectedCountryValue = countryList[0]
+            showIbanField = (selectedCountryValue.code == "PK" || selectedCountryValue.code == "EG" || selectedCountryValue.code == "SL")
+            showRoutingField = (selectedCountryValue.code == "IN")
+            showAccountNumberField = (selectedCountryValue.code == "IN" || selectedCountryValue.code == "CH" || selectedCountryValue.code == "PH" || selectedCountryValue.code == "SL")
+            showSwiftCodeField = (selectedCountryValue.code != "IN")
 
         }
+
 //        tableView.reloadRows(at: [IndexPath(row: 5, section: 0)], with: .automatic)
         tableView.reloadData()
+        
     }
 
     @objc private func dismissReceiveModePicker() {
@@ -264,16 +357,22 @@ class SendMoneyViewController: UIViewController {
 
 //        tableView.reloadRows(at: [IndexPath(row: 6, section: 0)], with: .automatic)
         tableView.reloadData()
+        
     }
     @objc private func dismissAccountTypePicker() {
         chooseAccountTypeField?.resignFirstResponder()
         if chooseAccountTypeField?.text == ""{
             chooseAccountTypeField?.text = accountTypeList[0]
             receiverDetails.accountType = accountTypeList[0]
-        }
+            
+            var selectedReceiveModeValue = receiveModeList[0]
+            showAccountType = (selectedReceiveModeValue == "Bank")
 
+        }
+        
 //        tableView.reloadRows(at: [IndexPath(row: 7, section: 0)], with: .automatic)
         tableView.reloadData()
+        
     }
 
 }
@@ -287,7 +386,7 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            var rowCount = 8
+            var rowCount = 7
             if showIbanField {
                 rowCount += 1 // Add 1 row for IBAN
             }
@@ -302,7 +401,10 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
             if showAccountType{
                 rowCount += 1
             }          
-            
+            if showSwiftCodeField{
+                rowCount += 1
+            }
+
 
             return 12
 
@@ -379,24 +481,32 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
             cell.txtFieldAmount.addTarget(self, action: #selector(updateFirstName(_:)), for: .editingChanged)
             cell.txtFieldAmount.tag = 1
             firstNameField = cell.txtFieldAmount
+            addDoneButtonToTextField(firstNameField)
+
        case 2:
             cell.txtFieldAmount.placeholder = "Receiver Middle Name"
             cell.txtFieldAmount.text = receiverDetails.middleName // Use model value
             cell.txtFieldAmount.addTarget(self, action: #selector(updateMiddleName(_:)), for: .editingChanged)
             cell.txtFieldAmount.tag = 2
             middleNameField = cell.txtFieldAmount
+            addDoneButtonToTextField(middleNameField)
+
         case 3:
             cell.txtFieldAmount.placeholder = "Receiver Last Name"
             cell.txtFieldAmount.text = receiverDetails.lastName // Use model value
             cell.txtFieldAmount.addTarget(self, action: #selector(updateLastName(_:)), for: .editingChanged)
             cell.txtFieldAmount.tag = 3
             lastNameField = cell.txtFieldAmount
+            addDoneButtonToTextField(lastNameField)
+
         case 4:
             cell.txtFieldAmount.placeholder = "Receiver Phone Number"
             cell.txtFieldAmount.text = receiverDetails.phoneNumber // Use model value
             cell.txtFieldAmount.addTarget(self, action: #selector(updatePhoneNumber(_:)), for: .editingChanged)
             cell.txtFieldAmount.tag = 4
             phoneNumberField = cell.txtFieldAmount
+            addDoneButtonToTextField(phoneNumberField)
+
         case 5:
             cell.txtFieldAmount.placeholder = "Choose Country"
             cell.txtFieldAmount.text = receiverDetails.country // Use model value
@@ -404,6 +514,7 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
             countryField = cell.txtFieldAmount
             countryField?.delegate = self
             self.countryPicker = UIPickerView.init(frame: CGRect(x: 0, y: 0, width: view.bounds.size.width, height: 200))
+            addDoneButtonToTextField(countryField)
 
 //            configurePicker(for: cell.txtFieldAmount, picker: self.countryPicker, data: countryList)
             configureCountryPicker()
@@ -415,7 +526,8 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
             receiveModeField = cell.txtFieldAmount
             receiveModeField?.delegate = self
             self.receivingPicker = UIPickerView.init(frame: CGRect(x: 0, y: 0, width: view.bounds.size.width, height: 200))
-            
+            addDoneButtonToTextField(receiveModeField)
+
 //            configurePicker(for: cell.txtFieldAmount, picker: self.receivingPicker, data: receiveModeList)
             configureReceiveModePicker()
         case 7:
@@ -426,18 +538,22 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
                 chooseAccountTypeField = cell.txtFieldAmount
                 chooseAccountTypeField?.delegate = self
                 self.accountTypePicker = UIPickerView.init(frame: CGRect(x: 0, y: 0, width: view.bounds.size.width, height: 200))
-                
+            addDoneButtonToTextField(chooseAccountTypeField)
+
                 //            configurePicker(for: cell.txtFieldAmount, picker: self.receivingPicker, data: receiveModeList)
                 configureAccountTypePicker()
 //            }else{
 //                cell.isHidden = true
 //            }
         case 8:
+            
             cell.txtFieldAmount.placeholder = "BIC/Swift code"
             cell.txtFieldAmount.text = receiverDetails.swiftCode // Use model value
             cell.txtFieldAmount.addTarget(self, action: #selector(updateSwiftCode(_:)), for: .editingChanged)
             cell.txtFieldAmount.tag = 5
             swiftCodeField = cell.txtFieldAmount
+            addDoneButtonToTextField(swiftCodeField)
+
         case 9:
 //            if showIbanField {
                 cell.txtFieldAmount.placeholder = "IBAN"
@@ -445,6 +561,8 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
                 cell.txtFieldAmount.addTarget(self, action: #selector(updateIban(_:)), for: .editingChanged)
                 cell.txtFieldAmount.tag = 6
                 ibanField = cell.txtFieldAmount
+            addDoneButtonToTextField(ibanField)
+
 //            } else {
 //                cell.isHidden = true
 //            }
@@ -455,7 +573,8 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
                 cell.txtFieldAmount.addTarget(self, action: #selector(updateRoutingCode(_:)), for: .editingChanged)
                 cell.txtFieldAmount.tag = 7
                 routingCodeField = cell.txtFieldAmount
-                
+            addDoneButtonToTextField(routingCodeField)
+
 //            } else {
 //                cell.isHidden = true
 //            }
@@ -467,7 +586,8 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
                 cell.txtFieldAmount.addTarget(self, action: #selector(updateAccountNumber(_:)), for: .editingChanged)
                 cell.txtFieldAmount.tag = 8
                 accountNumberField = cell.txtFieldAmount
-                
+            addDoneButtonToTextField(accountNumberField)
+
 //            } else {
 //                cell.isHidden = true
 //            }
@@ -487,6 +607,8 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
                 return showIbanField ? UITableView.automaticDimension : 0
             case 7: // Account Type Field
                 return showAccountType ? UITableView.automaticDimension : 0
+            case 8: // Account Type Field
+                return showSwiftCodeField ? UITableView.automaticDimension : 0
             case 10: // Routing Field
                 return showRoutingField ? UITableView.automaticDimension : 0
             case 11: // Account Number Field
@@ -538,7 +660,7 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         switch pickerView {
         case countryPicker:
-            return countryList[row]
+            return countryList[row].name
         case receivingPicker:
             return receiveModeList[row]
         case accountTypePicker:
@@ -555,13 +677,14 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
            if pickerView == countryPicker {
                let selectedCountryValue = countryList[row]
-               receiverDetails.country = selectedCountryValue
-               countryField?.text = selectedCountryValue
-               // Show IBAN field for multiple countries (PK, UK, AE, EG)
-               showIbanField = (selectedCountryValue == "PK" || selectedCountryValue == "UK" || selectedCountryValue == "AE" || selectedCountryValue == "EG")
-               showRoutingField = (selectedCountryValue == "BD" || selectedCountryValue == "IN" || selectedCountryValue == "LK" || selectedCountryValue == "PH")
-               showAccountNumberField = (selectedCountryValue == "NP" || selectedCountryValue == "IN" || selectedCountryValue == "LK" || selectedCountryValue == "PH" || selectedCountryValue == "ID" || selectedCountryValue == "BD")
-               
+               receiverDetails.country = selectedCountryValue.name
+               receiverDetails.country_code = selectedCountryValue.code
+               countryField?.text = selectedCountryValue.name
+               // Show IBAN field for multiple countries (PK, CH, IN, EG, SL, PH)
+               showIbanField = (selectedCountryValue.code == "PK" || selectedCountryValue.code == "EG" || selectedCountryValue.code == "SL")
+               showRoutingField = (selectedCountryValue.code == "IN")
+               showAccountNumberField = (selectedCountryValue.code == "IN" || selectedCountryValue.code == "CH" || selectedCountryValue.code == "PH" || selectedCountryValue.code == "SL")
+               showSwiftCodeField = (selectedCountryValue.code != "IN")
 //               tableView.reloadData()
            } else if pickerView == receivingPicker {
                let selectedReceiveModeValue = receiveModeList[row]
@@ -628,9 +751,10 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
            // Prevent manual editing of these text fields
-        return textField == countryField || textField == receiveModeField || textField == chooseAccountTypeField || textField == chooseInstrumentField
+        return textField == countryField || textField == receiveModeField || textField == chooseAccountTypeField || textField == chooseInstrumentField || textField == firstNameField || textField == middleNameField || textField == lastNameField || textField == phoneNumberField || textField == ibanField || textField == swiftCodeField || textField == routingCodeField
 
        }
+
     func textFieldDidEndEditing(_ textField: UITextField) {
         
        
@@ -686,34 +810,16 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
     }
     
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        switch textField {
-        case firstNameField:
-            middleNameField?.becomeFirstResponder()
-        case middleNameField:
-            lastNameField?.becomeFirstResponder()
-        case lastNameField:
-            phoneNumberField?.becomeFirstResponder()
-        case phoneNumberField:
-            countryField?.becomeFirstResponder()
-        case countryField:
-            receiveModeField?.becomeFirstResponder() // Close the keyboard for the last field
-        case receiveModeField:
-            ibanField?.becomeFirstResponder() // Close the keyboard for the last field
-        case ibanField:
-            swiftCodeField?.becomeFirstResponder() // Close the keyboard for the last field
-        case swiftCodeField:
-            view.endEditing(true) // Close the keyboard for the last field
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        textField.resignFirstResponder()
+//        return true
+//
+//    }
 
-        default:
-            textField.resignFirstResponder()
-        }
-        return false
-    }
     @objc func doneButtonTappedForCountry() {
         let selectedCountry = countryList[countryPicker?.selectedRow(inComponent: 0) ?? 0]
-        receiverDetails.country = selectedCountry
-        countryField?.text = selectedCountry
+        receiverDetails.country = selectedCountry.code
+        countryField?.text = selectedCountry.name
         countryField?.resignFirstResponder()  // Close the picker
     }
 

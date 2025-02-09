@@ -13,4 +13,6 @@ class UserManager {
     var loginModel: LoginModel?
     var getCodesData: GetCodesData?
     var getServiceCorridorData: [ServiceCorriderData]?
+    var getCurrentRate:[ExchangeRate]?
+    var getReceiverData:ReceiverDetails?
 }

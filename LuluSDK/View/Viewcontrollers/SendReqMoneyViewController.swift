@@ -10,13 +10,21 @@ import UIKit
 class SendReqMoneyViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
 //    private var footerView = ReferenceCell()
+    
+    var getCurrentRateInfo: [ExchangeRate] = []
     let footerView = UIView()
+    
+    var currentRate : ExchangeRate?
+    var ReceiverData : ReceiverDetails?
+    var txtFieldAmount:UITextField?
     override func viewDidLoad() {
         super.viewDidLoad()
 
         if let bundle = Bundle(identifier: "com.finance.LuluSDK") {
             tableView.register(UINib(nibName: "TextFieldCell", bundle: bundle), forCellReuseIdentifier: "cellTextField")
             tableView.register(UINib(nibName: "ProfileTCell", bundle: bundle), forCellReuseIdentifier: "profileCell")
+            tableView.register(UINib(nibName: "TitleCell", bundle: bundle), forCellReuseIdentifier: "cellTitle")
+
 //            tableView.regiLuluSDK.frameworkster(UINib(nibName: "ReferenceCell", bundle: bundle), forCellReuseIdentifier: "cellReference")
 
             if let headerView = bundle.loadNibNamed("CustomHeaderView", owner: self, options: nil)?.first as? CustomHeaderView {
@@ -67,16 +75,14 @@ class SendReqMoneyViewController: UIViewController {
         tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 0
         tableView.contentInset = .zero
-
+        getRates()
 
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 
     }
     @objc func moveToNext(){
-        let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "PaymentDetailsViewController") as! PaymentDetailsViewController
-        vc.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(vc, animated: true)
+        self.moveToNextAlert()
 
     }
     private func setupFooterView() {
@@ -86,7 +92,7 @@ class SendReqMoneyViewController: UIViewController {
         // Create text field and button
         let referenceTextField = UITextField()
         referenceTextField.borderStyle = .roundedRect
-        referenceTextField.placeholder = "Reference"
+        referenceTextField.placeholder = "Add Reference (Optional)"
         referenceTextField.translatesAutoresizingMaskIntoConstraints = false
         
         let nextButton = UIButton(type: .system)
@@ -125,6 +131,34 @@ class SendReqMoneyViewController: UIViewController {
             referenceTextField.widthAnchor.constraint(equalTo: footerView.widthAnchor, multiplier: 0.65)
         ])
     }
+    @objc private func moveToNextAlert() {
+        let paymentAlert = UIAlertController(
+            title: "Choose Payment Mode",
+            message: "Select your payment mode",
+            preferredStyle: .actionSheet
+        )
+        
+        // Payment mode options
+        let agencyPaymentAction = UIAlertAction(title: "Agency Payment", style: .default) { _ in
+            print("Agency Payment selected")
+            // Perform related tasks here
+            
+            let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "PaymentDetailsViewController") as! PaymentDetailsViewController
+            vc.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(vc, animated: true)
+
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+
+        // Add actions to the alert
+        paymentAlert.addAction(agencyPaymentAction)
+        paymentAlert.addAction(cancelAction)
+        
+        // Present the alert
+        self.present(paymentAlert, animated: true)
+    }
+
     @objc private func keyboardWillShow(notification: Notification) {
         if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardHeight = keyboardFrame.cgRectValue.height
@@ -160,7 +194,7 @@ extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section{
         case 0:
-            return 2
+            return 3
         default:
             return 0
         }
@@ -168,16 +202,81 @@ extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource
         
         
     }
-    
+    func getRates() {
+        
+        let url = "https://drap-sandbox.digitnine.com/raas/masters/v1/rates"
+        
+        let headers = [
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
+        ]
+        
+        let parameters: [String: String] = [:]
+        LoadingIndicatorManager.shared.showLoading(on: self.view)
+        APIService.shared.request(url: url, method: .get, parameters: parameters, headers: headers) { result in
+            DispatchQueue.main.async {
+                LoadingIndicatorManager.shared.hideLoading(on: self.view)
+            }
+            switch result {
+            case .success(let data):
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("Response: \(responseString)")
+                    DispatchQueue.main.async {
+                        let jsonDecoder = JSONDecoder()
+                        let decodedData = try? jsonDecoder.decode(ExchangeRateResponse.self, from: data)
+                        self.getCurrentRateInfo = decodedData?.data.rates ?? []
+                        UserManager.shared.getCurrentRate = self.getCurrentRateInfo
+                        self.ReceiverData = UserManager.shared.getReceiverData
+                        print("UserManager.shared.getCodesData: ", UserManager.shared.getCodesData ?? nil)
+                        for i in self.getCurrentRateInfo{
+                            if i.toCountryName == self.ReceiverData?.country{
+                                self.currentRate = i
+                                break
+                            }
+                        }
+                        
+                        self.tableView.reloadData()
+                    }
+                }
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+    }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.row{
         case 0:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellTitle", for: indexPath) as? TitleCell else {
+                fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
+            }
+//            if let arrRate = UserManager.shared.getCurrentRate{
+//                
+//                for i in arrRate{
+//                    if i.toCountry == "PK"{
+//                        cell.lblTitle.text = "Current Exchange Rate \n1 AED = \(i.rate)"
+//                    }
+//                }
+//            }
+            let rate:String = String(currentRate?.rate ?? 0.0)
+            cell.lblTitle.text = "Current Exchange Rate \n1 AED = \(rate)"
+            cell.lblTitle.numberOfLines = 0
+            cell.lblTitle.textAlignment = .center
+            cell.lblTitle.backgroundColor = UIColor(red: 248/255.0, green: 248/255.0, blue: 248/255.0, alpha: 1.0)
+        return cell
+
+        case 1:
             //use titleCell for title like - Recent, Alphabets
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "profileCell", for: indexPath) as? ProfileTCell else {
                 fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
             }
-            let title = "Jessica"
-            let subtitle = "from Instant Account"
+            let firstName = self.ReceiverData?.firstName ?? ""
+            let middleName = self.ReceiverData?.middleName ?? ""
+            let lastName = self.ReceiverData?.lastName ?? ""
+            let accountType = self.ReceiverData?.accountType ?? ""
+            print(accountType,ReceiverData?.accountType)
+            let title = "\(firstName) \(middleName) \(lastName)".trimmingCharacters(in: .whitespaces)
+            let subtitle = "from \(accountType)".trimmingCharacters(in: .whitespaces)
 
             // Define attributes for both parts
             let titleAttributes: [NSAttributedString.Key: Any] = [
@@ -214,13 +313,17 @@ extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource
 
             // Ensure label supports multi-line
             cell.lblTitle.numberOfLines = 0
-
+            cell.lblTitle.lineBreakMode = .byWordWrapping
             return cell
 
-        case 1:
+        case 2:
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellTextField", for: indexPath) as? TextFieldCell else {
                     fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
                 }
+            cell.txtFieldAmount.textAlignment = .center
+            
+            cell.txtFieldAmount.text = (currentRate?.fromCurrency ?? "AED") + " - "
+            self.txtFieldAmount = cell.txtFieldAmount
             cell.txtFieldAmount.setLeftPadding(10)
             return cell
 
@@ -237,6 +340,8 @@ extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource
         case 0:
             return 120
         case 1:
+            return 130
+        case 2:
             return 60
         default:
             return 0
@@ -265,6 +370,40 @@ extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource
         }
         
     }
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return nil
+    }
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0
+    }
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // 1. Get the current text
+        let currentText = textField.text ?? ""
+
+        // 2. Check if the user is deleting the "AED - " prefix
+        if range.location < 6 && range.length > 0 {
+            // Prevent deleting the prefix
+            textField.text = "AED - "
+            return false
+        }
+
+        // 3. Extract only the numeric part of the text
+        var numericText = currentText
+        if numericText.starts(with: "AED - ") {
+            numericText.removeFirst(6)
+        }
+
+        // 4. Calculate the new text after the user's input
+        let newText = (numericText as NSString).replacingCharacters(in: range, with: string)
+
+        // 5. Update the text field's text with the "AED - " prefix
+        textField.text = "AED - " + newText
+
+        // 6. Prevent the default change
+            return false
+        }
+    
+
     
 }
 

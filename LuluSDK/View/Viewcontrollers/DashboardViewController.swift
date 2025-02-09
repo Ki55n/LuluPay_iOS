@@ -31,11 +31,7 @@ class DashboardViewController: UIViewController {
         } else {
             print("Error: SDK Bundle not found.")
         }
-        exchangeRates = [
-            ExchangeRate(flag: flagEmoji(for: "PK"), currency: "PKR", buy: "86,246", sell: "85,583"),
-            ExchangeRate(flag: flagEmoji(for: "IN"), currency: "INR", buy: "86,246", sell: "85,583"),
-            ExchangeRate(flag: flagEmoji(for: "EG"), currency: "EGP", buy: "86,246", sell: "85,583")
-        ]
+        exchangeRates = []
     
     }
     
@@ -101,10 +97,10 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
                 }else{
                     rateCell.viewHeader.isHidden = true
                 }
-                rateCell.flagImageView.image = UIImage(named: rate.flag)
-                rateCell.currencyLabel.text = rate.currency
-                rateCell.buyRateLabel.text = rate.buy
-                rateCell.sellRateLabel.text = rate.sell
+//                rateCell.flagImageView.image = UIImage(named: rate.flag)
+//                rateCell.currencyLabel.text = rate.currency
+//                rateCell.buyRateLabel.text = rate.buy
+//                rateCell.sellRateLabel.text = rate.sell
                 return rateCell
             } else {
                 return UITableViewCell() // Fallback for unexpected rows

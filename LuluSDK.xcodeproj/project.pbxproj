@@ -66,6 +66,7 @@
 		B869532C2D4A05AD0088B538 /* SettingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B86953022D4A05AD0088B538 /* SettingsCell.xib */; };
 		B869532D2D4A05AD0088B538 /* TitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B86953032D4A05AD0088B538 /* TitleCell.xib */; };
 		B869532E2D4A05AD0088B538 /* TransferCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B86953042D4A05AD0088B538 /* TransferCell.xib */; };
+		B89D7E1A2D57C912008B6BE1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89D7E192D57C912008B6BE1 /* Extensions.swift */; };
 		B8C07C912D51E1A4008D506B /* ContactListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07C902D51E1A4008D506B /* ContactListViewController.swift */; };
 		B8C07C942D51E231008D506B /* ContactListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8C07C932D51E231008D506B /* ContactListTableViewCell.xib */; };
 		B8C07C952D51E231008D506B /* ContactListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07C922D51E231008D506B /* ContactListTableViewCell.swift */; };
@@ -161,6 +162,7 @@
 		B86953022D4A05AD0088B538 /* SettingsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsCell.xib; sourceTree = "<group>"; };
 		B86953032D4A05AD0088B538 /* TitleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TitleCell.xib; sourceTree = "<group>"; };
 		B86953042D4A05AD0088B538 /* TransferCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TransferCell.xib; sourceTree = "<group>"; };
+		B89D7E192D57C912008B6BE1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		B8C07C902D51E1A4008D506B /* ContactListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListViewController.swift; sourceTree = "<group>"; };
 		B8C07C922D51E231008D506B /* ContactListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListTableViewCell.swift; sourceTree = "<group>"; };
 		B8C07C932D51E231008D506B /* ContactListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContactListTableViewCell.xib; sourceTree = "<group>"; };
@@ -431,6 +433,7 @@
 			isa = PBXGroup;
 			children = (
 				B8D7619B2D561ACC001F9852 /* LoadingIndicatorManager.swift */,
+				B89D7E192D57C912008B6BE1 /* Extensions.swift */,
 			);
 			path = "\U0010Services";
 			sourceTree = "<group>";
@@ -569,6 +572,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D43C8332D4D510B00C841C2 /* LoginViewController.swift in Sources */,
+				B89D7E1A2D57C912008B6BE1 /* Extensions.swift in Sources */,
 				B8C07C992D51E3E1008D506B /* SearchCell.swift in Sources */,
 				B869531A2D4A05AD0088B538 /* NumberPadCell.swift in Sources */,
 				B8C07CA62D524E6B008D506B /* PaymentDetailCell.swift in Sources */,

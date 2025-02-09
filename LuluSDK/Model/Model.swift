@@ -8,11 +8,12 @@
 import Foundation
 
 
-struct ExchangeRate {
-    let flag: String
-    let currency: String
-    let buy: String
-    let sell: String
-}
+//struct ExchangeRate {
+//    let flag: String
+//    let currency: String
+//    let buy: String
+//    let sell: String
+//}
+
 
 
