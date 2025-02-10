@@ -17,4 +17,5 @@ class UserManager {
     var getReceiverData:ReceiverDetails?
     var getQuotesData:QuoteData?
     var getReferenceText:String?
+    var getRatesData: RatesData?
 }
