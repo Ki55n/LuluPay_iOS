@@ -8,7 +8,10 @@
 import UIKit
 
 class PaymentDetailCell: UITableViewCell {
-
+    @IBOutlet weak var lblTitle:UILabel!
+    @IBOutlet weak var lblAmount:UILabel!
+    @IBOutlet weak var lblCurrencyCode:UILabel!
+    @IBOutlet weak var imgCurrency:UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

@@ -14,19 +14,31 @@ class LoadingIndicatorManager {
     static let shared = LoadingIndicatorManager()
     private var activityIndicator: UIActivityIndicatorView?
 
-        func showLoading(on view: UIView) {
-            if activityIndicator == nil {
-                activityIndicator = UIActivityIndicatorView(style: .large)
-                activityIndicator?.color = .gray
-                activityIndicator?.center = view.center
-                activityIndicator?.startAnimating()
-                view.addSubview(activityIndicator!)
+    func showLoading(on view: UIView) {
+        DispatchQueue.main.async {
+            if self.activityIndicator == nil {
+                self.activityIndicator = UIActivityIndicatorView(style: .large)
+                self.activityIndicator?.color = .gray
+                self.activityIndicator?.center = view.center
+                self.activityIndicator?.startAnimating()
+                view.addSubview(self.activityIndicator!)
+                // Center the activity indicator
+                if let activityIndicator = self.activityIndicator {
+                    NSLayoutConstraint.activate([
+                        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+                    ])
+                }
+
             }
         }
+    }
 
-        func hideLoading(on view: UIView) {
-            activityIndicator?.stopAnimating()
-            activityIndicator?.removeFromSuperview()
-            activityIndicator = nil
+    func hideLoading(on view: UIView) {
+        DispatchQueue.main.async {
+            self.activityIndicator?.stopAnimating()
+            self.activityIndicator?.removeFromSuperview()
+            self.activityIndicator = nil
         }
+    }
 }

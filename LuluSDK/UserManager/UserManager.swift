@@ -13,6 +13,8 @@ class UserManager {
     var loginModel: LoginModel?
     var getCodesData: GetCodesData?
     var getServiceCorridorData: [ServiceCorriderData]?
-    var getCurrentRate:[ExchangeRate]?
+    var getCurrentRate:[Rates]?
     var getReceiverData:ReceiverDetails?
+    var getQuotesData:QuoteData?
+    var getReferenceText:String?
 }

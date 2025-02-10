@@ -36,7 +36,7 @@ class LoginViewController: UIViewController {
         LoadingIndicatorManager.shared.showLoading(on: self.view)
 
         APIService.shared.request(url: url, method: .post, parameters: parameters, headers: headers) { result in
-
+            LoadingIndicatorManager.shared.hideLoading(on: self.view)
             switch result {
             case .success(let data):
                 if let responseString = String(data: data, encoding: .utf8) {

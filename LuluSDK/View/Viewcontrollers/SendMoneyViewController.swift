@@ -211,9 +211,8 @@ class SendMoneyViewController: UIViewController {
             ]
             LoadingIndicatorManager.shared.showLoading(on: self.view)
             APIService.shared.request(url: url1, method: .get, parameters: filteredParams, headers: headers1) { result in
-                DispatchQueue.main.async {
-                    LoadingIndicatorManager.shared.hideLoading(on: self.view)
-                }
+            LoadingIndicatorManager.shared.hideLoading(on: self.view)
+                
                 switch result {
                 case .success(let data):
                     if let responseString = String(data: data, encoding: .utf8) {
@@ -325,7 +324,8 @@ class SendMoneyViewController: UIViewController {
 
         }
 //        tableView.reloadRows(at: [IndexPath(row: 5, section: 0)], with: .automatic)
-        tableView.reloadData()
+        let sectionIndex = 1 // Replace with the target section number
+        tableView.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
     }
 
     @objc private func dismissCountryPicker() {
@@ -344,8 +344,9 @@ class SendMoneyViewController: UIViewController {
         }
 
 //        tableView.reloadRows(at: [IndexPath(row: 5, section: 0)], with: .automatic)
-        tableView.reloadData()
-        
+        let sectionIndex = 0 // Replace with the target section number
+        tableView.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
+
     }
 
     @objc private func dismissReceiveModePicker() {
@@ -356,8 +357,9 @@ class SendMoneyViewController: UIViewController {
         }
 
 //        tableView.reloadRows(at: [IndexPath(row: 6, section: 0)], with: .automatic)
-        tableView.reloadData()
-        
+        let sectionIndex = 0 // Replace with the target section number
+        tableView.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
+
     }
     @objc private func dismissAccountTypePicker() {
         chooseAccountTypeField?.resignFirstResponder()
@@ -371,8 +373,9 @@ class SendMoneyViewController: UIViewController {
         }
         
 //        tableView.reloadRows(at: [IndexPath(row: 7, section: 0)], with: .automatic)
-        tableView.reloadData()
-        
+        let sectionIndex = 0 // Replace with the target section number
+        tableView.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
+
     }
 
 }
@@ -510,6 +513,7 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
         case 5:
             cell.txtFieldAmount.placeholder = "Choose Country"
             cell.txtFieldAmount.text = receiverDetails.country // Use model value
+            cell.txtFieldAmount.addTarget(self, action: #selector(updateCountry(_:)), for: .editingChanged)
             cell.txtFieldAmount.tag = 100
             countryField = cell.txtFieldAmount
             countryField?.delegate = self
@@ -724,6 +728,10 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
     @objc private func updatePhoneNumber(_ textField: UITextField) {
         receiverDetails.phoneNumber = textField.text ?? ""
     }
+    @objc private func updateCountry(_ textField: UITextField) {
+        receiverDetails.country = textField.text ?? ""
+    }
+
 
     @objc private func updateIban(_ textField: UITextField) {
         receiverDetails.iban = textField.text ?? ""
@@ -818,7 +826,7 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
 
     @objc func doneButtonTappedForCountry() {
         let selectedCountry = countryList[countryPicker?.selectedRow(inComponent: 0) ?? 0]
-        receiverDetails.country = selectedCountry.code
+        receiverDetails.country = selectedCountry.name
         countryField?.text = selectedCountry.name
         countryField?.resignFirstResponder()  // Close the picker
     }

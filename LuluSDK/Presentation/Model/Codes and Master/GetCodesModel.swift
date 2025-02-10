@@ -105,42 +105,6 @@ struct GetCodesData : Codable {
     }
 
 }
-// Root structure
-struct ExchangeRateResponse: Codable {
-    let status: String
-    let statusCode: Int
-    let data: ExchangeData
-
-    enum CodingKeys: String, CodingKey {
-        case status
-        case statusCode = "status_code"
-        case data
-    }
-}
-
-struct ExchangeData: Codable {
-    let rates: [ExchangeRate]
-}
-
-struct ExchangeRate: Codable {
-    let rate: Double
-    let toCurrencyName: String
-    let toCurrency: String
-    let fromCurrency: String
-    let toCountryName: String
-    let toCountry: String
-    let receivingMode: String
-
-    enum CodingKeys: String, CodingKey {
-        case rate
-        case toCurrencyName = "to_currency_name"
-        case toCurrency = "to_currency"
-        case fromCurrency = "from_currency"
-        case toCountryName = "to_country_name"
-        case toCountry = "to_country"
-        case receivingMode = "receiving_mode"
-    }
-}
 
 struct Income_types : Codable {
     let code : String?

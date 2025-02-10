@@ -11,12 +11,14 @@ class SendReqMoneyViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
 //    private var footerView = ReferenceCell()
     
-    var getCurrentRateInfo: [ExchangeRate] = []
+    var getCurrentRateInfo: [Rates] = []
     let footerView = UIView()
     
-    var currentRate : ExchangeRate?
+    var currentRate : Rates?
     var ReceiverData : ReceiverDetails?
+    
     var txtFieldAmount:UITextField?
+    let referenceTextField = UITextField()
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -81,8 +83,13 @@ class SendReqMoneyViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 
     }
+    
     @objc func moveToNext(){
-        self.moveToNextAlert()
+        if txtFieldAmount?.text != "AED - "{
+            self.moveToNextAlert()
+        }else{
+            showToast(message: "Please enter the amount")
+        }
 
     }
     private func setupFooterView() {
@@ -90,7 +97,7 @@ class SendReqMoneyViewController: UIViewController {
         footerView.translatesAutoresizingMaskIntoConstraints = false
         
         // Create text field and button
-        let referenceTextField = UITextField()
+        
         referenceTextField.borderStyle = .roundedRect
         referenceTextField.placeholder = "Add Reference (Optional)"
         referenceTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -143,10 +150,7 @@ class SendReqMoneyViewController: UIViewController {
             print("Agency Payment selected")
             // Perform related tasks here
             
-            let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "PaymentDetailsViewController") as! PaymentDetailsViewController
-            vc.hidesBottomBarWhenPushed = true
-            self.navigationController?.pushViewController(vc, animated: true)
-
+            self.createQuoteID()
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -186,7 +190,7 @@ class SendReqMoneyViewController: UIViewController {
    
 
 }
-extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource {
+extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -214,30 +218,180 @@ extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource
         let parameters: [String: String] = [:]
         LoadingIndicatorManager.shared.showLoading(on: self.view)
         APIService.shared.request(url: url, method: .get, parameters: parameters, headers: headers) { result in
-            DispatchQueue.main.async {
-                LoadingIndicatorManager.shared.hideLoading(on: self.view)
-            }
             switch result {
             case .success(let data):
                 if let responseString = String(data: data, encoding: .utf8) {
                     print("Response: \(responseString)")
                     DispatchQueue.main.async {
                         let jsonDecoder = JSONDecoder()
-                        let decodedData = try? jsonDecoder.decode(ExchangeRateResponse.self, from: data)
-                        self.getCurrentRateInfo = decodedData?.data.rates ?? []
+                        let decodedData = try? jsonDecoder.decode(RatesModel.self, from: data)
+                        self.getCurrentRateInfo = decodedData?.data?.rates ?? []
                         UserManager.shared.getCurrentRate = self.getCurrentRateInfo
                         self.ReceiverData = UserManager.shared.getReceiverData
                         print("UserManager.shared.getCodesData: ", UserManager.shared.getCodesData ?? nil)
                         for i in self.getCurrentRateInfo{
-                            if i.toCountryName == self.ReceiverData?.country{
+                            if i.to_country_name == self.ReceiverData?.country{
                                 self.currentRate = i
                                 break
                             }
                         }
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
                         
-                        self.tableView.reloadData()
                     }
                 }
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+            }
+                
+            LoadingIndicatorManager.shared.hideLoading(on: self.view)
+            
+
+        }
+    }
+    func createQuoteID() {
+        let url = "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/quote"
+        
+        let headers = [
+                "Content-Type": "application/json",
+                "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")",
+//                "sender": "testagentae",
+//                "channel": "Direct",
+//                "company": "784825",
+//                "branch": "784826"
+            ]
+        let detail = UserManager.shared.getReceiverData
+        let filteredText = txtFieldAmount?.text?.filter { $0.isNumber }
+        var requestBody = [String: String]()
+
+        if let countryCode = ReceiverData?.country_code,
+           let receivingMode = ReceiverData?.receiveMode.uppercased(),
+           let swiftCode = ReceiverData?.swiftCode,
+           let chooseInstrument = ReceiverData?.chooseInstrument.uppercased(),
+           let filteredText = txtFieldAmount?.text?.filter({ $0.isNumber }),
+           let routingCode = ReceiverData?.routingCode {
+                
+            switch countryCode {
+            case "IN": // For India Bank Transfer
+                if let routingCode = ReceiverData?.routingCode {
+                    requestBody = [
+                        "sending_country_code": "AE",
+                        "sending_currency_code": "AED",
+                        "receiving_country_code": "IN",
+                        "receiving_currency_code": "INR",
+                        "sending_amount": filteredText,
+                        "receiving_mode": receivingMode,
+                        "routing_code": routingCode,
+                        "iso_code": swiftCode,
+                        "type": "SEND",
+                        "instrument": chooseInstrument
+                    ]
+                }
+
+            case "PK": // For Pakistan Bank Transfer
+                requestBody = [
+                    "sending_country_code": "AE",
+                    "sending_currency_code": "AED",
+                    "receiving_country_code": "PK",
+                    "receiving_currency_code": "PKR",
+                    "sending_amount": filteredText,
+                    "receiving_mode": receivingMode,
+                    "iso_code": swiftCode,
+                    "type": "SEND",
+                    "instrument": chooseInstrument
+                ]
+            case "CH": // For China Bank Transfer
+                requestBody = [
+                    "sending_country_code": "AE",
+                    "sending_currency_code": "AED",
+                    "receiving_country_code": "CH",
+                    "receiving_currency_code": "CNY",
+                    "sending_amount": filteredText,
+                    "receiving_mode": receivingMode,
+                    "iso_code": swiftCode,
+                    "type": "SEND",
+                    "instrument": chooseInstrument
+                ]
+            case "EG": // For Egypt Bank Transfer
+                requestBody = [
+                    "sending_country_code": "AE",
+                    "sending_currency_code": "AED",
+                    "receiving_country_code": "EG",
+                    "receiving_currency_code": "EGP",
+                    "sending_amount": filteredText,
+                    "receiving_mode": receivingMode,
+                    "iso_code": swiftCode,
+                    "type": "SEND",
+                    "instrument": chooseInstrument
+                ]
+            case "PH": // For Philippines Bank Transfer
+                requestBody = [
+                    "sending_country_code": "AE",
+                    "sending_currency_code": "AED",
+                    "receiving_country_code": "PH",
+                    "receiving_currency_code": "PHP",
+                    "sending_amount": filteredText,
+                    "receiving_mode": receivingMode,
+                    "routing_code": routingCode,
+                    "iso_code": swiftCode,
+                    "type": "SEND",
+                    "instrument": chooseInstrument
+                ]
+            case "SL": // For Pakistan Bank Transfer
+                requestBody = [
+                    "sending_country_code": "AE",
+                    "sending_currency_code": "AED",
+                    "receiving_country_code": "SL",
+                    "receiving_currency_code": "LKR",
+                    "sending_amount": filteredText,
+                    "receiving_mode": receivingMode,
+                    "iso_code": swiftCode,
+                    "type": "SEND",
+                    "instrument": chooseInstrument
+                ]
+
+
+            default:
+                print("Unsupported country code.")
+            }
+            
+            print("Payload: \(requestBody)")
+        } else {
+            print("Invalid ReceiverData or missing input values.")
+        }
+        LoadingIndicatorManager.shared.showLoading(on: self.view)
+
+        APIService.shared.request(url: url, method: .post, parameters: requestBody, headers: headers, isJsonRequest: true) { result in
+                LoadingIndicatorManager.shared.hideLoading(on: self.view)
+            
+            
+            switch result {
+            case .success(let data):
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("Response: \(responseString)")
+                }
+                
+                DispatchQueue.main.async {
+                    let jsonDecoder = JSONDecoder()
+                    
+                    do {
+                        let decodedData = try jsonDecoder.decode(QuoteModel.self, from: data)
+                        UserManager.shared.getQuotesData = decodedData.data
+                        
+                        self.showToast(message: "Quote ID created!",duration: 0.5)
+                        DispatchQueue.main.asyncAfter(deadline: .now()+0.7){
+                            let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "PaymentDetailsViewController") as! PaymentDetailsViewController
+                            vc.hidesBottomBarWhenPushed = true
+                            self.navigationController?.pushViewController(vc, animated: true)
+
+                        }
+
+                    } catch {
+                        print("Failed to decode JSON: \(error.localizedDescription)")
+                    }
+                }
+                
             case .failure(let error):
                 print("Error: \(error.localizedDescription)")
             }
@@ -322,7 +476,7 @@ extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource
                 }
             cell.txtFieldAmount.textAlignment = .center
             
-            cell.txtFieldAmount.text = (currentRate?.fromCurrency ?? "AED") + " - "
+            cell.txtFieldAmount.text = (currentRate?.from_currency ?? "AED") + " - "
             self.txtFieldAmount = cell.txtFieldAmount
             cell.txtFieldAmount.setLeftPadding(10)
             return cell
@@ -376,6 +530,7 @@ extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0
     }
+    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         // 1. Get the current text
         let currentText = textField.text ?? ""
@@ -403,7 +558,11 @@ extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource
             return false
         }
     
-
+    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
+        if textField == referenceTextField{
+            UserManager.shared.getReferenceText = textField.text
+        }
+    }
     
 }
 

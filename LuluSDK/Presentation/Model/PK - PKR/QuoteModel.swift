@@ -46,7 +46,7 @@ struct QuoteData : Codable {
     let fx_rates : [Fx_rates]?
     let fee_details : [Fee_details]?
     let settlement_details : [Settlement_details]?
-    let correspondent_rules : [String]?
+    let correspondent_rules : [[String:String]]?
     let price_guarantee : String?
 
     enum CodingKeys: String, CodingKey {
@@ -91,80 +91,107 @@ struct QuoteData : Codable {
         fx_rates = try values.decodeIfPresent([Fx_rates].self, forKey: .fx_rates)
         fee_details = try values.decodeIfPresent([Fee_details].self, forKey: .fee_details)
         settlement_details = try values.decodeIfPresent([Settlement_details].self, forKey: .settlement_details)
-        correspondent_rules = try values.decodeIfPresent([String].self, forKey: .correspondent_rules)
+        correspondent_rules = try values.decodeIfPresent([[String:String]].self, forKey: .correspondent_rules)
         price_guarantee = try values.decodeIfPresent(String.self, forKey: .price_guarantee)
     }
-
+    
+    init(
+            state: String? = nil,
+            sub_state: String? = nil,
+            quote_id: String? = nil,
+            created_at: String? = nil,
+            created_at_gmt: String? = nil,
+            expires_at: String? = nil,
+            expires_at_gmt: String? = nil,
+            receiving_country_code: String? = nil,
+            receiving_currency_code: String? = nil,
+            sending_country_code: String? = nil,
+            sending_currency_code: String? = nil,
+            sending_amount: Int? = nil,
+            receiving_amount: Double? = nil,
+            total_payin_amount: Double? = nil,
+            fx_rates: [Fx_rates]? = nil,
+            fee_details: [Fee_details]? = nil,
+            settlement_details: [Settlement_details]? = nil,
+            correspondent_rules: [[String: String]]? = nil,
+            price_guarantee: String? = nil
+        ) {
+            self.state = state
+            self.sub_state = sub_state
+            self.quote_id = quote_id
+            self.created_at = created_at
+            self.created_at_gmt = created_at_gmt
+            self.expires_at = expires_at
+            self.expires_at_gmt = expires_at_gmt
+            self.receiving_country_code = receiving_country_code
+            self.receiving_currency_code = receiving_currency_code
+            self.sending_country_code = sending_country_code
+            self.sending_currency_code = sending_currency_code
+            self.sending_amount = sending_amount
+            self.receiving_amount = receiving_amount
+            self.total_payin_amount = total_payin_amount
+            self.fx_rates = fx_rates
+            self.fee_details = fee_details
+            self.settlement_details = settlement_details
+            self.correspondent_rules = correspondent_rules
+            self.price_guarantee = price_guarantee
+        }
+    
 }
 
-struct Fx_rates : Codable {
-    let rate : Double?
-    let type : String?
-    let base_currency_code : String?
-    let counter_currency_code : String?
+struct Fx_rates: Codable {
+    let rate: Double?
+    let type: String?
+    let base_currency_code: String?
+    let counter_currency_code: String?
 
-    enum CodingKeys: String, CodingKey {
-
-        case rate = "rate"
-        case type = "type"
-        case base_currency_code = "base_currency_code"
-        case counter_currency_code = "counter_currency_code"
+    init(
+        rate: Double? = nil,
+        type: String? = nil,
+        base_currency_code: String? = nil,
+        counter_currency_code: String? = nil
+    ) {
+        self.rate = rate
+        self.type = type
+        self.base_currency_code = base_currency_code
+        self.counter_currency_code = counter_currency_code
     }
-
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        rate = try values.decodeIfPresent(Double.self, forKey: .rate)
-        type = try values.decodeIfPresent(String.self, forKey: .type)
-        base_currency_code = try values.decodeIfPresent(String.self, forKey: .base_currency_code)
-        counter_currency_code = try values.decodeIfPresent(String.self, forKey: .counter_currency_code)
-    }
-
 }
 
-struct Fee_details : Codable {
-    let type : String?
-    let model : String?
-    let amount : Int?
-    let description : String?
-    let currency_code : String?
+struct Fee_details: Codable {
+    let type: String?
+    let model: String?
+    let amount: Double?
+    let description: String?
+    let currency_code: String?
 
-    enum CodingKeys: String, CodingKey {
-
-        case type = "type"
-        case model = "model"
-        case amount = "amount"
-        case description = "description"
-        case currency_code = "currency_code"
+    init(
+        type: String? = nil,
+        model: String? = nil,
+        amount: Double? = nil,
+        description: String? = nil,
+        currency_code: String? = nil
+    ) {
+        self.type = type
+        self.model = model
+        self.amount = amount
+        self.description = description
+        self.currency_code = currency_code
     }
-
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        type = try values.decodeIfPresent(String.self, forKey: .type)
-        model = try values.decodeIfPresent(String.self, forKey: .model)
-        amount = try values.decodeIfPresent(Int.self, forKey: .amount)
-        description = try values.decodeIfPresent(String.self, forKey: .description)
-        currency_code = try values.decodeIfPresent(String.self, forKey: .currency_code)
-    }
-
 }
 
-struct Settlement_details : Codable {
-    let value : Int?
-    let charge_type : String?
-    let currency_code : String?
+struct Settlement_details: Codable {
+    let value: Int?
+    let charge_type: String?
+    let currency_code: String?
 
-    enum CodingKeys: String, CodingKey {
-
-        case value = "value"
-        case charge_type = "charge_type"
-        case currency_code = "currency_code"
+    init(
+        value: Int? = nil,
+        charge_type: String? = nil,
+        currency_code: String? = nil
+    ) {
+        self.value = value
+        self.charge_type = charge_type
+        self.currency_code = currency_code
     }
-
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        value = try values.decodeIfPresent(Int.self, forKey: .value)
-        charge_type = try values.decodeIfPresent(String.self, forKey: .charge_type)
-        currency_code = try values.decodeIfPresent(String.self, forKey: .currency_code)
-    }
-
 }

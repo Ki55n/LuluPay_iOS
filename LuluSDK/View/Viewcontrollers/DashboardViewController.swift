@@ -11,7 +11,7 @@ class DashboardViewController: UIViewController {
     var getCodeInfo: GetCodesModel?
     var getServiceCorriderInfo: ServiceCorriderModel?
     @IBOutlet weak var tableView: UITableView!
-    var exchangeRates = [ExchangeRate]()
+    var exchangeRates = [RatesData]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -186,11 +186,10 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
                         ]
                         
                         let parameters1: [String: String] = [:]
-                        LoadingIndicatorManager.shared.showLoading(on: self.view)
+//                        LoadingIndicatorManager.shared.showLoading(on: self.view)
                         APIService.shared.request(url: url1, method: .get, parameters: parameters1, headers: headers1) { result in
-                            DispatchQueue.main.async {
-                                LoadingIndicatorManager.shared.hideLoading(on: self.view)
-                            }
+                            LoadingIndicatorManager.shared.hideLoading(on: self.view)
+                            
 
                             switch result {
                             case .success(let data):
