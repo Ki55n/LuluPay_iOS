@@ -9,13 +9,48 @@ import UIKit
 
 class DashboardViewController: UIViewController {
     var getCodeInfo: GetCodesModel?
+    var getRatesInfo: RatesModel?
     var getServiceCorriderInfo: ServiceCorriderModel?
     @IBOutlet weak var tableView: UITableView!
     var exchangeRates = [ExchangeRate]()
 
     override func viewDidLoad() {
+        let url = "https://drap-sandbox.digitnine.com/raas/masters/v1/rates"
+
+        let headers = [
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
+        ]
+
+        let parameters: [String: String] = [:]
+        APIService.shared.request(url: url, method: .get, parameters: parameters, headers: headers) { result in
+            switch result {
+            case .success(let data):
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("Response: \(responseString)")
+                    DispatchQueue.main.async {
+                        let jsonDecoder = JSONDecoder()
+                        self.getRatesInfo = try? jsonDecoder.decode(RatesModel.self, from: data)
+                        UserManager.shared.getRatesData = self.getRatesInfo?.data
+                        self.exchangeRates = UserManager.shared.getRatesData?.rates?.map { ex in
+                            ExchangeRate(
+                                flag: self.flagEmoji(for: ex.to_country ?? ""),
+                                currency: ex.to_currency ?? "",
+                                buy: String(format: "%.2f", ex.rate ?? 0.0),
+                                sell: "85,583"
+                            )
+                        } ?? []
+                        
+                        print("Updated Exchange Rates: ", self.exchangeRates)
+                        self.tableView.reloadData()
+                        print("UserManager.shared.getCodesData: ", UserManager.shared.getRatesData ?? nil)
+                    }
+                }
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+            }
+        }
         super.viewDidLoad()
-        
         if let bundle = Bundle(identifier: "com.finance.LuluSDK") {
             // Register custom cells
             tableView.register(UINib(nibName: "HeaderViewCell", bundle: bundle), forCellReuseIdentifier: "cellHeader")
@@ -31,11 +66,6 @@ class DashboardViewController: UIViewController {
         } else {
             print("Error: SDK Bundle not found.")
         }
-        exchangeRates = [
-            ExchangeRate(flag: flagEmoji(for: "PK"), currency: "PKR", buy: "86,246", sell: "85,583"),
-            ExchangeRate(flag: flagEmoji(for: "IN"), currency: "INR", buy: "86,246", sell: "85,583"),
-            ExchangeRate(flag: flagEmoji(for: "EG"), currency: "EGP", buy: "86,246", sell: "85,583")
-        ]
     
     }
     

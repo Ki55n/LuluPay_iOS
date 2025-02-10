@@ -13,4 +13,5 @@ class UserManager {
     var loginModel: LoginModel?
     var getCodesData: GetCodesData?
     var getServiceCorridorData: [ServiceCorriderData]?
+    var getRatesData: RatesData?
 }
