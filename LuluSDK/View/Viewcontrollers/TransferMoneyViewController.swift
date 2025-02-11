@@ -97,7 +97,16 @@ extension TransferMoneyViewController: UITableViewDelegate, UITableViewDataSourc
         cell.viewmain.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         cell.viewmain.layer.masksToBounds = true
 
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
+        cell.viewSendMoney.addGestureRecognizer(tapGesture)
+        cell.viewSendMoney.tag = 1
+        cell.viewSendMoney.isUserInteractionEnabled = true  // Ensure the view is tappable
         
+        let tapGesture1 = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
+        cell.viewRequestMoney.addGestureRecognizer(tapGesture1)
+        cell.viewRequestMoney.tag = 2
+        cell.viewRequestMoney.isUserInteractionEnabled = true  // Ensure the view is tappable
+
         cell.backgroundColor = .clear
         cell.contentView.backgroundColor = .clear
 
@@ -140,7 +149,24 @@ extension TransferMoneyViewController: UITableViewDelegate, UITableViewDataSourc
         //            return UITableViewCell()
         
     }
+    @objc func handleTapGesture(_ gesture:UITapGestureRecognizer) {
+        print("Send Money tapped!")
+        // Handle your action here
+        if gesture.view?.tag == 1{
+            UserManager.shared.gettransferType = .send
+        }else{
+            UserManager.shared.gettransferType = .receive
+        }
+        let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "ContactListViewController") as! ContactListViewController
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
+
+        
+    }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        
         let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "ContactListViewController") as! ContactListViewController
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)

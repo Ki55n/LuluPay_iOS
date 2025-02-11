@@ -67,6 +67,7 @@
 		B869532D2D4A05AD0088B538 /* TitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B86953032D4A05AD0088B538 /* TitleCell.xib */; };
 		B869532E2D4A05AD0088B538 /* TransferCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B86953042D4A05AD0088B538 /* TransferCell.xib */; };
 		B89D7E1A2D57C912008B6BE1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89D7E192D57C912008B6BE1 /* Extensions.swift */; };
+		B8B425A32D5B7B750026CE00 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = B8B425A22D5B7B750026CE00 /* Alamofire */; };
 		B8C07C912D51E1A4008D506B /* ContactListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07C902D51E1A4008D506B /* ContactListViewController.swift */; };
 		B8C07C942D51E231008D506B /* ContactListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B8C07C932D51E231008D506B /* ContactListTableViewCell.xib */; };
 		B8C07C952D51E231008D506B /* ContactListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07C922D51E231008D506B /* ContactListTableViewCell.swift */; };
@@ -191,6 +192,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B8B425A32D5B7B750026CE00 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -466,6 +468,9 @@
 			dependencies = (
 			);
 			name = LuluSDK;
+			packageProductDependencies = (
+				B8B425A22D5B7B750026CE00 /* Alamofire */,
+			);
 			productName = LuluSDK;
 			productReference = 7DB84ECD2D3AC05800A2C2D6 /* LuluSDK.framework */;
 			productType = "com.apple.product-type.framework";
@@ -515,6 +520,9 @@
 				Base,
 			);
 			mainGroup = 7DB84EC32D3AC05800A2C2D6;
+			packageReferences = (
+				B8B425A12D5B7B750026CE00 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			productRefGroup = 7DB84ECE2D3AC05800A2C2D6 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -909,6 +917,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B8B425A12D5B7B750026CE00 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B8B425A22D5B7B750026CE00 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B8B425A12D5B7B750026CE00 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7DB84EC42D3AC05800A2C2D6 /* Project object */;
 }

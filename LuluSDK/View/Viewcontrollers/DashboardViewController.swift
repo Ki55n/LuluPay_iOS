@@ -47,7 +47,7 @@ class DashboardViewController: UIViewController {
         let parameters: [String: String] = [:]
 
         // Make the request using the APIService
-        APIService.shared.request(url: url, method: .get, parameters: parameters, headers: headers, isJsonRequest: false) { (result: Result<Data, Error>) in
+        APIService.shared.request(url: url, method: .get, parameters: parameters, headers: headers) { (result: Result<Data, Error>) in
             
             switch result {
             case .success(let data):

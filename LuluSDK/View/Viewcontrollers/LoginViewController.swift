@@ -45,8 +45,8 @@ class LoginViewController: UIViewController {
                         let jsonDecoder = JSONDecoder()
                         self.loginInfo = try? jsonDecoder.decode(LoginModel.self, from: data)
                         UserManager.shared.loginModel = self.loginInfo
-                        
-                        
+                        let dic = ["username":"testagentae"]
+                        UserManager.shared.getLoginUserData = dic
 
 //                        let parameters1 = [
 //                                           

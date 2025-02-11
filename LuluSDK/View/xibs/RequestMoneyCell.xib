@@ -114,6 +114,8 @@
             <connections>
                 <outlet property="imgMoney" destination="ZDO-Oe-5MD" id="HpI-Xm-2Ig"/>
                 <outlet property="lblTitle" destination="Zs0-eE-BCk" id="J9g-wl-cJL"/>
+                <outlet property="viewRequestMoney" destination="oec-Ha-5qP" id="iEE-3M-5uf"/>
+                <outlet property="viewSendMoney" destination="Kcw-zx-lAu" id="G8q-KE-b1E"/>
                 <outlet property="viewmain" destination="c2u-dM-pAq" id="hOk-xd-IAT"/>
             </connections>
             <point key="canvasLocation" x="148.09160305343511" y="30.633802816901412"/>

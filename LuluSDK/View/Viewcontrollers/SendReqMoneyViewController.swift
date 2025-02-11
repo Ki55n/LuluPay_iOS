@@ -266,9 +266,9 @@ extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource
         var requestBody = [String: String]()
 
         if let countryCode = ReceiverData?.country_code,
-           let receivingMode = ReceiverData?.receiveMode.uppercased(),
+           let receivingMode = ReceiverData?.receiveMode?.uppercased(),
            let swiftCode = ReceiverData?.swiftCode,
-           let chooseInstrument = ReceiverData?.chooseInstrument.uppercased(),
+           let chooseInstrument = ReceiverData?.chooseInstrument?.uppercased(),
            let filteredText = txtFieldAmount?.text?.filter({ $0.isNumber }),
            let routingCode = ReceiverData?.routingCode {
                 

@@ -11,6 +11,8 @@ class RequestMoneyCell: UITableViewCell {
     @IBOutlet weak var imgMoney:UIImageView!
     @IBOutlet weak var lblTitle:UILabel!
     @IBOutlet weak var viewmain:UIView!
+    @IBOutlet weak var viewRequestMoney:UIView!
+    @IBOutlet weak var viewSendMoney:UIView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

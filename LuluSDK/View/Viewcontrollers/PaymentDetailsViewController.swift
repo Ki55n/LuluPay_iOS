@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import Alamofire
 
 class PaymentDetailsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     var getQuote : QuoteData?
-    
+    var ReceiverData : ReceiverDetails?
+//    var getQuote:getQuote?
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -52,6 +54,8 @@ class PaymentDetailsViewController: UIViewController {
         
         
         self.getQuote = UserManager.shared.getQuotesData
+        self.ReceiverData = UserManager.shared.getReceiverData
+
         tableView.bounces = true
         // Add the custom background view to the table view
         tableView.backgroundColor = .clear
@@ -70,13 +74,233 @@ class PaymentDetailsViewController: UIViewController {
     }
     @objc func Submit(){
         
-        let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "ConfirmPayViewController") as! ConfirmPayViewController
-        vc.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(vc, animated: true)
+        createTransactionID()
 
     }
     
+    func createTransactionID() {
+        let url = "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/createtransaction"
+        
+        let headers:HTTPHeaders = [
+                "Content-Type": "application/json",
+                "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")",
+                "sender": UserManager.shared.getLoginUserData?["username"] ?? "",
+                "channel": "Direct",
+                "company": "784825",
+                "branch": "784826"
+            ] //let headers:[String:String]?
+        guard let receiverData = ReceiverData else {
+            print("Invalid ReceiverData or missing input values.")
+            return
+        }
+        var bankDetails: BankDetails? = nil
+        var mobileWalletDetails: MobileWalletDetails? = nil
+        var cashPickupDetails: CashPickupDetails? = nil
 
+        if let receiveMode = receiverData.receiveMode, receiveMode.contains("BANK") {
+            bankDetails = BankDetails(
+                accountTypeCode: receiverData.accountType,
+                accountNumber: receiverData.accountNumber,
+                isoCode: receiverData.swiftCode,
+                iban: receiverData.iban,
+                routingCode: receiverData.routingCode
+            )
+        }
+
+        // Uncomment and fill in details for mobile wallet or cash pickup if necessary
+        /*
+        if receiverData.receiveMode.contains("MOBILEWALLET") {
+            mobileWalletDetails = MobileWalletDetails(
+                walletId: receiverData.walletId ?? "",
+                correspondent: receiverData.correspondent ?? "",
+                bankId: receiverData.bankId ?? "",
+                branchId: receiverData.branchId ?? ""
+            )
+        }
+
+        if receiverData.receiveMode.contains("CASHPICKUP") {
+            cashPickupDetails = CashPickupDetails(
+                correspondentId: receiverData.bankId ?? "",
+                correspondent: receiverData.correspondent ?? "",
+                correspondentLocationId: receiverData.branchId ?? ""
+            )
+        }
+        */
+
+        let transactionRequest = CreateTransactionRequest(
+            type: UserManager.shared.gettransferType?.rawValue ?? "",
+            sourceOfIncome: "SLRY",
+            purposeOfTxn: "SAVG",
+            instrument: receiverData.chooseInstrument?.uppercased(),
+            message: UserManager.shared.getReferenceText ?? "",
+            sender: Sender(customerNumber: "1000001220000001", agentCustomerNumber: ""),
+            receiver: Receiver(
+                mobileNumber: receiverData.phoneNumber,
+                firstName: receiverData.firstName,
+                lastName: receiverData.lastName,
+                nationality: receiverData.country_code,
+                bankDetails: bankDetails,
+                mobileWalletDetails: mobileWalletDetails,
+                cashPickupDetails: cashPickupDetails
+            ),
+            transaction: Transaction(
+                quoteId: getQuote?.quote_id ?? "",
+                agentTransactionRefNumber: getQuote?.quote_id ?? ""
+            )
+        )
+
+        // Send this transactionRequest to your API endpoint
+
+        print("Payload: \(transactionRequest)")
+        LoadingIndicatorManager.shared.showLoading(on: self.view)
+        APIService.shared.makeAlamofireRequest(url: url,method: .post,parameters: transactionRequest,headers: headers) { result in
+            switch result {
+            case .success(let data):
+                print("Success: \(data)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("Response: \(responseString)")
+                }
+                
+                DispatchQueue.main.async {
+                    let jsonDecoder = JSONDecoder()
+                    
+                    do {
+                        let decodedData = try jsonDecoder.decode(CreateTransactionModel.self, from: data)
+                        UserManager.shared.getTransactionalData = decodedData.data
+                        
+                        self.showTransferConfirmationAlert()
+                        
+                    } catch {
+                        print("Failed to decode JSON: \(error.localizedDescription)")
+                    }
+                }
+
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+                self.showToast(message: error.localizedDescription)
+
+            }
+
+        }
+//        APIService.shared.requestParamasCodable(url: url, method: .post, parameters: transactionRequest, headers: headers, isJsonRequest: true) { result in
+//                LoadingIndicatorManager.shared.hideLoading(on: self.view)
+//            
+//            
+//            switch result {
+//            case .success(let data):
+//                if let responseString = String(data: data, encoding: .utf8) {
+//                    print("Response: \(responseString)")
+//                }
+//                
+//                DispatchQueue.main.async {
+//                    let jsonDecoder = JSONDecoder()
+//                    
+//                    do {
+//                        let decodedData = try jsonDecoder.decode(CreateTransactionModel.self, from: data)
+//                        UserManager.shared.getTransactionalData = decodedData.data
+//                        
+//                        self.showTransferConfirmationAlert()
+//                        
+//                    } catch {
+//                        print("Failed to decode JSON: \(error.localizedDescription)")
+//                    }
+//                }
+//                
+//            case .failure(let error):
+//                print("Error: \(error.localizedDescription)")
+//                self.showToast(message: error.localizedDescription)
+//            }
+//        }
+    }
+    func createConfirmTransaction() {
+        let url = "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/confirmtransaction"
+        
+        let headers:[String:String]? = [
+                "Content-Type": "application/json",
+                "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")",
+                "sender": UserManager.shared.getLoginUserData?["username"] ?? "",
+                "channel": "Direct",
+                "company": "784825",
+                "branch": "784826"
+            ]
+        guard let receiverData = ReceiverData else {
+            print("Invalid ReceiverData or missing input values.")
+            return
+        }
+
+        let requestBody: [String: Any] = [
+            "transaction_ref_number": UserManager.shared.getTransactionalData?.transaction_ref_number ?? ""
+        ]
+
+        print("Payload: \(requestBody)")
+        LoadingIndicatorManager.shared.showLoading(on: self.view)
+
+        APIService.shared.request(url: url, method: .post, parameters: requestBody, headers: headers, isJsonRequest: true) { result in
+                LoadingIndicatorManager.shared.hideLoading(on: self.view)
+            
+            
+            switch result {
+            case .success(let data):
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("Response: \(responseString)")
+                }
+                
+                DispatchQueue.main.async {
+                    let jsonDecoder = JSONDecoder()
+                    
+                    do {
+                        let decodedData = try jsonDecoder.decode(CreateTransactionModel.self, from: data)
+                        UserManager.shared.getTransactionalData = decodedData.data
+                       
+                        let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "PaySuccessViewController") as! PaySuccessViewController
+                        vc.hidesBottomBarWhenPushed = true
+                        self.navigationController?.pushViewController(vc, animated: true)
+                        
+                        
+                    } catch {
+                        print("Failed to decode JSON: \(error.localizedDescription)")
+                    }
+                }
+                
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+                self.showToast(message: error.localizedDescription)
+
+            }
+        }
+    }
+
+    func showTransferConfirmationAlert() {
+        let alertController = UIAlertController(
+            title: "TransferConfirmation",
+            message: "We are about to debit your account and confirm the transaction.",
+            preferredStyle: .alert
+        )
+        
+        // Cancel button
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            print("Transaction canceled.")
+            // Handle cancel action
+        }
+        
+        // Pay button
+        let payAction = UIAlertAction(title: "Pay And Confirm", style: .default) { _ in
+            print("Pay button tapped.")
+            // Handle pay action
+            
+            
+        }
+        
+        
+        // Add actions to alert controller
+        alertController.addAction(cancelAction)
+        alertController.addAction(payAction)
+        
+        // Present the alert
+        if let viewController = UIApplication.shared.keyWindow?.rootViewController {
+            viewController.present(alertController, animated: true, completion: nil)
+        }
+    }
 }
 extension PaymentDetailsViewController: UITableViewDelegate, UITableViewDataSource {
     func emojiToImage(emoji: String, size: CGFloat = 40) -> UIImage? {
@@ -133,7 +357,7 @@ extension PaymentDetailsViewController: UITableViewDelegate, UITableViewDataSour
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellPaymentDetail", for: indexPath) as? PaymentDetailCell else {
                     fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
                 }
-                cell.lblAmount.text = String(self.getQuote?.sending_amount ?? 0)
+                cell.lblAmount.text = String(self.getQuote?.receiving_amount ?? 0)
                 cell.lblTitle.text = "Amount"
                 cell.lblCurrencyCode.text = self.getQuote?.receiving_country_code
                 if let countryCode = self.getQuote?.receiving_country_code {

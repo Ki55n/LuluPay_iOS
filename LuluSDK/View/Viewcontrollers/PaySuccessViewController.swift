@@ -92,8 +92,9 @@ extension PaySuccessViewController: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "profileCell", for: indexPath) as? ProfileTCell else {
                 fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
             }
+            
             let title = "Payment Done"
-            let subtitle = "\nYou’ve successfully sent ₹400.00 \nto Jessica Pearson"
+            let subtitle = "\nYou’ve successfully sent \(UserManager.shared.getQuotesData?.receiving_amount ?? 0) \nto \(UserManager.shared.getReceiverData?.firstName ?? "") \(UserManager.shared.getReceiverData?.lastName ?? "")"
             cell.imgPrtofile.image = UIImage(named: "CheckCircle")
 
             // Define attributes for both parts

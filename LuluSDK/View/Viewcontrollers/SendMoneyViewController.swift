@@ -1,19 +1,20 @@
 
 import UIKit
-struct ReceiverDetails {
-    var firstName: String
-    var middleName: String
-    var lastName: String
-    var phoneNumber: String
-    var country: String
-    var country_code: String
-    var receiveMode: String
-    var accountType: String
-    var swiftCode: String
-    var iban: String
-    var routingCode: String
-    var accountNumber: String
-    var chooseInstrument: String
+import Alamofire
+struct ReceiverDetails:Codable {
+    var firstName: String?
+    var middleName: String?
+    var lastName: String?
+    var phoneNumber: String?
+    var country: String?
+    var country_code: String?
+    var receiveMode: String?
+    var accountType: String?
+    var swiftCode: String?
+    var iban: String?
+    var routingCode: String?
+    var accountNumber: String?
+    var chooseInstrument: String?
 }
 
 class SendMoneyViewController: UIViewController {
@@ -179,39 +180,45 @@ class SendMoneyViewController: UIViewController {
     }
 
     @objc func Submit() {
-        if receiverDetails.firstName.isEmpty{
+        if let firstName = receiverDetails.firstName, firstName.isEmpty {
             showToast(message: "First Name field is required")
-        }else if receiverDetails.lastName.isEmpty{
+        } else if let lastName = receiverDetails.lastName, lastName.isEmpty {
             showToast(message: "Last Name field is required")
-        }else if receiverDetails.phoneNumber.isEmpty{
+        } else if let phoneNumber = receiverDetails.phoneNumber, phoneNumber.isEmpty {
             showToast(message: "Phone Number field is required")
-        }else if !isPhoneNumberValid(for: receiverDetails.country, phoneNumber: receiverDetails.phoneNumber) {
+        } else if !isPhoneNumberValid(for: receiverDetails.country ?? "", phoneNumber: receiverDetails.phoneNumber ?? "") {
             showToast(message: "Invalid phone number for \(receiverDetails.country)")
-        }else if (receiverDetails.iban.isEmpty&&showIbanField) || (receiverDetails.accountNumber.isEmpty&&showAccountNumberField){
-            showToast(message: "Receiver account number or iban is required!")
-        }else if receiverDetails.accountType.isEmpty && showAccountType{
+        } else if let iban = receiverDetails.iban ,iban.isEmpty && showIbanField {
+                showToast(message: "Receiver account number or iban is required!")
+            
+        } else if let accountNumber = receiverDetails.accountNumber,accountNumber.isEmpty && showAccountNumberField {
+                showToast(message: "Receiver account number or iban is required!")
+            
+        } else if let accountType = receiverDetails.accountType, accountType.isEmpty, showAccountType {
             showToast(message: "Receiver account type is required!")
-        }else if receiverDetails.chooseInstrument.isEmpty{
+        } else if let chooseInstrument = receiverDetails.chooseInstrument, chooseInstrument.isEmpty {
             showToast(message: "Instrument is required!")
-        }else if receiverDetails.swiftCode.isEmpty&&showSwiftCodeField{
+        } else if let swiftCode = receiverDetails.swiftCode, swiftCode.isEmpty && showSwiftCodeField {
             showToast(message: "Swift/iso code is required!")
-        }else if receiverDetails.routingCode.isEmpty&&showRoutingField{
+        } else if let routingCode = receiverDetails.routingCode, routingCode.isEmpty && showRoutingField {
             showToast(message: "Routing code is required!")
         }
         else{
             let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/accounts/validation?receiving_country_code=PK&receiving_mode=BANK&first_name=first name&middle_name=middle name&last_name=last name&iso_code=ALFHPKKA068&iban=PK12ABCD1234567891234567"
-            let params = ["first_name":receiverDetails.firstName,"last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country,"receiving_mode":self.receiverDetails.receiveMode,"iso_code":receiverDetails.swiftCode,"iban":receiverDetails.iban,"route_code":receiverDetails.routingCode,"account_number":receiverDetails.accountNumber,"account_type":receiverDetails.accountType]
-            let filteredParams = params.compactMapValues { $0.isEmpty == true ? nil : $0 }
-
+            let params = ["first_name":receiverDetails.firstName,"last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased(),"iso_code":receiverDetails.swiftCode,"iban":receiverDetails.iban,"route_code":receiverDetails.routingCode,"account_number":receiverDetails.accountNumber,"account_type":receiverDetails.accountType?.uppercased()]
+            let filteredParams = params.compactMapValues { $0?.isEmpty == true ? nil : $0 }
+            
             print(params)
-
-            let headers1 = [
-    //                            "Content-Type": "application/x-www-form-urlencoded",
+            //            let receiverDetails = ReceiverDetails(firstName: receiverDetails.firstName,middleName: receiverDetails.middleName,lastName: receiverDetails.lastName,phoneNumber: receiverDetails.phoneNumber,country: receiverDetails.country,country_code: receiverDetails.country_code,receiveMode: receiverDetails.receiveMode, accountType: receiverDetails.accountType, swiftCode: receiverDetails.swiftCode, iban: receiverDetails.iban, routingCode: receiverDetails.routingCode, accountNumber: receiverDetails.accountNumber,chooseInstrument: receiverDetails.chooseInstrument)
+            
+            let headers1:[String:String]? = [
+                //                            "Content-Type": "application/x-www-form-urlencoded",
                 "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
+                
             ]
             LoadingIndicatorManager.shared.showLoading(on: self.view)
             APIService.shared.request(url: url1, method: .get, parameters: filteredParams, headers: headers1) { result in
-            LoadingIndicatorManager.shared.hideLoading(on: self.view)
+                LoadingIndicatorManager.shared.hideLoading(on: self.view)
                 
                 switch result {
                 case .success(let data):
@@ -226,8 +233,35 @@ class SendMoneyViewController: UIViewController {
                     print("Error: \(error.localizedDescription)")
                 }
             }
-
         }
+        /*
+         
+         
+         
+         let headers1:HTTPHeaders = [
+ //                            "Content-Type": "application/x-www-form-urlencoded",
+             "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
+             
+         ]
+         LoadingIndicatorManager.shared.showLoading(on: self.view)
+         APIService.shared.makeAlamofireRequest(url: url1, parameters: receiverDetails,headers: headers1,encoding: URLEncoding.queryString) { result in
+             switch result {
+             case .success(let data):
+                 if let responseString = String(data: data, encoding: .utf8) {
+                     UserManager.shared.getReceiverData = self.receiverDetails
+                     guard let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "SendReqMoneyViewController") as? SendReqMoneyViewController else { return }
+                     vc.hidesBottomBarWhenPushed = true
+                     self.navigationController?.pushViewController(vc, animated: true)
+                     print("Response: \(responseString)")
+                 }
+             case .failure(let error):
+                 print("Error: \(error.localizedDescription)")
+             }
+         }
+
+         }
+
+         */
         
     }
     
@@ -372,7 +406,7 @@ class SendMoneyViewController: UIViewController {
 
         }
         
-        tableView.reloadRows(at: [IndexPath(row: 7, section: 0)], with: .automatic)
+//        tableView.reloadRows(at: [IndexPath(row: 7, section: 0)], with: .automatic)
 //        let sectionIndex = 0 // Replace with the target section number
 //        tableView.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
 
@@ -705,14 +739,15 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
                showAccountType = (selectedReceiveModeValue == "Bank")
 //               tableView.reloadRows(at: [IndexPath(row: 6, section: 0)], with: .automatic)
 
-//               tableView.reloadData()
+               let sectionIndex = 0 // Replace with the target section number
+               tableView.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
            }else if pickerView == accountTypePicker {
                let selectedReceiveModeValue = accountTypeList[row]
                receiverDetails.accountType = selectedReceiveModeValue
                chooseAccountTypeField?.text = selectedReceiveModeValue
 
 //               tableView.reloadData()
-//               tableView.reloadRows(at: [IndexPath(row: 7, section: 0)], with: .automatic)
+               tableView.reloadRows(at: [IndexPath(row: 7, section: 0)], with: .automatic)
 
            }else if pickerView == chooseInstrumentPicker {
                let selectedReceiveModeValue = instrumentList[row]

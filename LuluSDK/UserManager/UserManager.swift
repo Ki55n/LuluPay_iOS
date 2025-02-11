@@ -6,7 +6,10 @@
 //
 
 import Foundation
-
+enum TransferType: String {
+    case send = "SEND"
+    case receive = "RECEIVE"
+}
 class UserManager {
     static let shared = UserManager() // Shared instance
     private init() {}
@@ -18,4 +21,7 @@ class UserManager {
     var getQuotesData:QuoteData?
     var getReferenceText:String?
     var getRatesData: RatesData?
+    var gettransferType:TransferType?
+    var getTransactionalData:CreateTransactionData?
+    var getLoginUserData:[String:String]?
 }
