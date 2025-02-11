@@ -303,6 +303,153 @@ class APIService {
     
         task.resume()
     }
+    
+    func requestParamasCodable1(url: String,
+                     method: LuHTTPMethod,
+                     parameters: Any? = nil,
+                     headers: [String: String]? = nil,
+                     isJsonRequest: Bool = false,
+                     isFormURLEncoded: Bool = false,  // Flag to indicate if body should be JSON
+                 completion: @escaping (Result<Data, Error>) -> Void) {
+    
+        guard let url = URL(string: url) else {
+            completion(.failure(APIError.invalidURL))
+            return
+        }
+    
+        var request = URLRequest(url: url)
+        request.httpMethod = method.rawValue
+    
+        // Set headers
+        if let headers = headers {
+            for (key, value) in headers {
+                request.setValue(value, forHTTPHeaderField: key)
+            }
+        }
+    
+        // If parameters are provided, encode them into JSON
+        if let parameters = parameters {
+            if isJsonRequest {
+                // Encode as Codable (JSON)
+                if let codableParameters = parameters as? Codable {
+                    do {
+                        let encoder = JSONEncoder()
+                        encoder.keyEncodingStrategy = .convertToSnakeCase
+                        let jsonData = try encoder.encode(codableParameters)
+                        request.httpBody = jsonData
+                        request.setValue("text/plain", forHTTPHeaderField: "Content-Type")
+                    } catch {
+                        completion(.failure(error))
+                        return
+                    }
+                } else {
+                    // If it's a dictionary, serialize it as JSON
+                    do {
+                        let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+                        request.httpBody = jsonData
+                        request.setValue("text/plain", forHTTPHeaderField: "Content-Type")
+                    } catch {
+                        completion(.failure(error))
+                        return
+                    }
+                }
+            } else if isFormURLEncoded {
+                // Encode parameters in application/x-www-form-urlencoded format
+                if let dictParameters = parameters as? [String: Any] {
+                    var bodyString = ""
+    
+                    for (key, value) in dictParameters {
+                        if let value = value as? String {
+                            let encodedKey = key.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? key
+                            let encodedValue = value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? value
+                            bodyString += "\(encodedKey)=\(encodedValue)&"
+                        }
+                    }
+    
+                    if !bodyString.isEmpty {
+                        // Remove the last '&' character
+                        bodyString.removeLast()
+                        request.httpBody = bodyString.data(using: .utf8)
+                        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+                    }
+                }
+            }
+            else {
+                // For non-JSON request (query parameters in URL for example)
+                if let dictParameters = parameters as? [String: Any] {
+                    var urlComponents = URLComponents(string: url.absoluteString)
+                    var queryItems = [URLQueryItem]()
+    
+                    for (key, value) in dictParameters {
+                        if let value = value as? String {
+                            queryItems.append(URLQueryItem(name: key, value: value))
+                        }
+                    }
+    
+                    urlComponents?.queryItems = queryItems
+    
+                    if let finalURL = urlComponents?.url {
+                        request.url = finalURL
+                    } else {
+                        completion(.failure(NSError(domain: "Invalid URL", code: 400, userInfo: nil)))
+                        return
+                    }
+                }
+            }
+        }
+    
+    
+        // Add timeout for request if needed
+        //            request.timeoutInterval = 30  // 30 seconds timeout
+        print("URL-",request.url)
+        print("Param-",parameters)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+                return
+            }
+    
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(.failure(APIError.noData))
+                }
+                return
+            }
+    
+            guard let httpResponse = response as? HTTPURLResponse else {
+                DispatchQueue.main.async {
+                    completion(.failure(APIError.invalidResponse(statusCode: -1)))
+                }
+                return
+            }
+    
+            if !(200...299).contains(httpResponse.statusCode) {
+                do {
+                    // Parse error response body
+                    let errorResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                    let errorMessage = errorResponse?["message"] as? String ?? errorResponse?["error"] as? String ?? "Unknown error"
+    
+                    DispatchQueue.main.async {
+                        completion(.failure(APIError.apiError(message: errorMessage)))
+                    }
+                } catch {
+                    let rawResponse = String(data: data, encoding: .utf8) ?? "Unable to decode error."
+                    DispatchQueue.main.async {
+                        completion(.failure(APIError.apiError(message: "Parsing error. Response: \(rawResponse)")))
+                    }
+                }
+                return
+            }
+    
+            DispatchQueue.main.async {
+                completion(.success(data))
+            }
+        }
+    
+        task.resume()
+    }
 
     //MARK: - Alamofire
     // Function to make API request using Alamofire

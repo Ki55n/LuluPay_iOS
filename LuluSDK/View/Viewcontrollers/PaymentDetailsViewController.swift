@@ -81,7 +81,7 @@ class PaymentDetailsViewController: UIViewController {
     func createTransactionID() {
         let url = "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/createtransaction"
         
-        let headers:HTTPHeaders = [
+        let headers = [
                 "Content-Type": "application/json",
                 "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")",
                 "sender": UserManager.shared.getLoginUserData?["username"] ?? "",
@@ -127,33 +127,48 @@ class PaymentDetailsViewController: UIViewController {
         }
         */
 
-        let transactionRequest = CreateTransactionRequest(
-            type: UserManager.shared.gettransferType?.rawValue ?? "",
-            sourceOfIncome: "SLRY",
-            purposeOfTxn: "SAVG",
-            instrument: receiverData.chooseInstrument?.uppercased(),
-            message: UserManager.shared.getReferenceText ?? "",
-            sender: Sender(customerNumber: "1000001220000001", agentCustomerNumber: ""),
-            receiver: Receiver(
-                mobileNumber: receiverData.phoneNumber,
-                firstName: receiverData.firstName,
-                lastName: receiverData.lastName,
-                nationality: receiverData.country_code,
-                bankDetails: bankDetails,
-                mobileWalletDetails: mobileWalletDetails,
-                cashPickupDetails: cashPickupDetails
-            ),
-            transaction: Transaction(
-                quoteId: getQuote?.quote_id ?? "",
-                agentTransactionRefNumber: getQuote?.quote_id ?? ""
-            )
-        )
+        
+        let senderDetails: [String: Any] = [
+            "customer_number": "1000001220000001"
+        ]
+
+        let bankDetailsDict: [String: Any] = [
+            "account_type_code": "1",
+            "iso_code": "ALFHPKKA068",
+            "iban": "PK12ABCD1234567891234567"
+        ]
+
+        let receiverDetails: [String: Any] = [
+            "mobile_number": receiverData.phoneNumber ?? "",
+            "first_name": receiverData.firstName ?? "",
+            "last_name": receiverData.lastName ?? "",
+            "nationality": receiverData.country_code ?? "",
+            "relation_code": "32",
+            "bank_details": bankDetailsDict
+        ]
+
+        let transactionDetails: [String: Any] = [
+            "quote_id": getQuote?.quote_id ?? "",
+            "agent_transaction_ref_number": getQuote?.quote_id ?? ""
+        ]
+
+        let transactionRequest: [String: Any] = [
+            "type": UserManager.shared.gettransferType?.rawValue ?? "",
+            "source_of_income": "SLRY",
+            "purpose_of_txn": "SAVG",
+            "instrument": receiverData.chooseInstrument?.uppercased() ?? "",
+            "message": UserManager.shared.getReferenceText ?? "",
+            "sender": senderDetails,
+            "receiver": receiverDetails,
+            "transaction": transactionDetails
+        ]
+
 
         // Send this transactionRequest to your API endpoint
 
         print("Payload: \(transactionRequest)")
         LoadingIndicatorManager.shared.showLoading(on: self.view)
-        APIService.shared.makeAlamofireRequest(url: url,method: .post,parameters: transactionRequest,headers: headers) { result in
+        APIService.shared.requestParamasCodable1(url: url,method: .post,parameters: transactionRequest,headers: headers) { result in
             switch result {
             case .success(let data):
                 print("Success: \(data)")
@@ -655,3 +670,52 @@ extension PaymentDetailsViewController: UITableViewDelegate, UITableViewDataSour
     }
     
 }
+
+
+//        let transactionRequest = CreateTransactionRequest(
+//            type: UserManager.shared.gettransferType?.rawValue ?? "",
+//            sourceOfIncome: "SLRY",
+//            purposeOfTxn: "SAVG",
+//            instrument: receiverData.chooseInstrument?.uppercased(),
+//            message: UserManager.shared.getReferenceText ?? "",
+//            sender: Sender(customerNumber: "1000001220000001", agentCustomerNumber: ""),
+//            receiver: Receiver(
+//                mobileNumber: receiverData.phoneNumber,
+//                firstName: receiverData.firstName,
+//                lastName: receiverData.lastName,
+//                nationality: receiverData.country_code,
+//                bankDetails: bankDetails,
+//                mobileWalletDetails: mobileWalletDetails,
+//                cashPickupDetails: cashPickupDetails
+//            ),
+//            transaction: Transaction(
+//                quoteId: getQuote?.quote_id ?? "",
+//                agentTransactionRefNumber: getQuote?.quote_id ?? ""
+//            )
+//        )
+//        let transactionRequest: [String: Any] = [
+//            "type": UserManager.shared.gettransferType?.rawValue ?? "",
+//            "source_of_income": "SLRY",
+//            "purpose_of_txn": "SAVG",
+//            "instrument": receiverData.chooseInstrument?.uppercased() ?? "",
+//            "message": UserManager.shared.getReferenceText ?? "",
+//            "sender": [
+//                "customer_number": "1000001220000001"
+//            ],
+//            "receiver": [
+//                "mobile_number": receiverData.phoneNumber ?? "",
+//                "first_name": receiverData.firstName ?? "",
+//                "last_name": receiverData.lastName ?? "",
+//                "nationality": receiverData.country_code ?? "",
+//                "relation_code": "32",
+//                "bank_details": [
+//                    "account_type_code": bankDetails?.accountTypeCode ?? "",
+//                    "iso_code": bankDetails?.isoCode ?? "",
+//                    "iban": bankDetails?.iban
+//                ]
+//            ],
+//            "transaction": [
+//                "quote_id": getQuote?.quote_id ?? "",
+//                "agent_transaction_ref_number" : getQuote?.quote_id ?? ""
+//            ]
+//        ]
