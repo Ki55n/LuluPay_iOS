@@ -69,6 +69,7 @@ class PaymentDetailsViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     @objc func Submit(){
+        
         let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "ConfirmPayViewController") as! ConfirmPayViewController
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
@@ -93,7 +94,7 @@ extension PaymentDetailsViewController: UITableViewDelegate, UITableViewDataSour
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        return 6
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -108,6 +109,8 @@ extension PaymentDetailsViewController: UITableViewDelegate, UITableViewDataSour
             return ((getQuote?.fee_details?.count ?? 0) * 5) + 1
         case 4:
             return ((getQuote?.settlement_details?.count ?? 0) * 3) + 1
+        case 5:
+            return 1
         default:
             return 0
         }
@@ -122,6 +125,8 @@ extension PaymentDetailsViewController: UITableViewDelegate, UITableViewDataSour
                     fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
                 }
                 cell.lblTitle.text = "Payment Details"
+                cell.lblTitle.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+
                 return cell
                 
             }else{
@@ -160,6 +165,8 @@ extension PaymentDetailsViewController: UITableViewDelegate, UITableViewDataSour
                     fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
                 }
                 cell.lblTitle.text = "Transaction Details"
+                cell.lblTitle.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+
                 return cell
                 
             }else{
@@ -221,6 +228,8 @@ extension PaymentDetailsViewController: UITableViewDelegate, UITableViewDataSour
                     fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
                 }
                 cell.lblTitle.text = "FX Rates"
+                cell.lblTitle.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+
                 return cell
                 
             }else{
@@ -265,8 +274,66 @@ extension PaymentDetailsViewController: UITableViewDelegate, UITableViewDataSour
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellTitle", for: indexPath) as? TitleCell else {
                     fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
                 }
-                cell.lblTitle.text = "Settlement"
+                cell.lblTitle.text = "Fee Details"
+                cell.lblTitle.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+
+                return cell
                 
+            }else{
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellDetail", for: indexPath) as? TransactionDetailCell else {
+                    fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
+                }
+                let settlementIndex = (indexPath.row - 1) / 5  // Subtract 1 to account for the title row
+                if settlementIndex >= 0, settlementIndex < self.getQuote?.fee_details?.count ?? 0,
+                   let settlement = self.getQuote?.fee_details?[settlementIndex] {
+                    // Determine the key to show based on the remainder
+                    let keyIndex = (indexPath.row - 1) % 5  // Subtract 1 to skip the title row
+                    let keys = ["type", "model", "amount", "description", "currency_code"]
+                    
+                    if keyIndex < keys.count {
+                        let key = keys[keyIndex]
+                        //    let type: String?
+//                        let model: String?
+//                        let amount: Double?
+//                        let description: String?
+//                        let currency_code: String?
+
+                        switch key {
+                        case "type":
+                            cell.lblTitle.text = "Type"
+                            cell.lblValue.text = settlement.type
+
+                        case "model":
+                            cell.lblTitle.text = "Model"
+                            cell.lblValue.text = settlement.model
+
+                        case "amount":
+                            cell.lblTitle.text = "Amount"
+                            cell.lblValue.text = String(settlement.amount ?? 0.0)
+                        case "description":
+                            cell.lblTitle.text = "Description"
+                            cell.lblValue.text = settlement.description
+                        case "currency_code":
+                            cell.lblTitle.text = "Currency Code"
+                            cell.lblValue.text = settlement.currency_code
+
+                        default:
+                            break
+                        }
+                    }
+                }
+
+                return cell
+            }
+
+            
+        case 4:
+            if indexPath.row == 0{
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellTitle", for: indexPath) as? TitleCell else {
+                    fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
+                }
+                cell.lblTitle.text = "Settlement Details"
+                cell.lblTitle.font = UIFont.systemFont(ofSize: 15, weight: .bold)
                 return cell
                 
             }else{
@@ -274,7 +341,7 @@ extension PaymentDetailsViewController: UITableViewDelegate, UITableViewDataSour
                     fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
                 }
                 let settlementIndex = (indexPath.row - 1) / 3  // Subtract 1 to account for the title row
-                if settlementIndex >= 0, settlementIndex < (self.getQuote?.settlement_details?.count ?? 0),
+                if settlementIndex >= 0, settlementIndex < self.getQuote?.settlement_details?.count ?? 0,
                    let settlement = self.getQuote?.settlement_details?[settlementIndex] {
                     // Determine the key to show based on the remainder
                     let keyIndex = (indexPath.row - 1) % 3  // Subtract 1 to skip the title row
@@ -304,9 +371,8 @@ extension PaymentDetailsViewController: UITableViewDelegate, UITableViewDataSour
                 return cell
             }
 
-            
 
-            case 4:
+            case 5:
             
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellbutton", for: indexPath) as? ButtonCell else {
                     fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
@@ -329,15 +395,15 @@ extension PaymentDetailsViewController: UITableViewDelegate, UITableViewDataSour
             if indexPath.row == 0{
                 return 40
             }else{
-                return 50
+                return 70
             }
             
-        case 1:
+        case 1...4:
                 return 40
-        case 2:
+        case 5:
             return 50
         default:
-            return 0
+            return UITableView.automaticDimension
         }
         
     }

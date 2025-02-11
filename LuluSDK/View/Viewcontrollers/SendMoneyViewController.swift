@@ -344,8 +344,8 @@ class SendMoneyViewController: UIViewController {
         }
 
 //        tableView.reloadRows(at: [IndexPath(row: 5, section: 0)], with: .automatic)
-        let sectionIndex = 0 // Replace with the target section number
-        tableView.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
+//        let sectionIndex = 0 // Replace with the target section number
+//        tableView.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
 
     }
 
@@ -356,9 +356,9 @@ class SendMoneyViewController: UIViewController {
             receiverDetails.receiveMode = receiveModeList[0]
         }
 
-//        tableView.reloadRows(at: [IndexPath(row: 6, section: 0)], with: .automatic)
-        let sectionIndex = 0 // Replace with the target section number
-        tableView.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
+        tableView.reloadRows(at: [IndexPath(row: 6, section: 0)], with: .automatic)
+//        let sectionIndex = 0 // Replace with the target section number
+//        tableView.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
 
     }
     @objc private func dismissAccountTypePicker() {
@@ -372,9 +372,9 @@ class SendMoneyViewController: UIViewController {
 
         }
         
-//        tableView.reloadRows(at: [IndexPath(row: 7, section: 0)], with: .automatic)
-        let sectionIndex = 0 // Replace with the target section number
-        tableView.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
+        tableView.reloadRows(at: [IndexPath(row: 7, section: 0)], with: .automatic)
+//        let sectionIndex = 0 // Replace with the target section number
+//        tableView.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
 
     }
 
@@ -489,7 +489,7 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
        case 2:
             cell.txtFieldAmount.placeholder = "Receiver Middle Name"
             cell.txtFieldAmount.text = receiverDetails.middleName // Use model value
-            cell.txtFieldAmount.addTarget(self, action: #selector(updateMiddleName(_:)), for: .editingChanged)
+            cell.txtFieldAmount.addTarget(self, action: #selector(updateFirstName(_:)), for: .editingChanged)
             cell.txtFieldAmount.tag = 2
             middleNameField = cell.txtFieldAmount
             addDoneButtonToTextField(middleNameField)
@@ -497,7 +497,7 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
         case 3:
             cell.txtFieldAmount.placeholder = "Receiver Last Name"
             cell.txtFieldAmount.text = receiverDetails.lastName // Use model value
-            cell.txtFieldAmount.addTarget(self, action: #selector(updateLastName(_:)), for: .editingChanged)
+            cell.txtFieldAmount.addTarget(self, action: #selector(updateFirstName(_:)), for: .editingChanged)
             cell.txtFieldAmount.tag = 3
             lastNameField = cell.txtFieldAmount
             addDoneButtonToTextField(lastNameField)
@@ -505,7 +505,7 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
         case 4:
             cell.txtFieldAmount.placeholder = "Receiver Phone Number"
             cell.txtFieldAmount.text = receiverDetails.phoneNumber // Use model value
-            cell.txtFieldAmount.addTarget(self, action: #selector(updatePhoneNumber(_:)), for: .editingChanged)
+            cell.txtFieldAmount.addTarget(self, action: #selector(updateFirstName(_:)), for: .editingChanged)
             cell.txtFieldAmount.tag = 4
             phoneNumberField = cell.txtFieldAmount
             addDoneButtonToTextField(phoneNumberField)
@@ -513,7 +513,7 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
         case 5:
             cell.txtFieldAmount.placeholder = "Choose Country"
             cell.txtFieldAmount.text = receiverDetails.country // Use model value
-            cell.txtFieldAmount.addTarget(self, action: #selector(updateCountry(_:)), for: .editingChanged)
+            cell.txtFieldAmount.addTarget(self, action: #selector(updateFirstName(_:)), for: .editingChanged)
             cell.txtFieldAmount.tag = 100
             countryField = cell.txtFieldAmount
             countryField?.delegate = self
@@ -526,6 +526,8 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
         case 6:
             cell.txtFieldAmount.placeholder = "Choose Receive Mode"
             cell.txtFieldAmount.text = receiverDetails.receiveMode // Use model value
+            cell.txtFieldAmount.addTarget(self, action: #selector(updateFirstName(_:)), for: .editingChanged)
+
             cell.txtFieldAmount.tag = 101
             receiveModeField = cell.txtFieldAmount
             receiveModeField?.delegate = self
@@ -538,6 +540,8 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
 //            if showAccountType{
                 cell.txtFieldAmount.placeholder = "Choose Account Type"
                 cell.txtFieldAmount.text = receiverDetails.accountType // Use model value
+                cell.txtFieldAmount.addTarget(self, action: #selector(updateFirstName(_:)), for: .editingChanged)
+
                 cell.txtFieldAmount.tag = 102
                 chooseAccountTypeField = cell.txtFieldAmount
                 chooseAccountTypeField?.delegate = self
@@ -553,7 +557,7 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
             
             cell.txtFieldAmount.placeholder = "BIC/Swift code"
             cell.txtFieldAmount.text = receiverDetails.swiftCode // Use model value
-            cell.txtFieldAmount.addTarget(self, action: #selector(updateSwiftCode(_:)), for: .editingChanged)
+            cell.txtFieldAmount.addTarget(self, action: #selector(updateFirstName(_:)), for: .editingChanged)
             cell.txtFieldAmount.tag = 5
             swiftCodeField = cell.txtFieldAmount
             addDoneButtonToTextField(swiftCodeField)
@@ -562,7 +566,7 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
 //            if showIbanField {
                 cell.txtFieldAmount.placeholder = "IBAN"
                 cell.txtFieldAmount.text = receiverDetails.iban // Use model value
-                cell.txtFieldAmount.addTarget(self, action: #selector(updateIban(_:)), for: .editingChanged)
+                cell.txtFieldAmount.addTarget(self, action: #selector(updateFirstName(_:)), for: .editingChanged)
                 cell.txtFieldAmount.tag = 6
                 ibanField = cell.txtFieldAmount
             addDoneButtonToTextField(ibanField)
@@ -574,7 +578,7 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
 //            if showRoutingField {
                 cell.txtFieldAmount.placeholder = "Routing Code"
                 cell.txtFieldAmount.text = receiverDetails.routingCode // Use model value
-                cell.txtFieldAmount.addTarget(self, action: #selector(updateRoutingCode(_:)), for: .editingChanged)
+                cell.txtFieldAmount.addTarget(self, action: #selector(updateFirstName(_:)), for: .editingChanged)
                 cell.txtFieldAmount.tag = 7
                 routingCodeField = cell.txtFieldAmount
             addDoneButtonToTextField(routingCodeField)
@@ -587,7 +591,7 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
 //            if showAccountNumberField {
                 cell.txtFieldAmount.placeholder = "Account Number"
                 cell.txtFieldAmount.text = receiverDetails.accountNumber // Use model value
-                cell.txtFieldAmount.addTarget(self, action: #selector(updateAccountNumber(_:)), for: .editingChanged)
+                cell.txtFieldAmount.addTarget(self, action: #selector(updateFirstName(_:)), for: .editingChanged)
                 cell.txtFieldAmount.tag = 8
                 accountNumberField = cell.txtFieldAmount
             addDoneButtonToTextField(accountNumberField)
@@ -690,12 +694,16 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
                showAccountNumberField = (selectedCountryValue.code == "IN" || selectedCountryValue.code == "CH" || selectedCountryValue.code == "PH" || selectedCountryValue.code == "SL")
                showSwiftCodeField = (selectedCountryValue.code != "IN")
 //               tableView.reloadData()
+               let sectionIndex = 0 // Replace with the target section number
+               tableView.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
+
            } else if pickerView == receivingPicker {
                let selectedReceiveModeValue = receiveModeList[row]
                receiverDetails.receiveMode = selectedReceiveModeValue
                receiveModeField?.text = selectedReceiveModeValue
                // Show account type field if "Bank Account" is selected
                showAccountType = (selectedReceiveModeValue == "Bank")
+//               tableView.reloadRows(at: [IndexPath(row: 6, section: 0)], with: .automatic)
 
 //               tableView.reloadData()
            }else if pickerView == accountTypePicker {
@@ -704,20 +712,47 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
                chooseAccountTypeField?.text = selectedReceiveModeValue
 
 //               tableView.reloadData()
+//               tableView.reloadRows(at: [IndexPath(row: 7, section: 0)], with: .automatic)
+
            }else if pickerView == chooseInstrumentPicker {
                let selectedReceiveModeValue = instrumentList[row]
                receiverDetails.chooseInstrument = selectedReceiveModeValue
                chooseInstrumentField?.text = selectedReceiveModeValue
 
-//               tableView.reloadData()
+//               tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
            }
        }
 
     @objc private func updateFirstName(_ textField: UITextField) {
-        receiverDetails.firstName = textField.text ?? ""
+        if textField == self.firstNameField{
+            receiverDetails.firstName = textField.text ?? ""
+        }else if textField == self.middleNameField{
+            receiverDetails.middleName = textField.text ?? ""
+        }else if textField == self.lastNameField{
+            receiverDetails.lastName = textField.text ?? ""
+        }else if textField == self.phoneNumberField{
+            receiverDetails.phoneNumber = textField.text ?? ""
+        }else if textField == self.countryField{
+            receiverDetails.country = textField.text ?? ""
+        }else if textField == self.ibanField{
+            receiverDetails.iban = textField.text ?? ""
+        }else if textField == self.accountNumberField{
+            receiverDetails.accountNumber = textField.text ?? ""
+        }else if textField == self.receiveModeField{
+            receiverDetails.receiveMode = textField.text ?? ""
+        }else if textField == self.swiftCodeField{
+            receiverDetails.swiftCode = textField.text ?? ""
+        }else if textField == self.routingCodeField{
+            receiverDetails.routingCode = textField.text ?? ""
+        }else if textField == self.chooseInstrumentField{
+            receiverDetails.chooseInstrument = textField.text ?? ""
+        }else if textField == self.chooseAccountTypeField{
+            receiverDetails.accountType = textField.text ?? ""
+        }
     }
 
-    @objc private func updateMiddleName(_ textField: UITextField) {
+  /*  @objc private func updateMiddleName(_ textField: UITextField) {
+        
         receiverDetails.middleName = textField.text ?? ""
     }
 
@@ -745,7 +780,7 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
     }
     @objc private func updateAccountNumber(_ textField: UITextField) {
         receiverDetails.accountNumber = textField.text ?? ""
-    }
+    } */
 
 
     //remove redundant functions since you assigned them programatically
@@ -810,6 +845,16 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
         }else if textField.tag == 102 {
             textField.resignFirstResponder()
             self.receiverDetails.accountType = textField.text ?? ""
+            textField.resignFirstResponder()
+            
+        }else if textField.tag == 7 {
+            textField.resignFirstResponder()
+            self.receiverDetails.routingCode = textField.text ?? ""
+            textField.resignFirstResponder()
+            
+        }else if textField.tag == 8 {
+            textField.resignFirstResponder()
+            self.receiverDetails.accountNumber = textField.text ?? ""
             textField.resignFirstResponder()
             
         }

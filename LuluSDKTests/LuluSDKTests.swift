@@ -297,6 +297,7 @@ final class LuluSDKTests: XCTestCase {
         paymentDetailsVC.tableView?.register(TitleCell.self, forCellReuseIdentifier: "titleCell")
 
         paymentDetailsVC.tableView?.dataSource = paymentDetailsVC
+        paymentDetailsVC.tableView?.delegate = paymentDetailsVC
         paymentDetailsVC.loadViewIfNeeded()
 
         // Mock QuoteData setup
@@ -310,8 +311,9 @@ final class LuluSDKTests: XCTestCase {
 
         // Reload the table view after setting the data
         paymentDetailsVC.tableView?.reloadData()
+        RunLoop.main.run(until: Date().addingTimeInterval(1)) // Ensure UI updates
 
-        XCTAssertEqual(paymentDetailsVC.tableView?.numberOfSections, 5, "The table view should have 4 sections.")
+        XCTAssertEqual(paymentDetailsVC.tableView?.numberOfSections, 6, "The table view should have 4 sections.")
 
         // Assert section 2 row count
         let fxSectionRows = paymentDetailsVC.tableView?.numberOfRows(inSection: 2) ?? 0
@@ -334,11 +336,11 @@ final class LuluSDKTests: XCTestCase {
         }
 
         // Assert section 3 row count
-        let settlementSectionRows = paymentDetailsVC.tableView?.numberOfRows(inSection: 3) ?? 0
+        let settlementSectionRows = paymentDetailsVC.tableView?.numberOfRows(inSection: 4) ?? 0
         XCTAssertEqual(settlementSectionRows, 3, "Section 3 should display 3 rows per settlement entry")
 
         // Assert section 4 row count
-        let buttonSectionRows = paymentDetailsVC.tableView?.numberOfRows(inSection: 4) ?? 0
+        let buttonSectionRows = paymentDetailsVC.tableView?.numberOfRows(inSection: 5) ?? 0
         XCTAssertEqual(buttonSectionRows, 1, "Section 4 should display 1 row for the button")
 
         // Verify first row in section 2 is a TitleCell

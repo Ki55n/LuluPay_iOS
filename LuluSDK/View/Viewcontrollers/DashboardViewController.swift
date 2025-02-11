@@ -12,45 +12,11 @@ class DashboardViewController: UIViewController {
     var getRatesInfo: RatesModel?
     var getServiceCorriderInfo: ServiceCorriderModel?
     @IBOutlet weak var tableView: UITableView!
-    var exchangeRates = [RatesData]()
+    var exchangeRates = [ExchangeRate]()
 
     override func viewDidLoad() {
-        let url = "https://drap-sandbox.digitnine.com/raas/masters/v1/rates"
-
-        let headers = [
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
-        ]
-
-        let parameters: [String: String] = [:]
-        APIService.shared.request(url: url, method: .get, parameters: parameters, headers: headers) { result in
-            switch result {
-            case .success(let data):
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("Response: \(responseString)")
-                    DispatchQueue.main.async {
-                        let jsonDecoder = JSONDecoder()
-                        self.getRatesInfo = try? jsonDecoder.decode(RatesModel.self, from: data)
-                        UserManager.shared.getRatesData = self.getRatesInfo?.data
-                        self.exchangeRates = UserManager.shared.getRatesData?.rates?.map { ex in
-                            ExchangeRate(
-                                flag: self.flagEmoji(for: ex.to_country ?? ""),
-                                currency: ex.to_currency ?? "",
-                                buy: String(format: "%.2f", ex.rate ?? 0.0),
-                                sell: "85,583"
-                            )
-                        } ?? []
-                        
-                        print("Updated Exchange Rates: ", self.exchangeRates)
-                        self.tableView.reloadData()
-                        print("UserManager.shared.getCodesData: ", UserManager.shared.getRatesData ?? nil)
-                    }
-                }
-            case .failure(let error):
-                print("Error: \(error.localizedDescription)")
-            }
-        }
         super.viewDidLoad()
+        
         if let bundle = Bundle(identifier: "com.finance.LuluSDK") {
             // Register custom cells
             tableView.register(UINib(nibName: "HeaderViewCell", bundle: bundle), forCellReuseIdentifier: "cellHeader")
@@ -66,10 +32,71 @@ class DashboardViewController: UIViewController {
         } else {
             print("Error: SDK Bundle not found.")
         }
+        getRates()
         exchangeRates = []
     
     }
-    
+    func getRates() {
+        let url = "https://drap-sandbox.digitnine.com/raas/masters/v1/rates"
+
+        let headers = [
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
+        ]
+
+        let parameters: [String: String] = [:]
+
+        // Make the request using the APIService
+        APIService.shared.request(url: url, method: .get, parameters: parameters, headers: headers, isJsonRequest: false) { (result: Result<Data, Error>) in
+            
+            switch result {
+            case .success(let data):
+                // Successfully received the data
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("Response: \(responseString)")
+                }
+                
+                DispatchQueue.main.async {
+                    do {
+                        let jsonDecoder = JSONDecoder()
+                        // Decoding the response data into RatesModel
+                        self.getRatesInfo = try jsonDecoder.decode(RatesModel.self, from: data)
+                        UserManager.shared.getRatesData = self.getRatesInfo?.data
+                        
+                        // Map the rates data into exchangeRates
+                        if let rates = UserManager.shared.getRatesData?.rates {
+                            self.exchangeRates = rates.map { ex in
+                                ExchangeRate(
+                                    flag: self.flagEmoji(for: ex.to_country ?? ""),
+                                    currency: ex.to_currency ?? "",
+                                    buy: String(format: "%.2f", ex.rate ?? 0.0),
+                                    sell: "85,583"
+                                )
+                            }
+                        } else {
+                            self.exchangeRates = []
+                        }
+                        
+                        // Debugging the updated exchange rates
+                        print("Updated Exchange Rates: ", self.exchangeRates)
+                        
+                        // Reload the table view with updated data
+                        self.tableView.reloadData()
+
+                        // Debugging UserManager's updated rates data
+                        print("UserManager.shared.getRatesData: ", UserManager.shared.getRatesData ?? nil)
+                    } catch {
+                        print("Failed to decode JSON: \(error.localizedDescription)")
+                    }
+                }
+
+            case .failure(let error):
+                // Handle failure and show an error message
+                print("Error: \(error.localizedDescription)")
+                // Optionally, show an alert or update the UI to reflect the failure
+            }
+        }
+    }
     func flagEmoji(for countryCode: String) -> String {
         let base: UInt32 = 127397 // Regional Indicator Symbol base code
         var flagString = ""
@@ -132,10 +159,10 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
                 }else{
                     rateCell.viewHeader.isHidden = true
                 }
-                rateCell.flagImageView.image = UIImage(named: rate.flag)
-                rateCell.currencyLabel.text = rate.currency
-                rateCell.buyRateLabel.text = rate.buy
-                rateCell.sellRateLabel.text = rate.sell
+//                rateCell.flagImageView.image = UIImage(named: rate.flag)
+//                rateCell.currencyLabel.text = rate.currency
+//                rateCell.buyRateLabel.text = rate.buy
+//                rateCell.sellRateLabel.text = rate.sell
                 return rateCell
             } else {
                 return UITableViewCell() // Fallback for unexpected rows

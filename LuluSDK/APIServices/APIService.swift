@@ -106,8 +106,9 @@ class APIService {
             }
             
             // Add timeout for request if needed
-            request.timeoutInterval = 30  // 30 seconds timeout
-
+//            request.timeoutInterval = 30  // 30 seconds timeout
+        print("URL-",request.url)
+        print("Param-",parameters)
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 if let error = error {
                     DispatchQueue.main.async {

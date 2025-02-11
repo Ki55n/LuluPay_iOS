@@ -74,3 +74,9 @@ struct Rates : Codable {
     }
 
 }
+struct ExchangeRate {
+    let flag: String
+    let currency: String
+    let buy: String
+    let sell: String
+}
