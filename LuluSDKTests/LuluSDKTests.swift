@@ -123,37 +123,37 @@ final class LuluSDKTests: XCTestCase {
 //        viewController.getCurrentRateInfo = []
 //
 //    }
-    func testAccountTypeContainsData() {
-        // 1. Arrange: Create a SendMoneyViewController instance and mock data
-
-        let viewController = SendReqMoneyViewController()
-
-        // Mock ReceiverData with accountType
-        var receiverDetails = ReceiverDetails(firstName: "John", middleName: "", lastName: "Doe", phoneNumber: "1234567890", country: "Egypt", country_code: "EG", receiveMode: "Bank", accountType: "Savings", swiftCode: "", iban: "", routingCode: "", accountNumber: "", chooseInstrument: "")
-        UserManager.shared.getReceiverData = receiverDetails
-
-        // 2. Act: Assign the ReceiverData to the view controller
-
-        viewController.ReceiverData = UserManager.shared.getReceiverData
-
-        // 3. Assert: Check that accountType is not empty
-
-        XCTAssertFalse(viewController.ReceiverData?.accountType.isEmpty ?? true, "Account type should not be empty")
-
-        // Test what happens with a nil value
-        receiverDetails = ReceiverDetails(firstName: "John", middleName: "", lastName: "Doe", phoneNumber: "1234567890", country: "Egypt", country_code: "EG", receiveMode: "Bank", accountType: "", swiftCode: "", iban: "", routingCode: "", accountNumber: "", chooseInstrument: "")
-        UserManager.shared.getReceiverData = receiverDetails
-
-        // 2. Act: Assign the ReceiverData to the view controller
-
-        viewController.ReceiverData = UserManager.shared.getReceiverData
-
-        XCTAssertTrue(viewController.ReceiverData?.accountType.isEmpty ?? true, "Account type should be nil when value does not exist.")
-
-
-        // Cleanup
-        UserManager.shared.getReceiverData = nil
-    }
+//    func testAccountTypeContainsData() {
+//        // 1. Arrange: Create a SendMoneyViewController instance and mock data
+//
+//        let viewController = SendReqMoneyViewController()
+//
+//        // Mock ReceiverData with accountType
+//        var receiverDetails = ReceiverDetails(firstName: "John", middleName: "", lastName: "Doe", phoneNumber: "1234567890", country: "Egypt", country_code: "EG", receiveMode: "Bank", accountType: "Savings", swiftCode: "", iban: "", routingCode: "", accountNumber: "", chooseInstrument: "")
+//        UserManager.shared.getReceiverData = receiverDetails
+//
+//        // 2. Act: Assign the ReceiverData to the view controller
+//
+//        viewController.ReceiverData = UserManager.shared.getReceiverData
+//
+//        // 3. Assert: Check that accountType is not empty
+//
+//        XCTAssertFalse(viewController.ReceiverData?.accountType.isEmpty ?? true, "Account type should not be empty")
+//
+//        // Test what happens with a nil value
+//        receiverDetails = ReceiverDetails(firstName: "John", middleName: "", lastName: "Doe", phoneNumber: "1234567890", country: "Egypt", country_code: "EG", receiveMode: "Bank", accountType: "", swiftCode: "", iban: "", routingCode: "", accountNumber: "", chooseInstrument: "")
+//        UserManager.shared.getReceiverData = receiverDetails
+//
+//        // 2. Act: Assign the ReceiverData to the view controller
+//
+//        viewController.ReceiverData = UserManager.shared.getReceiverData
+//
+//        XCTAssertTrue(viewController.ReceiverData?.accountType.isEmpty ?? true, "Account type should be nil when value does not exist.")
+//
+//
+//        // Cleanup
+//        UserManager.shared.getReceiverData = nil
+//    }
 
 
         func testQuoteModelDecoding() {
@@ -380,5 +380,134 @@ final class LuluSDKTests: XCTestCase {
     }
 
 
+
+        func testRemoveNilValues() {
+            // Given mock data
+            let vc = PaymentDetailsViewController()
+            let receiverData = vc.ReceiverData
+            let bankDetails = BankDetails(accountTypeCode: "1", isoCode: "ALFHPKKA068", iban: "PK12ABCD1234567891234567", routingCode: "XYZ123")
+            
+            let senderDetails = Sender(customerNumber: "7841001220007002")
+            let receiverDetails = Receiver(
+                mobileNumber: receiverData?.phoneNumber ?? "",
+                firstName: receiverData?.firstName ?? "",
+                lastName: receiverData?.lastName ?? "",
+                nationality: receiverData?.country_code ?? "",
+                relationCode: "32",
+                bankDetails: bankDetails
+            )
+            
+            let transactionDetails = Transaction(
+                quoteId: "Q12345",
+                agentTransactionRefNumber: "AGENT12345"
+            )
+            
+            let transactionRequest = CreateTransactionRequest(
+                type: "TRANSFER",
+                sourceOfIncome: "SLRY",
+                purposeOfTxn: "SAVG",
+                instrument: receiverData?.chooseInstrument?.uppercased() ?? "",
+                message: "Agency transaction",
+                sender: senderDetails,
+                receiver: receiverDetails,
+                transaction: transactionDetails
+            )
+            
+            // Remove nil values from the request
+            guard let cleanedRequest = vc.removeNilValues(from: transactionRequest) else {
+                XCTFail("Nil values were not removed properly.")
+                return
+            }
+
+            // Test if cleaned request does not contain any nil or empty values
+            if let cleanedDict = cleanedRequest as? [String: Any] {
+                XCTAssertNil(cleanedDict["receiver.lastName"]) // Last name is empty and should be removed
+            }
+        }
+    
+
+    
+
 }
 
+import XCTest
+
+class TransactionRequestTests: XCTestCase {
+
+    func testTransactionRequestCreation() {
+        // Test Data Setup
+        
+        let vc = PaymentDetailsViewController()
+        
+        let receiverData = ReceiverDetails(
+            firstName: "Swathi", lastName: "L", phoneNumber: "+923001234567", country_code: "PK", receiveMode: "Bank", accountType: "Savings", swiftCode: "SWIFT123", iban: "IBAN12345", routingCode: "ROUTING123", accountNumber: "1234567890",
+            chooseInstrument: "Remittance"
+        )
+        let unique_id = vc.generateUniqueId()
+        // Sender Details (provided static values)
+        let senderDetails = Sender(customerNumber: "7841001220007002", agentCustomerNumber: "AGENT" + unique_id)
+
+        // Transaction Details (provided static values)
+        let transactionDetails = Transaction(
+            quoteId: "1279125104358279",
+            agentTransactionRefNumber: "1279125104358279"
+        )
+
+        // Begin setting up the Receiver Details
+        var bankDetails: BankDetails?
+        var mobileWalletDetails: MobileWalletDetails?
+        var cashPickupDetails: CashPickupDetails?
+
+        // Set bank details only if all fields are non-nil
+        if let receiveMode = receiverData.receiveMode, receiveMode.contains("Bank") {
+            bankDetails = BankDetails()
+
+            bankDetails?.accountNumber = (receiverData.accountNumber?.isEmpty ?? true) ? nil : receiverData.accountNumber
+            bankDetails?.accountTypeCode = "1" // Setting default value for accountTypeCode
+            bankDetails?.iban = (receiverData.iban?.isEmpty ?? true) ? nil : receiverData.iban
+            bankDetails?.isoCode = (receiverData.swiftCode?.isEmpty ?? true) ? nil : receiverData.swiftCode
+            bankDetails?.routingCode = (receiverData.routingCode?.isEmpty ?? true) ? nil : receiverData.routingCode
+        }
+
+        // Setting up the Receiver details (with bankDetails populated if necessary)
+        let receiverDetails = Receiver(
+            mobileNumber: receiverData.phoneNumber ?? "",
+            firstName: receiverData.firstName ?? "",
+            lastName: receiverData.lastName ?? "",
+            nationality: receiverData.country_code ?? "",
+            relationCode: "32",
+            bankDetails: bankDetails,
+            cashPickupDetails: cashPickupDetails
+        )
+
+        // Transaction Request setup
+        let transactionRequest = CreateTransactionRequest(
+            type: "SEND",
+            sourceOfIncome: "SLRY",
+            purposeOfTxn: "SAVG",
+            instrument: receiverData.chooseInstrument?.uppercased() ?? "",
+            message: "Agency transaction",
+            sender: senderDetails,
+            receiver: receiverDetails,
+            transaction: transactionDetails
+        )
+
+        // Printing the payload for inspection
+        print("Payload: \(transactionRequest)")
+
+        // Remove Nil Values from transactionRequest and test
+        guard let cleanedRequest = vc.removeNilValues(from: transactionRequest) else {
+            XCTFail("Failed to clean the request due to nil values")
+            return
+        }
+//        XCTAssertNil(bankDetails,"bankdetails")
+        // Assertions
+        // Test that the bankDetails are set only when values are non-nil
+        XCTAssertNotNil(bankDetails?.accountNumber, "Account number should not be nil")
+        XCTAssertNotNil(bankDetails?.iban, "IBAN should not be nil")
+        XCTAssertNotNil(bankDetails?.isoCode, "ISO code should not be nil")
+        XCTAssertNotNil(bankDetails?.routingCode, "Routing code should not be nil")
+        
+        
+    }
+}

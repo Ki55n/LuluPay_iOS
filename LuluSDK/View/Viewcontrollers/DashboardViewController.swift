@@ -36,6 +36,7 @@ class DashboardViewController: UIViewController {
         exchangeRates = []
     
     }
+
     func getRates() {
         let url = "https://drap-sandbox.digitnine.com/raas/masters/v1/rates"
 

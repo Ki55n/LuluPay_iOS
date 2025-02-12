@@ -55,7 +55,7 @@ class PaymentDetailsViewController: UIViewController {
         
         self.getQuote = UserManager.shared.getQuotesData
         self.ReceiverData = UserManager.shared.getReceiverData
-
+        print("ReceiverData assigned",ReceiverData)
         tableView.bounces = true
         // Add the custom background view to the table view
         tableView.backgroundColor = .clear
@@ -78,194 +78,247 @@ class PaymentDetailsViewController: UIViewController {
 
     }
     
-    func createTransactionID() {
-        guard let url = URL(string: "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/createtransaction") else { return }
-        guard let receiverData = ReceiverData else {
-            print("Invalid ReceiverData or missing input values.")
-            return
-        }
-//        let senderDetails: [String: Any] = [
-//            "customer_number": "7841001220007002"
-//        ]
-//        
-//        let bankDetailsDict: [String: Any] = [
-//            "account_type_code": "1",
-//            "iso_code": "ALFHPKKA068",
-//            "iban": "PK12ABCD1234567891234567"
-//        ]
-//        
-//        let receiverDetails: [String: Any] = [
-//            "mobile_number": receiverData.phoneNumber ?? "",
-//            "first_name": receiverData.firstName ?? "",
-//            "last_name": receiverData.lastName ?? "",
-//            "nationality": receiverData.country_code ?? "",
-//            "relation_code": "32",
-//            "bank_details": bankDetailsDict
-//        ]
-//        
-//        let transactionDetails: [String: Any] = [
-//            "quote_id": getQuote?.quote_id ?? "",
-//            "agent_transaction_ref_number": getQuote?.quote_id ?? ""
-//        ]
-//        
-//        let requestBody: [String: Any] = [
-//            "type": UserManager.shared.gettransferType?.rawValue ?? "",
-//            "source_of_income": "SLRY",
-//            "purpose_of_txn": "SAVG",
-//            "instrument": receiverData.chooseInstrument?.uppercased() ?? "",
-//            "message": "Agency transaction",
-//            "sender": senderDetails,
-//            "receiver": receiverDetails,
-//            "transaction": transactionDetails
-//        ]
-        let requestBody = TransactionRequest(
-            type: UserManager.shared.gettransferType?.rawValue ?? "",
-            source_of_income: "SLRY",
-            purpose_of_txn: "SAVG",
-            instrument: receiverData.chooseInstrument?.uppercased() ?? "",
-            message: "Agency transaction",
-            sender: Sender(customer_number: "7841001220007002"),
-            receiver: Receiver(
-                mobile_number: receiverData.phoneNumber ?? "",
-                first_name: receiverData.firstName ?? "",
-                last_name: receiverData.lastName ?? "",
-                nationality: receiverData.country_code ?? "",
-                relation_code: "32",
-                bank_details: BankDetails(
-                    account_type_code: "1",
-                    iso_code: "ALFHPKKA068",
-                    iban: "PK12ABCD1234567891234567"
-                )
-            ),
-            transaction: Transaction(
-                quote_id: getQuote?.quote_id ?? "",
-                agent_transaction_ref_number: getQuote?.quote_id ?? ""
-            )
-        )
-        print("requestBody: ", requestBody)
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("Direct", forHTTPHeaderField: "channel")
-        request.addValue("784825", forHTTPHeaderField: "company")
-        request.addValue("784826", forHTTPHeaderField: "branch")
-        request.addValue("Bearer \(UserManager.shared.loginModel?.access_token ?? "")", forHTTPHeaderField: "Authorization")
-        
-        do {
-            request.httpBody = try JSONEncoder().encode(requestBody)
-        } catch {
-            print("Failed to encode request body: \(error)")
-            return
-        }
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("Error: \(error.localizedDescription)")
-                return
-            }
-            
-            if let httpResponse = response as? HTTPURLResponse {
-                print("HTTP Response Status: \(httpResponse.statusCode)")
-            }
-            
-            if let data = data {
-                let responseString = String(data: data, encoding: .utf8)
-                print("Response Data: \(responseString ?? "No Data")")
-            }
-        }
-        
-        task.resume()
-    }
-
 //    func createTransactionID() {
-//        let url = "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/createtransaction"
-//        
-//        let headers = [
-//                "Content-Type": "application/json",
-//                "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")",
-//                "sender": UserManager.shared.getLoginUserData?["username"] ?? "",
-//                "channel": "Direct",
-//                "company": "784825",
-//                "branch": "784826"
-//            ] //let headers:[String:String]?
+//        guard let url = URL(string: "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/createtransaction") else { return }
 //        guard let receiverData = ReceiverData else {
 //            print("Invalid ReceiverData or missing input values.")
 //            return
 //        }
-//        var bankDetails: BankDetails? = nil
-//        var mobileWalletDetails: MobileWalletDetails? = nil
-//        var cashPickupDetails: CashPickupDetails? = nil
-//
-//        if let receiveMode = receiverData.receiveMode, receiveMode.contains("BANK") {
-//            bankDetails = BankDetails(
-//                accountTypeCode: receiverData.accountType,
-//                accountNumber: receiverData.accountNumber,
-//                isoCode: receiverData.swiftCode,
-//                iban: receiverData.iban,
-//                routingCode: receiverData.routingCode
+////        let senderDetails: [String: Any] = [
+////            "customer_number": "7841001220007002"
+////        ]
+////        
+////        let bankDetailsDict: [String: Any] = [
+////            "account_type_code": "1",
+////            "iso_code": "ALFHPKKA068",
+////            "iban": "PK12ABCD1234567891234567"
+////        ]
+////        
+////        let receiverDetails: [String: Any] = [
+////            "mobile_number": receiverData.phoneNumber ?? "",
+////            "first_name": receiverData.firstName ?? "",
+////            "last_name": receiverData.lastName ?? "",
+////            "nationality": receiverData.country_code ?? "",
+////            "relation_code": "32",
+////            "bank_details": bankDetailsDict
+////        ]
+////        
+////        let transactionDetails: [String: Any] = [
+////            "quote_id": getQuote?.quote_id ?? "",
+////            "agent_transaction_ref_number": getQuote?.quote_id ?? ""
+////        ]
+////        
+////        let requestBody: [String: Any] = [
+////            "type": UserManager.shared.gettransferType?.rawValue ?? "",
+////            "source_of_income": "SLRY",
+////            "purpose_of_txn": "SAVG",
+////            "instrument": receiverData.chooseInstrument?.uppercased() ?? "",
+////            "message": "Agency transaction",
+////            "sender": senderDetails,
+////            "receiver": receiverDetails,
+////            "transaction": transactionDetails
+////        ]
+//        let requestBody = TransactionRequest(
+//            type: UserManager.shared.gettransferType?.rawValue ?? "",
+//            source_of_income: "SLRY",
+//            purpose_of_txn: "SAVG",
+//            instrument: receiverData.chooseInstrument?.uppercased() ?? "",
+//            message: "Agency transaction",
+//            sender: Sender(customer_number: "7841001220007002"),
+//            receiver: Receiver(
+//                mobile_number: receiverData.phoneNumber ?? "",
+//                first_name: receiverData.firstName ?? "",
+//                last_name: receiverData.lastName ?? "",
+//                nationality: receiverData.country_code ?? "",
+//                relation_code: "32",
+//                bank_details: BankDetails(
+//                    account_type_code: "1",
+//                    iso_code: "ALFHPKKA068",
+//                    iban: "PK12ABCD1234567891234567"
+//                )
+//            ),
+//            transaction: Transaction(
+//                quote_id: getQuote?.quote_id ?? "",
+//                agent_transaction_ref_number: getQuote?.quote_id ?? ""
 //            )
-//        }
-//
-//        // Uncomment and fill in details for mobile wallet or cash pickup if necessary
-//
+//        )
+//        print("requestBody: ", requestBody)
+//        var request = URLRequest(url: url)
+//        request.httpMethod = "POST"
+//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+//        request.addValue("Direct", forHTTPHeaderField: "channel")
+//        request.addValue("784825", forHTTPHeaderField: "company")
+//        request.addValue("784826", forHTTPHeaderField: "branch")
+//        request.addValue("Bearer \(UserManager.shared.loginModel?.access_token ?? "")", forHTTPHeaderField: "Authorization")
 //        
-//        let senderDetails: [String: Any] = [
-//            "customer_number": "7841001220007002"
-//        ]
+//        do {
+//            request.httpBody = try JSONEncoder().encode(requestBody)
+//        } catch {
+//            print("Failed to encode request body: \(error)")
+//            return
+//        }
+//        
+//        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+//            if let error = error {
+//                print("Error: \(error.localizedDescription)")
+//                return
+//            }
+//            
+//            if let httpResponse = response as? HTTPURLResponse {
+//                print("HTTP Response Status: \(httpResponse.statusCode)")
+//            }
+//            
+//            if let data = data {
+//                let responseString = String(data: data, encoding: .utf8)
+//                print("Response Data: \(responseString ?? "No Data")")
+//            }
+//        }
+//        
+//        task.resume()
+//    }
+    func generateUniqueId() -> String {
+        return UUID().uuidString // Using UUID to generate a unique ID
+    }
+
+    func createTransactionID() {
+        let url = "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/createtransaction"
+        
+        let headers = [
+                "Content-Type": "application/json",
+                "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")",
+                "sender": UserManager.shared.getLoginUserData?["username"] ?? "",
+                "channel": "Direct",
+                "company": "784825",
+                "branch": "784826"
+            ] //let headers:[String:String]?
+        guard let receiverData = ReceiverData else {
+            print("Invalid ReceiverData or missing input values.")
+            return
+        }
+        print("ReceiverData-",receiverData)
+        
+        var bankDetails: BankDetails?
+        var mobileWalletDetails: MobileWalletDetails?
+        var cashPickupDetails: CashPickupDetails?
+
+        if let receiveMode = receiverData.receiveMode, receiveMode.contains("Bank") {
+             bankDetails = BankDetails()
+
+                // If at least one field has value, create bankDetails
+            bankDetails?.accountNumber = (receiverData.accountNumber?.isEmpty ?? true) ? nil : receiverData.accountNumber
+            bankDetails?.accountTypeCode = "1"
+            bankDetails?.iban = (receiverData.iban?.isEmpty ?? true) ? nil : receiverData.iban
+            bankDetails?.isoCode = (receiverData.swiftCode?.isEmpty ?? true) ? nil : receiverData.swiftCode
+            bankDetails?.routingCode = (receiverData.routingCode?.isEmpty ?? true) ? nil : receiverData.routingCode
+            
+        }
+
+        // Uncomment and fill in details for mobile wallet or cash pickup if necessary
+        /*
+        if receiverData.receiveMode.contains("MOBILEWALLET") {
+            mobileWalletDetails = MobileWalletDetails(
+                walletId: receiverData.walletId ?? "",
+                correspondent: receiverData.correspondent ?? "",
+                bankId: receiverData.bankId ?? "",
+                branchId: receiverData.branchId ?? ""
+            )
+        }
+
+        if receiverData.receiveMode.contains("CASHPICKUP") {
+            cashPickupDetails = CashPickupDetails(
+                correspondentId: receiverData.bankId ?? "",
+                correspondent: receiverData.correspondent ?? "",
+                correspondentLocationId: receiverData.branchId ?? ""
+            )
+        }
+        */
+
+        
+        let senderDetails = Sender(customerNumber: "7841001220007002", agentCustomerNumber: "AGENT" + generateUniqueId())
+
+
+        let receiverDetails = Receiver(
+            mobileNumber: receiverData.phoneNumber ?? "",
+            firstName: receiverData.firstName ?? "",
+            lastName: receiverData.lastName ?? "",
+            nationality: receiverData.country_code ?? "",
+            relationCode: "32",
+            bankDetails: bankDetails,
+            cashPickupDetails: cashPickupDetails
+        )
+
+        let transactionDetails = Transaction(
+            quoteId: getQuote?.quote_id ?? "",
+            agentTransactionRefNumber: getQuote?.quote_id ?? ""
+        )
+
+        let transactionRequest = CreateTransactionRequest(
+            type: UserManager.shared.gettransferType?.rawValue ?? "",
+            sourceOfIncome: "SLRY",
+            purposeOfTxn: "SAVG",
+            instrument: receiverData.chooseInstrument?.uppercased() ?? "",
+            message: UserManager.shared.getReferenceText ?? "Agency transaction",
+            sender: senderDetails,
+            receiver: receiverDetails,
+            transaction: transactionDetails
+        )
+
+        // Send this transactionRequest to your API endpoint
+
+        print("Payload: \(transactionRequest)")
+        guard let cleanedRequest = removeNilValues(from: transactionRequest) else { return }
+
+        LoadingIndicatorManager.shared.showLoading(on: self.view)
+        APIService.shared.requestParamasCodable1(url: url,method: .post,parameters: cleanedRequest,headers: headers,isJsonRequest: true) { result in
+            LoadingIndicatorManager.shared.hideLoading(on: self.view)
+            switch result {
+            case .success(let data):
+                print("Success: \(data)")
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("Response: \(responseString)")
+                }
+                
+                DispatchQueue.main.async {
+                    let jsonDecoder = JSONDecoder()
+                    
+                    do {
+                        let decodedData = try jsonDecoder.decode(CreateTransactionModel.self, from: data)
+                        UserManager.shared.getTransactionalData = decodedData.data
+                        DispatchQueue.main.async {
+                            self.showTransferConfirmationAlert()
+                        }
+                        
+                    } catch {
+                        print("Failed to decode JSON: \(error.localizedDescription)")
+                    }
+                }
+
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+                self.showToast(message: error.localizedDescription)
+
+            }
+
+        }
+//        APIService.shared.requestParamasCodable(url: url, method: .post, parameters: transactionRequest, headers: headers, isJsonRequest: true) { result in
+//                LoadingIndicatorManager.shared.hideLoading(on: self.view)
 //
-//        let bankDetailsDict: [String: Any] = [
-//            "account_type_code": "1",
-//            "iso_code": "ALFHPKKA068",
-//            "iban": "PK12ABCD1234567891234567"
-//        ]
 //
-//        let receiverDetails: [String: Any] = [
-//            "mobile_number": receiverData.phoneNumber ?? "",
-//            "first_name": receiverData.firstName ?? "",
-//            "last_name": receiverData.lastName ?? "",
-//            "nationality": receiverData.country_code ?? "",
-//            "relation_code": "32",
-//            "bank_details": bankDetailsDict
-//        ]
-//
-//        let transactionDetails: [String: Any] = [
-//            "quote_id": getQuote?.quote_id ?? "",
-//            "agent_transaction_ref_number": getQuote?.quote_id ?? ""
-//        ]
-//
-//        let transactionRequest: [String: Any] = [
-//            "type": UserManager.shared.gettransferType?.rawValue ?? "",
-//            "source_of_income": "SLRY",
-//            "purpose_of_txn": "SAVG",
-//            "instrument": receiverData.chooseInstrument?.uppercased() ?? "",
-//            "message": UserManager.shared.getReferenceText ?? "",
-//            "sender": senderDetails,
-//            "receiver": receiverDetails,
-//            "transaction": transactionDetails
-//        ]
-//
-//
-//        // Send this transactionRequest to your API endpoint
-//
-//        print("Payload: \(transactionRequest)")
-//        LoadingIndicatorManager.shared.showLoading(on: self.view)
-//        APIService.shared.request1(url: url,method: .post,parameters: transactionRequest,headers: headers) { result in
 //            switch result {
 //            case .success(let data):
-//                print("Success: \(data)")
 //                if let responseString = String(data: data, encoding: .utf8) {
 //                    print("Response: \(responseString)")
 //                }
-//                
+//
 //                DispatchQueue.main.async {
 //                    let jsonDecoder = JSONDecoder()
-//                    
+//
 //                    do {
 //                        let decodedData = try jsonDecoder.decode(CreateTransactionModel.self, from: data)
 //                        UserManager.shared.getTransactionalData = decodedData.data
-//                        
+//
 //                        self.showTransferConfirmationAlert()
-//                        
+//
 //                    } catch {
 //                        print("Failed to decode JSON: \(error.localizedDescription)")
 //                    }
@@ -274,11 +327,9 @@ class PaymentDetailsViewController: UIViewController {
 //            case .failure(let error):
 //                print("Error: \(error.localizedDescription)")
 //                self.showToast(message: error.localizedDescription)
-//
 //            }
-//
 //        }
-//    }
+    }
     func createConfirmTransaction() {
         let url = "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/confirmtransaction"
         
@@ -298,43 +349,50 @@ class PaymentDetailsViewController: UIViewController {
         let requestBody: [String: Any] = [
             "transaction_ref_number": UserManager.shared.getTransactionalData?.transaction_ref_number ?? ""
         ]
+       
+        if let cleanedRequest = removeNilValues(from: requestBody) {
+            print("Payload: \(cleanedRequest)")
+            LoadingIndicatorManager.shared.showLoading(on: self.view)
 
-        print("Payload: \(requestBody)")
-        LoadingIndicatorManager.shared.showLoading(on: self.view)
-
-        APIService.shared.request(url: url, method: .post, parameters: requestBody, headers: headers, isJsonRequest: true) { result in
+            APIService.shared.request(url: url, method: .post, parameters: requestBody, headers: headers, isJsonRequest: true) { result in
+                   
                 LoadingIndicatorManager.shared.hideLoading(on: self.view)
-            
-            
-            switch result {
-            case .success(let data):
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("Response: \(responseString)")
-                }
                 
-                DispatchQueue.main.async {
-                    let jsonDecoder = JSONDecoder()
-                    
-                    do {
-                        let decodedData = try jsonDecoder.decode(CreateTransactionModel.self, from: data)
-                        UserManager.shared.getTransactionalData = decodedData.data
-                       
-                        let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "PaySuccessViewController") as! PaySuccessViewController
-                        vc.hidesBottomBarWhenPushed = true
-                        self.navigationController?.pushViewController(vc, animated: true)
-                        
-                        
-                    } catch {
-                        print("Failed to decode JSON: \(error.localizedDescription)")
+                
+                switch result {
+                case .success(let data):
+                    if let responseString = String(data: data, encoding: .utf8) {
+                        print("Response: \(responseString)")
                     }
-                }
-                
-            case .failure(let error):
-                print("Error: \(error.localizedDescription)")
-                self.showToast(message: error.localizedDescription)
+                    
+                    DispatchQueue.main.async {
+                        let jsonDecoder = JSONDecoder()
+                        
+                        do {
+                            let decodedData = try jsonDecoder.decode(CreateTransactionModel.self, from: data)
+                            UserManager.shared.getTransactionalData = decodedData.data
+                           
+                            let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "PaySuccessViewController") as! PaySuccessViewController
+                            vc.hidesBottomBarWhenPushed = true
+                            self.navigationController?.pushViewController(vc, animated: true)
+                            
+                            
+                        } catch {
+                            print("Failed to decode JSON: \(error.localizedDescription)")
+                        }
+                    }
+                    
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
+                    self.showToast(message: error.localizedDescription)
 
+                }
             }
+
+        } else {
+            print("Error: Unable to remove nil values or clean parameters.")
         }
+
     }
 
     func showTransferConfirmationAlert() {
@@ -354,7 +412,7 @@ class PaymentDetailsViewController: UIViewController {
         let payAction = UIAlertAction(title: "Pay And Confirm", style: .default) { _ in
             print("Pay button tapped.")
             // Handle pay action
-            
+            self.createConfirmTransaction()
             
         }
         
@@ -364,10 +422,59 @@ class PaymentDetailsViewController: UIViewController {
         alertController.addAction(payAction)
         
         // Present the alert
-        if let viewController = UIApplication.shared.keyWindow?.rootViewController {
-            viewController.present(alertController, animated: true, completion: nil)
+        if let topController = getTopViewController() {
+            topController.present(alertController, animated: true, completion: nil)
         }
     }
+    func getTopViewController() -> UIViewController? {
+        var topController = UIApplication.shared.keyWindow?.rootViewController
+        
+        while let presentedVC = topController?.presentedViewController {
+            topController = presentedVC
+        }
+        
+        return topController
+    }
+
+    func removeNilValues(from parameters: Any) -> Any? {
+        // Case 1: If parameters are a dictionary [String: Any]
+        if let dictParameters = parameters as? [String: Any] {
+            return dictParameters.compactMapValues { (value: Any) -> Any? in
+                // Check if value is a string and remove empty strings
+                if let value = value as? String, value.isEmpty {
+                    return nil // Remove empty strings
+                }
+                return value // Keep non-nil and non-empty values
+            }
+        }
+
+        // Case 2: If parameters are a Codable object
+        if let codableParameters = parameters as? Encodable {
+            do {
+                let encoder = JSONEncoder()
+                encoder.keyEncodingStrategy = .convertToSnakeCase
+                let jsonData = try encoder.encode(codableParameters)
+                guard let jsonDict = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] else {
+                    return nil // Return nil if serialization fails
+                }
+
+                // Filter out nil values from the dictionary
+                return jsonDict.compactMapValues { (value: Any) -> Any? in
+                    // Check if value is a string and remove empty strings
+                    if let value = value as? String, value.isEmpty {
+                        return nil // Remove empty strings
+                    }
+                    return value // Keep non-nil and non-empty values
+                }
+            } catch {
+                print("Error encoding Codable: \(error)")
+                return nil
+            }
+        }
+
+        return nil // Return nil if it's neither a dictionary nor a Codable object
+    }
+
 }
 extension PaymentDetailsViewController: UITableViewDelegate, UITableViewDataSource {
     func emojiToImage(emoji: String, size: CGFloat = 40) -> UIImage? {
@@ -772,37 +879,37 @@ extension PaymentDetailsViewController: UITableViewDelegate, UITableViewDataSour
 //            ]
 //        ]
 
-struct Sender: Codable {
-    let customer_number: String
-}
-
-struct BankDetails: Codable {
-    let account_type_code: String
-    let iso_code: String
-    let iban: String
-}
-
-struct Receiver: Codable {
-    let mobile_number: String
-    let first_name: String
-    let last_name: String
-    let nationality: String
-    let relation_code: String
-    let bank_details: BankDetails
-}
-
-struct Transaction: Codable {
-    let quote_id: String
-    let agent_transaction_ref_number: String
-}
-
-struct TransactionRequest: Codable {
-    let type: String
-    let source_of_income: String
-    let purpose_of_txn: String
-    let instrument: String
-    let message: String
-    let sender: Sender
-    let receiver: Receiver
-    let transaction: Transaction
-}
+//struct Sender: Codable {
+//    let customer_number: String
+//}
+//
+//struct BankDetails: Codable {
+//    let account_type_code: String
+//    let iso_code: String
+//    let iban: String
+//}
+//
+//struct Receiver: Codable {
+//    let mobile_number: String
+//    let first_name: String
+//    let last_name: String
+//    let nationality: String
+//    let relation_code: String
+//    let bank_details: BankDetails
+//}
+//
+//struct Transaction: Codable {
+//    let quote_id: String
+//    let agent_transaction_ref_number: String
+//}
+//
+//struct TransactionRequest: Codable {
+//    let type: String
+//    let source_of_income: String
+//    let purpose_of_txn: String
+//    let instrument: String
+//    let message: String
+//    let sender: Sender
+//    let receiver: Receiver
+//    let transaction: Transaction
+//}

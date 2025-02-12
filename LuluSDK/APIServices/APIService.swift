@@ -432,7 +432,7 @@ class APIService {
                         encoder.keyEncodingStrategy = .convertToSnakeCase
                         let jsonData = try encoder.encode(codableParameters)
                         request.httpBody = jsonData
-                        request.setValue("text/plain", forHTTPHeaderField: "Content-Type")
+                        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                     } catch {
                         completion(.failure(error))
                         return
@@ -442,7 +442,7 @@ class APIService {
                     do {
                         let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
                         request.httpBody = jsonData
-                        request.setValue("text/plain", forHTTPHeaderField: "Content-Type")
+                        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                     } catch {
                         completion(.failure(error))
                         return
