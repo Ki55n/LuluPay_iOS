@@ -79,130 +79,180 @@ class PaymentDetailsViewController: UIViewController {
     }
     
     func createTransactionID() {
-        let url = "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/createtransaction"
-        
-        let headers = [
-                "Content-Type": "application/json",
-                "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")",
-                "sender": UserManager.shared.getLoginUserData?["username"] ?? "",
-                "channel": "Direct",
-                "company": "784825",
-                "branch": "784826"
-            ] //let headers:[String:String]?
+        guard let url = URL(string: "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/createtransaction") else { return }
         guard let receiverData = ReceiverData else {
             print("Invalid ReceiverData or missing input values.")
             return
         }
-        var bankDetails: BankDetails? = nil
-        var mobileWalletDetails: MobileWalletDetails? = nil
-        var cashPickupDetails: CashPickupDetails? = nil
-
-        if let receiveMode = receiverData.receiveMode, receiveMode.contains("BANK") {
-            bankDetails = BankDetails(
-                accountTypeCode: receiverData.accountType,
-                accountNumber: receiverData.accountNumber,
-                isoCode: receiverData.swiftCode,
-                iban: receiverData.iban,
-                routingCode: receiverData.routingCode
+//        let senderDetails: [String: Any] = [
+//            "customer_number": "7841001220007002"
+//        ]
+//        
+//        let bankDetailsDict: [String: Any] = [
+//            "account_type_code": "1",
+//            "iso_code": "ALFHPKKA068",
+//            "iban": "PK12ABCD1234567891234567"
+//        ]
+//        
+//        let receiverDetails: [String: Any] = [
+//            "mobile_number": receiverData.phoneNumber ?? "",
+//            "first_name": receiverData.firstName ?? "",
+//            "last_name": receiverData.lastName ?? "",
+//            "nationality": receiverData.country_code ?? "",
+//            "relation_code": "32",
+//            "bank_details": bankDetailsDict
+//        ]
+//        
+//        let transactionDetails: [String: Any] = [
+//            "quote_id": getQuote?.quote_id ?? "",
+//            "agent_transaction_ref_number": getQuote?.quote_id ?? ""
+//        ]
+//        
+//        let requestBody: [String: Any] = [
+//            "type": UserManager.shared.gettransferType?.rawValue ?? "",
+//            "source_of_income": "SLRY",
+//            "purpose_of_txn": "SAVG",
+//            "instrument": receiverData.chooseInstrument?.uppercased() ?? "",
+//            "message": "Agency transaction",
+//            "sender": senderDetails,
+//            "receiver": receiverDetails,
+//            "transaction": transactionDetails
+//        ]
+        let requestBody = TransactionRequest(
+            type: UserManager.shared.gettransferType?.rawValue ?? "",
+            source_of_income: "SLRY",
+            purpose_of_txn: "SAVG",
+            instrument: receiverData.chooseInstrument?.uppercased() ?? "",
+            message: "Agency transaction",
+            sender: Sender(customer_number: "7841001220007002"),
+            receiver: Receiver(
+                mobile_number: receiverData.phoneNumber ?? "",
+                first_name: receiverData.firstName ?? "",
+                last_name: receiverData.lastName ?? "",
+                nationality: receiverData.country_code ?? "",
+                relation_code: "32",
+                bank_details: BankDetails(
+                    account_type_code: "1",
+                    iso_code: "ALFHPKKA068",
+                    iban: "PK12ABCD1234567891234567"
+                )
+            ),
+            transaction: Transaction(
+                quote_id: getQuote?.quote_id ?? "",
+                agent_transaction_ref_number: getQuote?.quote_id ?? ""
             )
-        }
-
-        // Uncomment and fill in details for mobile wallet or cash pickup if necessary
-        /*
-        if receiverData.receiveMode.contains("MOBILEWALLET") {
-            mobileWalletDetails = MobileWalletDetails(
-                walletId: receiverData.walletId ?? "",
-                correspondent: receiverData.correspondent ?? "",
-                bankId: receiverData.bankId ?? "",
-                branchId: receiverData.branchId ?? ""
-            )
-        }
-
-        if receiverData.receiveMode.contains("CASHPICKUP") {
-            cashPickupDetails = CashPickupDetails(
-                correspondentId: receiverData.bankId ?? "",
-                correspondent: receiverData.correspondent ?? "",
-                correspondentLocationId: receiverData.branchId ?? ""
-            )
-        }
-        */
-
+        )
+        print("requestBody: ", requestBody)
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("Direct", forHTTPHeaderField: "channel")
+        request.addValue("784825", forHTTPHeaderField: "company")
+        request.addValue("784826", forHTTPHeaderField: "branch")
+        request.addValue("Bearer \(UserManager.shared.loginModel?.access_token ?? "")", forHTTPHeaderField: "Authorization")
         
-        let senderDetails: [String: Any] = [
-            "customer_number": "1000001220000001"
-        ]
-
-        let bankDetailsDict: [String: Any] = [
-            "account_type_code": "1",
-            "iso_code": "ALFHPKKA068",
-            "iban": "PK12ABCD1234567891234567"
-        ]
-
-        let receiverDetails: [String: Any] = [
-            "mobile_number": receiverData.phoneNumber ?? "",
-            "first_name": receiverData.firstName ?? "",
-            "last_name": receiverData.lastName ?? "",
-            "nationality": receiverData.country_code ?? "",
-            "relation_code": "32",
-            "bank_details": bankDetailsDict
-        ]
-
-        let transactionDetails: [String: Any] = [
-            "quote_id": getQuote?.quote_id ?? "",
-            "agent_transaction_ref_number": getQuote?.quote_id ?? ""
-        ]
-
-        let transactionRequest: [String: Any] = [
-            "type": UserManager.shared.gettransferType?.rawValue ?? "",
-            "source_of_income": "SLRY",
-            "purpose_of_txn": "SAVG",
-            "instrument": receiverData.chooseInstrument?.uppercased() ?? "",
-            "message": UserManager.shared.getReferenceText ?? "",
-            "sender": senderDetails,
-            "receiver": receiverDetails,
-            "transaction": transactionDetails
-        ]
-
-
-        // Send this transactionRequest to your API endpoint
-
-        print("Payload: \(transactionRequest)")
-        LoadingIndicatorManager.shared.showLoading(on: self.view)
-        APIService.shared.requestParamasCodable1(url: url,method: .post,parameters: transactionRequest,headers: headers) { result in
-            switch result {
-            case .success(let data):
-                print("Success: \(data)")
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("Response: \(responseString)")
-                }
-                
-                DispatchQueue.main.async {
-                    let jsonDecoder = JSONDecoder()
-                    
-                    do {
-                        let decodedData = try jsonDecoder.decode(CreateTransactionModel.self, from: data)
-                        UserManager.shared.getTransactionalData = decodedData.data
-                        
-                        self.showTransferConfirmationAlert()
-                        
-                    } catch {
-                        print("Failed to decode JSON: \(error.localizedDescription)")
-                    }
-                }
-
-            case .failure(let error):
-                print("Error: \(error.localizedDescription)")
-                self.showToast(message: error.localizedDescription)
-
-            }
-
+        do {
+            request.httpBody = try JSONEncoder().encode(requestBody)
+        } catch {
+            print("Failed to encode request body: \(error)")
+            return
         }
-//        APIService.shared.requestParamasCodable(url: url, method: .post, parameters: transactionRequest, headers: headers, isJsonRequest: true) { result in
-//                LoadingIndicatorManager.shared.hideLoading(on: self.view)
-//            
-//            
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+                return
+            }
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                print("HTTP Response Status: \(httpResponse.statusCode)")
+            }
+            
+            if let data = data {
+                let responseString = String(data: data, encoding: .utf8)
+                print("Response Data: \(responseString ?? "No Data")")
+            }
+        }
+        
+        task.resume()
+    }
+
+//    func createTransactionID() {
+//        let url = "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/createtransaction"
+//        
+//        let headers = [
+//                "Content-Type": "application/json",
+//                "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")",
+//                "sender": UserManager.shared.getLoginUserData?["username"] ?? "",
+//                "channel": "Direct",
+//                "company": "784825",
+//                "branch": "784826"
+//            ] //let headers:[String:String]?
+//        guard let receiverData = ReceiverData else {
+//            print("Invalid ReceiverData or missing input values.")
+//            return
+//        }
+//        var bankDetails: BankDetails? = nil
+//        var mobileWalletDetails: MobileWalletDetails? = nil
+//        var cashPickupDetails: CashPickupDetails? = nil
+//
+//        if let receiveMode = receiverData.receiveMode, receiveMode.contains("BANK") {
+//            bankDetails = BankDetails(
+//                accountTypeCode: receiverData.accountType,
+//                accountNumber: receiverData.accountNumber,
+//                isoCode: receiverData.swiftCode,
+//                iban: receiverData.iban,
+//                routingCode: receiverData.routingCode
+//            )
+//        }
+//
+//        // Uncomment and fill in details for mobile wallet or cash pickup if necessary
+//
+//        
+//        let senderDetails: [String: Any] = [
+//            "customer_number": "7841001220007002"
+//        ]
+//
+//        let bankDetailsDict: [String: Any] = [
+//            "account_type_code": "1",
+//            "iso_code": "ALFHPKKA068",
+//            "iban": "PK12ABCD1234567891234567"
+//        ]
+//
+//        let receiverDetails: [String: Any] = [
+//            "mobile_number": receiverData.phoneNumber ?? "",
+//            "first_name": receiverData.firstName ?? "",
+//            "last_name": receiverData.lastName ?? "",
+//            "nationality": receiverData.country_code ?? "",
+//            "relation_code": "32",
+//            "bank_details": bankDetailsDict
+//        ]
+//
+//        let transactionDetails: [String: Any] = [
+//            "quote_id": getQuote?.quote_id ?? "",
+//            "agent_transaction_ref_number": getQuote?.quote_id ?? ""
+//        ]
+//
+//        let transactionRequest: [String: Any] = [
+//            "type": UserManager.shared.gettransferType?.rawValue ?? "",
+//            "source_of_income": "SLRY",
+//            "purpose_of_txn": "SAVG",
+//            "instrument": receiverData.chooseInstrument?.uppercased() ?? "",
+//            "message": UserManager.shared.getReferenceText ?? "",
+//            "sender": senderDetails,
+//            "receiver": receiverDetails,
+//            "transaction": transactionDetails
+//        ]
+//
+//
+//        // Send this transactionRequest to your API endpoint
+//
+//        print("Payload: \(transactionRequest)")
+//        LoadingIndicatorManager.shared.showLoading(on: self.view)
+//        APIService.shared.request1(url: url,method: .post,parameters: transactionRequest,headers: headers) { result in
 //            switch result {
 //            case .success(let data):
+//                print("Success: \(data)")
 //                if let responseString = String(data: data, encoding: .utf8) {
 //                    print("Response: \(responseString)")
 //                }
@@ -220,13 +270,15 @@ class PaymentDetailsViewController: UIViewController {
 //                        print("Failed to decode JSON: \(error.localizedDescription)")
 //                    }
 //                }
-//                
+//
 //            case .failure(let error):
 //                print("Error: \(error.localizedDescription)")
 //                self.showToast(message: error.localizedDescription)
+//
 //            }
+//
 //        }
-    }
+//    }
     func createConfirmTransaction() {
         let url = "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/confirmtransaction"
         
@@ -719,3 +771,38 @@ extension PaymentDetailsViewController: UITableViewDelegate, UITableViewDataSour
 //                "agent_transaction_ref_number" : getQuote?.quote_id ?? ""
 //            ]
 //        ]
+
+struct Sender: Codable {
+    let customer_number: String
+}
+
+struct BankDetails: Codable {
+    let account_type_code: String
+    let iso_code: String
+    let iban: String
+}
+
+struct Receiver: Codable {
+    let mobile_number: String
+    let first_name: String
+    let last_name: String
+    let nationality: String
+    let relation_code: String
+    let bank_details: BankDetails
+}
+
+struct Transaction: Codable {
+    let quote_id: String
+    let agent_transaction_ref_number: String
+}
+
+struct TransactionRequest: Codable {
+    let type: String
+    let source_of_income: String
+    let purpose_of_txn: String
+    let instrument: String
+    let message: String
+    let sender: Sender
+    let receiver: Receiver
+    let transaction: Transaction
+}

@@ -106,73 +106,73 @@ struct ConfirmTransactionData : Codable {
 
 // MARK: - Request Models
 
-struct CreateTransactionRequest: Codable {
-    let type: String?
-    let sourceOfIncome: String?
-    let purposeOfTxn: String?
-    let instrument: String?
-    let message: String?
-    let sender: Sender?
-    let receiver: Receiver?
-    let transaction: Transaction?
+//struct CreateTransactionRequest: Codable {
+//    let type: String?
+//    let sourceOfIncome: String?
+//    let purposeOfTxn: String?
+//    let instrument: String?
+//    let message: String?
+//    let sender: Sender?
+//    let receiver: Receiver?
+//    let transaction: Transaction?
+//
+//    enum CodingKeys: String, CodingKey {
+//        case type
+//        case sourceOfIncome = "source_of_income"
+//        case purposeOfTxn = "purpose_of_txn"
+//        case instrument
+//        case message
+//        case sender
+//        case receiver
+//        case transaction
+//    }
+//}
 
-    enum CodingKeys: String, CodingKey {
-        case type
-        case sourceOfIncome = "source_of_income"
-        case purposeOfTxn = "purpose_of_txn"
-        case instrument
-        case message
-        case sender
-        case receiver
-        case transaction
-    }
-}
+//struct Sender: Codable {
+//    let customerNumber: String?
+//    let agentCustomerNumber: String?
+//
+//    enum CodingKeys: String, CodingKey {
+//        case customerNumber = "customer_number"
+//        case agentCustomerNumber = "agent_customer_number"
+//    }
+//}
 
-struct Sender: Codable {
-    let customerNumber: String?
-    let agentCustomerNumber: String?
+//struct Receiver: Codable {
+//    let mobileNumber: String?
+//    let firstName: String?
+//    let lastName: String?
+//    let nationality: String?
+//    let bankDetails: BankDetails?
+//    let mobileWalletDetails: MobileWalletDetails?
+//    let cashPickupDetails: CashPickupDetails?
+//
+//    enum CodingKeys: String, CodingKey {
+//        case mobileNumber = "mobile_number"
+//        case firstName = "first_name"
+//        case lastName = "last_name"
+//        case nationality
+//        case bankDetails = "bank_details"
+//        case mobileWalletDetails = "mobileWallet_details"
+//        case cashPickupDetails = "cashPickup_details"
+//    }
+//}
 
-    enum CodingKeys: String, CodingKey {
-        case customerNumber = "customer_number"
-        case agentCustomerNumber = "agent_customer_number"
-    }
-}
-
-struct Receiver: Codable {
-    let mobileNumber: String?
-    let firstName: String?
-    let lastName: String?
-    let nationality: String?
-    let bankDetails: BankDetails?
-    let mobileWalletDetails: MobileWalletDetails?
-    let cashPickupDetails: CashPickupDetails?
-
-    enum CodingKeys: String, CodingKey {
-        case mobileNumber = "mobile_number"
-        case firstName = "first_name"
-        case lastName = "last_name"
-        case nationality
-        case bankDetails = "bank_details"
-        case mobileWalletDetails = "mobileWallet_details"
-        case cashPickupDetails = "cashPickup_details"
-    }
-}
-
-struct BankDetails: Codable {
-    let accountTypeCode: String?
-    let accountNumber: String?
-    let isoCode: String?
-    let iban: String?
-    let routingCode: String?
-
-    enum CodingKeys: String, CodingKey {
-        case accountTypeCode = "account_type_code"
-        case accountNumber = "account_number"
-        case isoCode = "iso_code"
-        case iban
-        case routingCode = "routing_code"
-    }
-}
+//struct BankDetails: Codable {
+//    let accountTypeCode: String?
+//    let accountNumber: String?
+//    let isoCode: String?
+//    let iban: String?
+//    let routingCode: String?
+//
+//    enum CodingKeys: String, CodingKey {
+//        case accountTypeCode = "account_type_code"
+//        case accountNumber = "account_number"
+//        case isoCode = "iso_code"
+//        case iban
+//        case routingCode = "routing_code"
+//    }
+//}
 
 struct MobileWalletDetails: Codable {
     let walletId: String?
@@ -200,12 +200,12 @@ struct CashPickupDetails: Codable {
     }
 }
 
-struct Transaction: Codable {
-    let quoteId: String?
-    let agentTransactionRefNumber: String?
-
-    enum CodingKeys: String, CodingKey {
-        case quoteId = "quote_id"
-        case agentTransactionRefNumber = "agent_transaction_ref_number"
-    }
-}
+//struct Transaction: Codable {
+//    let quoteId: String?
+//    let agentTransactionRefNumber: String?
+//
+//    enum CodingKeys: String, CodingKey {
+//        case quoteId = "quote_id"
+//        case agentTransactionRefNumber = "agent_transaction_ref_number"
+//    }
+//}

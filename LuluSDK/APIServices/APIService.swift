@@ -157,6 +157,101 @@ class APIService {
             
             task.resume()
         }
+    
+    func request1(url: String,
+                     method: LuHTTPMethod,
+                     parameters: [String: Any]? = nil,
+                     headers: [String: String]? = nil,
+                     isJsonRequest: Bool = false,  // Flag to indicate if body should be JSON
+                     completion: @escaping (Result<Data, Error>) -> Void) {
+            
+            guard let url = URL(string: url) else {
+                completion(.failure(APIError.invalidURL))
+                return
+            }
+
+            var request = URLRequest(url: url)
+            request.httpMethod = method.rawValue
+            
+            // Set headers
+            if let headers = headers {
+                for (key, value) in headers {
+                    request.setValue(value, forHTTPHeaderField: key)
+                }
+            }
+            
+            // Set Content-Type to application/json if it's a JSON request
+            if isJsonRequest {
+                request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+                
+                // Encode parameters as JSON
+                if let parameters = parameters {
+                    do {
+                        let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
+                        request.httpBody = jsonData
+                    } catch {
+                        completion(.failure(APIError.decodingFailed))
+                        return
+                    }
+                }
+            } else if let parameters = parameters, method != .get {
+                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+                // For x-www-form-urlencoded, encode parameters as key=value
+                var parameterArray = [String]()
+
+                for (key, value) in parameters {
+                    if let stringValue = value as? String {
+                        let encodedKey = key.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? key
+                        let encodedValue = stringValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? stringValue
+                        parameterArray.append("\(encodedKey)=\(encodedValue)")
+                    } else if let intValue = value as? Int {
+                        let encodedKey = key.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? key
+                        let encodedValue = String(intValue).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? String(intValue)
+                        parameterArray.append("\(encodedKey)=\(encodedValue)")
+                    }
+                    // You can handle other types (e.g., Date, Arrays) similarly if needed.
+                }
+
+                let parameterString = parameterArray.joined(separator: "&")
+                request.httpBody = parameterString.data(using: .utf8)
+            }
+            
+            // Add timeout for request if needed
+//            request.timeoutInterval = 30  // 30 seconds timeout
+        print("URL-",request.url)
+        print("Param-",parameters)
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        completion(.failure(error))
+                    }
+                    return
+                }
+                
+                guard let data = data else {
+                    DispatchQueue.main.async {
+                        completion(.failure(APIError.noData))
+                    }
+                    return
+                }
+                
+                // Response validation (check if response code is 2xx)
+                if let httpResponse = response as? HTTPURLResponse,
+                   !(200...299).contains(httpResponse.statusCode) {
+                    DispatchQueue.main.async {
+                        completion(.failure(APIError.invalidResponse(statusCode: httpResponse.statusCode)))
+                    }
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    completion(.success(data))
+                }
+            }
+            
+            task.resume()
+        }
     func requestParamasCodable(url: String,
                      method: LuHTTPMethod,
                      parameters: Any? = nil,
