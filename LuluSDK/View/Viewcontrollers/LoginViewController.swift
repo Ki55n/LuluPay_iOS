@@ -20,7 +20,7 @@ class LoginViewController: UIViewController {
     
 
     @IBAction func loginBtnAction(_sender: UIButton) {
-        let url = "https://drap-sandbox.digitnine.com/auth/realms/cdp/protocol/openid-connect/token"
+        let url = UserManager.shared.setBaseURL+"/auth/realms/cdp/protocol/openid-connect/token"
 
         let headers = [
             "Content-Type": "application/x-www-form-urlencoded"

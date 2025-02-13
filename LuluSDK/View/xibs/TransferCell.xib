@@ -22,18 +22,18 @@
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="ZLL-jx-0gt">
                                 <rect key="frame" x="0.0" y="0.0" width="482" height="106"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H1c-wl-3or">
-                                        <rect key="frame" x="0.0" y="0.0" width="154" height="106"/>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H1c-wl-3or">
+                                        <rect key="frame" x="-20" y="0.0" width="20" height="106"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="req_money" translatesAutoresizingMaskIntoConstraints="NO" id="9Gv-MJ-IFW">
-                                                <rect key="frame" x="62" y="15" width="30" height="30"/>
+                                                <rect key="frame" x="-5" y="15" width="30" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="8FP-EG-eI4"/>
                                                     <constraint firstAttribute="width" constant="30" id="oLm-BV-5Dd"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Deposit" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="91t-RD-Vwa">
-                                                <rect key="frame" x="10" y="55" width="134" height="41"/>
+                                                <rect key="frame" x="10" y="55" width="0.0" height="41"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -49,18 +49,18 @@
                                             <constraint firstItem="9Gv-MJ-IFW" firstAttribute="centerX" secondItem="H1c-wl-3or" secondAttribute="centerX" id="wzv-Bj-6Dq"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AkW-jp-BGe">
-                                        <rect key="frame" x="164" y="0.0" width="154" height="106"/>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AkW-jp-BGe">
+                                        <rect key="frame" x="-20" y="0.0" width="20" height="106"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="withdraw" translatesAutoresizingMaskIntoConstraints="NO" id="quV-DP-IWJ">
-                                                <rect key="frame" x="62" y="15" width="30" height="30"/>
+                                                <rect key="frame" x="-5" y="15" width="30" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="30" id="FCD-dl-FrN"/>
                                                     <constraint firstAttribute="height" constant="30" id="I1P-Ea-ogt"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Withdraw" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="phY-dY-kJV">
-                                                <rect key="frame" x="10" y="55" width="134" height="41"/>
+                                                <rect key="frame" x="10" y="55" width="0.0" height="41"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -77,17 +77,17 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uch-vS-sz6">
-                                        <rect key="frame" x="328" y="0.0" width="154" height="106"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="482" height="106"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="transfer" translatesAutoresizingMaskIntoConstraints="NO" id="65t-ng-zfh">
-                                                <rect key="frame" x="62" y="15" width="30" height="30"/>
+                                                <rect key="frame" x="226" y="15" width="30" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="hrn-w4-xv3"/>
                                                     <constraint firstAttribute="width" constant="30" id="puT-Bj-b0d"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Transfer" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rn5-9J-7ad">
-                                                <rect key="frame" x="10" y="55" width="134" height="41"/>
+                                                <rect key="frame" x="10" y="55" width="462" height="41"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>

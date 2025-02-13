@@ -181,7 +181,7 @@ class PaymentDetailsViewController: UIViewController {
     }
 
     func createTransactionID() {
-        let url = "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/createtransaction"
+        let url = UserManager.shared.setBaseURL+"/amr/ras/api/v1_0/ras/createtransaction"
         
         let headers = [
                 "Content-Type": "application/json",
@@ -333,7 +333,7 @@ class PaymentDetailsViewController: UIViewController {
 //        }
     }
     func createConfirmTransaction() {
-        let url = "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/confirmtransaction"
+        let url = UserManager.shared.setBaseURL+"/amr/ras/api/v1_0/ras/confirmtransaction"
         
         let headers:[String:String]? = [
                 "Content-Type": "application/json",

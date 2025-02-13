@@ -132,8 +132,12 @@ extension PaySuccessViewController: UITableViewDelegate, UITableViewDataSource {
 
             // Ensure label supports multi-line
             cell.lblTitle.numberOfLines = 0
-            cell.imgPrtofile.image = #imageLiteral(resourceName: "CheckCircle@2x.png")
-            
+            if let image = UIImage(named: "CheckCircle") {
+                cell.imgPrtofile.image = image
+            } else {
+                print("Image not found")
+            }
+
             return cell
 
 

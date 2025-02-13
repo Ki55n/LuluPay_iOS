@@ -66,7 +66,7 @@ class ShareReceiptViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     @objc func Submit(){
-        let url = "https://drap-sandbox.digitnine.com/api/v1_0/ras/transaction-receipt"
+        let url = UserManager.shared.setBaseURL+"/api/v1_0/ras/transaction-receipt"
 
         let headers = [
             "Content-Type": "application/json",
@@ -219,25 +219,25 @@ extension ShareReceiptViewController: UITableViewDelegate, UITableViewDataSource
 
             }else{
                 
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellPaymentDetail", for: indexPath) as? PaymentDetailCell else {
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellDetail", for: indexPath) as? TransactionDetailCell else {
                         fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
                     }
                     
                     if indexPath.row == 1{
                         cell.lblTitle.text = "Transaction Number"
-                        cell.lblAmount.text = "#"+(UserManager.shared.getTransactionalData?.transaction_ref_number ?? "")
-                        cell.lblAmount.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+                        cell.lblValue.text = "#"+(UserManager.shared.getTransactionalData?.transaction_ref_number ?? "")
+                        cell.lblValue.font = UIFont.systemFont(ofSize: 15, weight: .bold)
                     } else if indexPath.row == 2{
                         cell.lblTitle.text = "Transaction Date"
-                        cell.lblAmount.text = UserManager.shared.getTransactionalData?.transaction_date
+                        cell.lblValue.text = UserManager.shared.getTransactionalData?.transaction_date
 
                     }else if indexPath.row == 3{
                         cell.lblTitle.text = "Transaction Receipient"
-                        cell.lblAmount.text = UserManager.shared.getTransactionalData?.transaction_date
+                        cell.lblValue.text = UserManager.shared.getTransactionalData?.transaction_date
 
                     }else if indexPath.row == 4{
                         cell.lblTitle.text = "Amount"
-                        cell.lblAmount.text = String(UserManager.shared.getQuotesData?.sending_amount ?? 0)
+                        cell.lblValue.text = String(UserManager.shared.getQuotesData?.sending_amount ?? 0)
 
                     }else if indexPath.row == 5{
                         cell.lblTitle.text = "Commission Fee"
@@ -245,7 +245,7 @@ extension ShareReceiptViewController: UITableViewDelegate, UITableViewDataSource
                             if let commissionDetail = feeDetails.first(where: { $0.type as? String == "COMMISSION" }) {
                                 if let amount = commissionDetail.amount as? Double {
                                     print("Commission amount: \(amount)")
-                                    cell.lblAmount.text = String(amount)
+                                    cell.lblValue.text = String(amount)
 
                                 } else {
                                     print("Commission amount not found")
@@ -262,7 +262,7 @@ extension ShareReceiptViewController: UITableViewDelegate, UITableViewDataSource
                             if let commissionDetail = feeDetails.first(where: { $0.type as? String == "TAX" }) {
                                 if let amount = commissionDetail.amount as? Double {
                                     print("Tax amount: \(amount)")
-                                    cell.lblAmount.text = String(amount)
+                                    cell.lblValue.text = String(amount)
 
                                 } else {
                                     print("Commission amount not found")
@@ -274,13 +274,13 @@ extension ShareReceiptViewController: UITableViewDelegate, UITableViewDataSource
 
                     }else if indexPath.row == 7{
                         cell.lblTitle.text = "Total Amount"
-                        cell.lblAmount.text = String(UserManager.shared.getQuotesData?.total_payin_amount ?? 0)
-                        cell.lblAmount.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+                        cell.lblValue.text = String(UserManager.shared.getQuotesData?.total_payin_amount ?? 0)
+                        cell.lblValue.font = UIFont.systemFont(ofSize: 15, weight: .bold)
 
 
                     }else{
                         cell.lblTitle.text = "Reference Number"
-                        cell.lblAmount.text = "REF12345567"
+                        cell.lblValue.text = "REF12345567"
 
                     }
                     return cell

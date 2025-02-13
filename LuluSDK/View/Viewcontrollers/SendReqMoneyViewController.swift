@@ -208,7 +208,7 @@ extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource
     }
     func getRates() {
         
-        let url = "https://drap-sandbox.digitnine.com/raas/masters/v1/rates"
+        let url = UserManager.shared.setBaseURL+"/raas/masters/v1/rates"
         
         let headers = [
             "Content-Type": "application/x-www-form-urlencoded",
@@ -251,7 +251,7 @@ extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource
         }
     }
     func createQuoteID() {
-        let url = "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/quote"
+        let url = UserManager.shared.setBaseURL+"/amr/ras/api/v1_0/ras/quote"
         
         let headers = [
                 "Content-Type": "application/json",
@@ -568,7 +568,7 @@ let correspondent = UserManager.shared.getServiceCorridorData?.first?.corridor_c
                     fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
                 }
             cell.txtFieldAmount.textAlignment = .center
-            
+            cell.txtFieldAmount.keyboardType = .numberPad
             cell.txtFieldAmount.text = (currentRate?.from_currency ?? "AED") + " - "
             self.txtFieldAmount = cell.txtFieldAmount
             cell.txtFieldAmount.setLeftPadding(10)

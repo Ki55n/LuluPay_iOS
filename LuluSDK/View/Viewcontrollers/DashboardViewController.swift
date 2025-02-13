@@ -33,12 +33,11 @@ class DashboardViewController: UIViewController {
             print("Error: SDK Bundle not found.")
         }
         getRates()
-        exchangeRates = []
     
     }
 
     func getRates() {
-        let url = "https://drap-sandbox.digitnine.com/raas/masters/v1/rates"
+        let url = UserManager.shared.setBaseURL+"/raas/masters/v1/rates"
 
         let headers = [
             "Content-Type": "application/x-www-form-urlencoded",

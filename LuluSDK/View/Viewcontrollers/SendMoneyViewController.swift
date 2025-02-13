@@ -231,7 +231,7 @@ class SendMoneyViewController: UIViewController {
             showToast(message: "Routing code is required!")
         }
         else{
-            let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/accounts/validation"//?receiving_country_code=PK&receiving_mode=BANK&first_name=first name&middle_name=middle name&last_name=last name&iso_code=ALFHPKKA068&iban=PK12ABCD1234567891234567"
+            let url1 = UserManager.shared.setBaseURL+"/raas/masters/v1/accounts/validation"//?receiving_country_code=PK&receiving_mode=BANK&first_name=first name&middle_name=middle name&last_name=last name&iso_code=ALFHPKKA068&iban=PK12ABCD1234567891234567"
             var params = [String:String?]()
             let receiverdata = UserManager.shared.getReceiverData
             if receiverdata?.receiveMode == "Bank"{
@@ -317,7 +317,7 @@ class SendMoneyViewController: UIViewController {
         
     }
     func getReceivingModes(completion: @escaping () -> Void){
-        let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/codes"
+        let url1 = UserManager.shared.setBaseURL+"/raas/masters/v1/codes"
         var params = [String:String?]()
         
         
@@ -384,7 +384,7 @@ class SendMoneyViewController: UIViewController {
     
     }
     func getInstruments(completion: @escaping () -> Void){
-        let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/codes"
+        let url1 = UserManager.shared.setBaseURL+"/raas/masters/v1/codes"
         var params = [String:String?]()
         params = ["code":"INSTRUMENTS","service_type":"C2C"]
         let filteredParams = params.compactMapValues { $0?.isEmpty == true ? nil : $0 }
@@ -514,7 +514,7 @@ class SendMoneyViewController: UIViewController {
 
 
     func getAccountType(completion: @escaping () -> Void){
-        let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/codes"
+        let url1 = UserManager.shared.setBaseURL+"/raas/masters/v1/codes"
         var params = [String:String?]()
         
         
