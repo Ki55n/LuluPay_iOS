@@ -65,54 +65,104 @@ class ShareReceiptViewController: UIViewController {
     @objc func moveBack(){
         self.navigationController?.popViewController(animated: true)
     }
-    @objc func Submit(){
-        let url = "https://drap-sandbox.digitnine.com/api/v1_0/ras/transaction-receipt"
-
-        let headers = [
+    @objc func Submit() {
+        let baseURL = "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/transaction-receipt"
+        
+        guard let transactionRef = UserManager.shared.getTransactionalData?.transaction_ref_number,
+              !transactionRef.isEmpty else {
+            print("Error: Missing transaction reference number")
+            return
+        }
+        
+        // Append query parameter to URL
+        let urlString = "\(baseURL)?transaction_ref_number=\(transactionRef)"
+        
+        // Ensure the URL is valid
+        guard let url = URL(string: urlString) else {
+            print("Error: Invalid URL")
+            return
+        }
+        
+        let headers: [String: String] = [
             "Content-Type": "application/json",
             "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")",
-            "sender": UserManager.shared.getLoginUserData?["username"] ?? "",
+            "sender": UserManager.shared.getLoginUserData?["username"] ?? "testagentae",
             "channel": "Direct",
             "company": "784825",
             "branch": "784826"
         ]
 
-        let parameters: [String: Any] = [
-            "transaction_ref_number": UserManager.shared.getTransactionalData?.transaction_ref_number ?? "",
-        ]
+        // Show loading indicator
         LoadingIndicatorManager.shared.showLoading(on: self.view)
-
-        APIService.shared.newRequestPdfData(url: url, method: .get, parameters: parameters, headers: headers) { result in
+        
+        // Call API
+        APIService.shared.newRequestPdfData(url: url.absoluteString, method: .get, headers: headers) { result in
             LoadingIndicatorManager.shared.hideLoading(on: self.view)
+            
             switch result {
             case .success(let data):
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("Response: \(responseString)")
-                    DispatchQueue.main.async {
-                        // Patientname_YYYY_MM_DD T HH:MM:SS
-                        let fileName = "Receipt"
-                        if let fileURL = self.savePDFToFile(pdfData: data, fileName: "\(fileName).pdf") {
-                            //                                                                shareAndDownloadPDF(pdfData: pdfData, fileName: "\(fileName).pdf")
-                            let pdfViewer = PDFViewer(url: fileURL)
-                            let hostingController = UIHostingController(rootView: pdfViewer)
-                            if let windowScene = UIApplication.shared.connectedScenes
-                                .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
-                               let rootViewController = windowScene.windows.first?.rootViewController {
-                                rootViewController.present(hostingController, animated: true, completion: nil)
-                            } else {
-                                print("Failed to find an active UIWindowScene or rootViewController")
+//                if let responseString = String(data: data, encoding: .utf8) {
+//                    print("Response: \(responseString)")
+//                    
+//                    DispatchQueue.main.async {
+//                        let fileName = "Receipt"
+//                        if let fileURL = self.savePDFToFile(pdfData: data, fileName: "\(fileName).pdf") {
+//                            let pdfViewer = PDFViewer(url: fileURL)
+//                            let hostingController = UIHostingController(rootView: pdfViewer)
+//                            if let topController = self.topViewController() {
+//                                topController.present(hostingController, animated: true, completion: nil)
+//                            } else {
+//                                print("Failed to find an active top view controller")
+//                            }
+//                        }
+//                    }
+//                }
+                do {
+                    // Decode JSON response
+                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                       let responseData = json["data"] as? String,
+                       let pdfData = Data(base64Encoded: responseData, options: .ignoreUnknownCharacters) {
+                        
+                        // Save and display PDF
+                        DispatchQueue.main.async {
+                            let fileName = "Receipt.pdf"
+                            if let fileURL = self.savePDFToFile(pdfData: pdfData, fileName: fileName) {
+                                let pdfViewer = PDFViewer(url: fileURL)
+                                let hostingController = UIHostingController(rootView: pdfViewer)
+                                if let topController = self.topViewController() {
+                                    topController.present(hostingController, animated: true, completion: nil)
+                                } else {
+                                    print("Failed to find an active top view controller")
+                                }
                             }
                         }
+                    } else {
+                        print("Error: Failed to extract Base64 PDF data from response")
                     }
+                } catch {
+                    print("Error parsing JSON: \(error.localizedDescription)")
                 }
             case .failure(let error):
                 print("Error: \(error.localizedDescription)")
             }
         }
-//        let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "RequestNewCardController") as! RequestNewCardController
-//        vc.hidesBottomBarWhenPushed = true
-//        navigationController?.popToRootViewController(animated: true)
+        
+        //        let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "RequestNewCardController") as! RequestNewCardController
+        //        vc.hidesBottomBarWhenPushed = true
+        //        navigationController?.popToRootViewController(animated: true) 
+    }
 
+    func topViewController() -> UIViewController? {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let rootViewController = windowScene.windows.first?.rootViewController else {
+            return nil
+        }
+
+        var topController: UIViewController = rootViewController
+        while let presentedViewController = topController.presentedViewController {
+            topController = presentedViewController
+        }
+        return topController
     }
 
     func savePDFToFile(pdfData: Data, fileName: String) -> URL? {
