@@ -16,12 +16,10 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         let isUserLoggedIn = UserDefaults.standard.bool(forKey: "isUserLoggedIn")
         if isUserLoggedIn {
-            let url = "https://drap-sandbox.digitnine.com/auth/realms/cdp/protocol/openid-connect/token"
-
+            let url = UserManager.shared.setBaseURL+"/auth/realms/cdp/protocol/openid-connect/token"
             let headers = [
                 "Content-Type": "application/x-www-form-urlencoded"
             ]
-
             let parameters = [
                 "username": "testagentae",
                 "password": "Admin@123",
@@ -44,16 +42,6 @@ class LoginViewController: UIViewController {
                             let dic = ["username":"testagentae"]
                             UserManager.shared.getLoginUserData = dic
                             UserDefaults.standard.setValue(true, forKey: "isUserLoggedIn")
-    //                        let parameters1 = [
-    //
-    //                            "receiving_country_code": "PK",
-    //                            "receiving_mode": "BANK",
-    //                            "first_name": "first name",
-    //                            "middle_name": "middle name",
-    //                            "last_name": "last name",
-    //                            "iso_code": "ALFHPKKA068",
-    //                            "iban": "PK12ABCD1234567891234567"
-    //                        ]
                             
                                         let storyboard = MyStoryboardLoader.getStoryboard(name: "Lulu")
                                         // Instantiate the initial view controller

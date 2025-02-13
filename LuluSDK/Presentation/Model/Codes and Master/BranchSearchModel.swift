@@ -13,7 +13,6 @@ struct BranchSearchModel : Codable {
     let data : BranchSearchData?
 
     enum CodingKeys: String, CodingKey {
-
         case status = "status"
         case status_code = "status_code"
         case data = "data"
@@ -36,7 +35,6 @@ struct BranchSearchData : Codable {
     let current_page : Int?
 
     enum CodingKeys: String, CodingKey {
-
         case records = "records"
         case list = "list"
         case total_records = "total_records"
@@ -67,7 +65,6 @@ struct BranchSearchList : Codable {
     let sort : String?
 
     enum CodingKeys: String, CodingKey {
-
         case bank_id = "bank_id"
         case branch_id = "branch_id"
         case branch_name = "branch_name"

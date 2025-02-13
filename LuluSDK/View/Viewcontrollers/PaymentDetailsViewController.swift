@@ -271,7 +271,7 @@ class PaymentDetailsViewController: UIViewController {
         guard let cleanedRequest = removeNilValues(from: transactionRequest) else { return }
 
         LoadingIndicatorManager.shared.showLoading(on: self.view)
-        APIService.shared.requestParamasCodable1(url: url,method: .post,parameters: cleanedRequest,headers: headers,isJsonRequest: true) { result in
+        APIService.shared.requestParamasCodable(url: url,method: .post,parameters: cleanedRequest,headers: headers,isJsonRequest: true) { result in
             LoadingIndicatorManager.shared.hideLoading(on: self.view)
             switch result {
             case .success(let data):
@@ -302,35 +302,6 @@ class PaymentDetailsViewController: UIViewController {
             }
 
         }
-//        APIService.shared.requestParamasCodable(url: url, method: .post, parameters: transactionRequest, headers: headers, isJsonRequest: true) { result in
-//                LoadingIndicatorManager.shared.hideLoading(on: self.view)
-//
-//
-//            switch result {
-//            case .success(let data):
-//                if let responseString = String(data: data, encoding: .utf8) {
-//                    print("Response: \(responseString)")
-//                }
-//
-//                DispatchQueue.main.async {
-//                    let jsonDecoder = JSONDecoder()
-//
-//                    do {
-//                        let decodedData = try jsonDecoder.decode(CreateTransactionModel.self, from: data)
-//                        UserManager.shared.getTransactionalData = decodedData.data
-//
-//                        self.showTransferConfirmationAlert()
-//
-//                    } catch {
-//                        print("Failed to decode JSON: \(error.localizedDescription)")
-//                    }
-//                }
-//
-//            case .failure(let error):
-//                print("Error: \(error.localizedDescription)")
-//                self.showToast(message: error.localizedDescription)
-//            }
-//        }
     }
     func createConfirmTransaction() {
         let url = UserManager.shared.setBaseURL+"/amr/ras/api/v1_0/ras/confirmtransaction"
@@ -343,7 +314,7 @@ class PaymentDetailsViewController: UIViewController {
                 "company": "784825",
                 "branch": "784826"
             ]
-        guard let receiverData = ReceiverData else {
+        guard ReceiverData != nil else {
             print("Invalid ReceiverData or missing input values.")
             return
         }

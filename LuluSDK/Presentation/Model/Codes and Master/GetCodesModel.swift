@@ -13,7 +13,6 @@ struct GetCodesModel : Codable {
     let data : GetCodesData?
 
     enum CodingKeys: String, CodingKey {
-
         case status = "status"
         case status_code = "status_code"
         case data = "data"
@@ -111,7 +110,6 @@ struct Income_types : Codable {
     let name : String?
 
     enum CodingKeys: String, CodingKey {
-
         case code = "code"
         case name = "name"
     }

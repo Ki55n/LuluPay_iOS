@@ -220,7 +220,7 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
         // Perform actions when viewTransfer is tapped
         print("viewTransfer tapped: \(view)")
         
-        let url = "https://drap-sandbox.digitnine.com/raas/masters/v1/codes?"
+        let url = UserManager.shared.setBaseURL+"/raas/masters/v1/codes?"
 
         let headers = [
             "Content-Type": "application/x-www-form-urlencoded",
@@ -239,8 +239,7 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
                         let jsonDecoder = JSONDecoder()
                         self.getCodeInfo = try? jsonDecoder.decode(GetCodesModel.self, from: data)
                         UserManager.shared.getCodesData = self.getCodeInfo?.data
-                        print("UserManager.shared.getCodesData: ", UserManager.shared.getCodesData ?? nil)
-                        let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/service-corridor"
+                        let url1 = UserManager.shared.setBaseURL+"/raas/masters/v1/service-corridor"
                         
                         let headers1 = [
                             "Content-Type": "application/x-www-form-urlencoded",
@@ -248,7 +247,6 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
                         ]
                         
                         let parameters1: [String: String] = [:]
-//                        LoadingIndicatorManager.shared.showLoading(on: self.view)
                         APIService.shared.request(url: url1, method: .get, parameters: parameters1, headers: headers1) { result in
                             LoadingIndicatorManager.shared.hideLoading(on: self.view)
                             

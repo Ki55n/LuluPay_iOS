@@ -66,7 +66,7 @@ class ShareReceiptViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     @objc func Submit() {
-        let baseURL = "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/transaction-receipt"
+        let baseURL = UserManager.shared.setBaseURL+"/amr/ras/api/v1_0/ras/transaction-receipt"
         
         guard let transactionRef = UserManager.shared.getTransactionalData?.transaction_ref_number,
               !transactionRef.isEmpty else {

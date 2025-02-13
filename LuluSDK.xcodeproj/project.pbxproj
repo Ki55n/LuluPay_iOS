@@ -298,7 +298,6 @@
 				317432A32D4B51D4001AD0BD /* Presentation */,
 				B869532F2D4A05B90088B538 /* Services */,
 				B86953062D4A05AD0088B538 /* View */,
-				B86953072D4A05AD0088B538 /* ViewModel */,
 				B86952D82D4A059E0088B538 /* Model */,
 				7DB84ED02D3AC05800A2C2D6 /* LuluSDK.h */,
 				7DB84ED12D3AC05800A2C2D6 /* LuluSDK.docc */,
@@ -355,7 +354,7 @@
 			path = Viewcontrollers;
 			sourceTree = "<group>";
 		};
-		B86952F62D4A05AD0088B538 /* xib Class */ = {
+		B86952F62D4A05AD0088B538 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				B86952E82D4A05AD0088B538 /* ButtonCell.swift */,
@@ -381,7 +380,7 @@
 				B86952EE2D4A05AD0088B538 /* InstantAccountCell.swift */,
 				B8C07CB22D5257AA008D506B /* ConfirmPayCell.swift */,
 			);
-			path = "xib Class";
+			path = Views;
 			sourceTree = "<group>";
 		};
 		B86953052D4A05AD0088B538 /* xibs */ = {
@@ -418,17 +417,10 @@
 			children = (
 				B86952DD2D4A05AD0088B538 /* Storyboards */,
 				B86952E72D4A05AD0088B538 /* Viewcontrollers */,
-				B86952F62D4A05AD0088B538 /* xib Class */,
+				B86952F62D4A05AD0088B538 /* Views */,
 				B86953052D4A05AD0088B538 /* xibs */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		B86953072D4A05AD0088B538 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		B869532F2D4A05B90088B538 /* Services */ = {
