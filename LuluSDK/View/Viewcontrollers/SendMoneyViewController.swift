@@ -231,7 +231,7 @@ class SendMoneyViewController: UIViewController {
             showToast(message: "Routing code is required!")
         }
         else{
-            let url1 = UserManager.shared.setBaseURL+"/raas/masters/v1/accounts/validation"//?receiving_country_code=PK&receiving_mode=BANK&first_name=first name&middle_name=middle name&last_name=last name&iso_code=ALFHPKKA068&iban=PK12ABCD1234567891234567"
+            let url1 = UserManager.shared.setBaseURL+"/raas/masters/v1/accounts/validation"
             var params = [String:String?]()
             let receiverdata = UserManager.shared.getReceiverData
             if receiverdata?.receiveMode == "Bank"{
@@ -257,11 +257,8 @@ class SendMoneyViewController: UIViewController {
                  params = ["first_name":receiverDetails.firstName,"last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased().trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""),"iso_code":receiverDetails.swiftCode]
 
             }
-//            let params = ["first_name":receiverDetails.firstName,"last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased(),"iso_code":receiverDetails.swiftCode,"iban":receiverDetails.iban,"route_code":receiverDetails.routingCode,"account_number":receiverDetails.accountNumber,"account_type":receiverDetails.accountType?.uppercased()]
             let filteredParams = params.compactMapValues { $0?.isEmpty == true ? nil : $0 }
             
-            print(params)
-            //            let receiverDetails = ReceiverDetails(firstName: receiverDetails.firstName,middleName: receiverDetails.middleName,lastName: receiverDetails.lastName,phoneNumber: receiverDetails.phoneNumber,country: receiverDetails.country,country_code: receiverDetails.country_code,receiveMode: receiverDetails.receiveMode, accountType: receiverDetails.accountType, swiftCode: receiverDetails.swiftCode, iban: receiverDetails.iban, routingCode: receiverDetails.routingCode, accountNumber: receiverDetails.accountNumber,chooseInstrument: receiverDetails.chooseInstrument)
             
             let headers1:[String:String]? = [
                 "Content-Type": "application/json",
@@ -537,21 +534,36 @@ class SendMoneyViewController: UIViewController {
             case .success(let data):
                 if let responseString = String(data: data, encoding: .utf8) {
                     do {
-                        // Parse the JSON response
-                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                        let jsonDecoder = JSONDecoder()
+                        let decodedData = try jsonDecoder.decode(AccountType_Response.self, from: data)
+                        self.accountTypeList = decodedData.data.accountTypes
+                        UserManager.shared.accountTypes = self.accountTypeList ?? []
+                        DispatchQueue.main.async {
+                            // Reload table view row with the updated data
+                            self.tableView.reloadRows(at: [IndexPath(row: 7, section: 1)], with: .automatic)
+
+                        }
                         
+                        // Call the completion handler
+                        completion()
+
+                   /*     // Parse the JSON response
+                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                        print("JSON OBJECT: \(jsonObject)")
                         // Check if 'instruments' exists in the response
                         if let receivingModesData = jsonObject?["account_types"] as? [[String: Any]] {
-                            print("Instruments Data: \(receivingModesData)")
+//                            print("Instruments Data: \(receivingModesData)")
                             
                             // Attempt to decode the instruments data into an array of Instruments objects
                             do {
                                 let jsonData = try JSONSerialization.data(withJSONObject: receivingModesData)
                                 let decodedList = try JSONDecoder().decode([Account_types].self, from: jsonData)
                                 self.accountTypeList = decodedList
-                                
-                                // Reload table view row with the updated data
-                                self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .automatic)
+                                DispatchQueue.main.async {
+                                    // Reload table view row with the updated data
+                                    self.tableView.reloadRows(at: [IndexPath(row: 7, section: 1)], with: .automatic)
+
+                                }
                                 
                                 // Call the completion handler
                                 completion()
@@ -561,7 +573,7 @@ class SendMoneyViewController: UIViewController {
                             }
                         } else {
                             print("Error: 'instruments' key not found in the response")
-                        }
+                        } */
                     } catch {
                         print("Error during JSON serialization: \(error)")
                     }
@@ -707,8 +719,8 @@ class SendMoneyViewController: UIViewController {
     @objc private func dismissAccountTypePicker() {
         chooseAccountTypeField?.resignFirstResponder()
         if chooseAccountTypeField?.text == ""{
-            chooseAccountTypeField?.text = accountTypeList?[0].code
-            receiverDetails.accountType = accountTypeList?[0].code
+            chooseAccountTypeField?.text = accountTypeList?[0].name
+            receiverDetails.accountType = accountTypeList?[0].name
             
             var selectedReceiveModeValue = receiveModeList?[0].code
             showAccountType = (selectedReceiveModeValue == "BANK")
@@ -1027,7 +1039,7 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
         case receivingPicker:
             return receiveModeList?[row].code
         case accountTypePicker:
-            return accountTypeList?[row].code
+            return accountTypeList?[row].name
         case chooseInstrumentPicker:
             return instrumentList?[row].code
 
@@ -1064,8 +1076,8 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
                tableView.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
            }else if pickerView == accountTypePicker {
                let selectedReceiveModeValue = accountTypeList?[row]
-               receiverDetails.accountType = selectedReceiveModeValue?.code
-               chooseAccountTypeField?.text = selectedReceiveModeValue?.code
+               receiverDetails.accountType = selectedReceiveModeValue?.name
+               chooseAccountTypeField?.text = selectedReceiveModeValue?.name
 
 //               tableView.reloadData()
                tableView.reloadRows(at: [IndexPath(row: 7, section: 0)], with: .automatic)
@@ -1240,8 +1252,8 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
     }
     @objc func doneButtonTappedForAccountType() {
         let selectedReceiveMode = accountTypeList?[accountTypePicker?.selectedRow(inComponent: 0) ?? 0]
-        receiverDetails.accountType = selectedReceiveMode?.code
-        chooseAccountTypeField?.text = selectedReceiveMode?.code
+        receiverDetails.accountType = selectedReceiveMode?.name
+        chooseAccountTypeField?.text = selectedReceiveMode?.name
         chooseAccountTypeField?.resignFirstResponder()  // Close the picker
     }
 

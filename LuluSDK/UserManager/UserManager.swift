@@ -25,7 +25,7 @@ class UserManager {
     var getTransactionalData:CreateTransactionData?
     var getLoginUserData:[String:String]?
     var getBankList:MasterBanksList?
-    
+    var accountTypes:[Account_types] = []
 //    var setBaseURL = "https://drap.digitnine.com"   //production
     var setBaseURL = "https://drap-sandbox.digitnine.com" //dev
 }

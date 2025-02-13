@@ -147,9 +147,6 @@ class ShareReceiptViewController: UIViewController {
             }
         }
         
-        //        let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "RequestNewCardController") as! RequestNewCardController
-        //        vc.hidesBottomBarWhenPushed = true
-        //        navigationController?.popToRootViewController(animated: true) 
     }
 
     func topViewController() -> UIViewController? {
@@ -283,7 +280,7 @@ extension ShareReceiptViewController: UITableViewDelegate, UITableViewDataSource
 
                     }else if indexPath.row == 3{
                         cell.lblTitle.text = "Transaction Receipient"
-                        cell.lblValue.text = UserManager.shared.getTransactionalData?.transaction_date
+                        cell.lblValue.text = UserManager.shared.getReceiverData?.firstName
 
                     }else if indexPath.row == 4{
                         cell.lblTitle.text = "Amount"
@@ -404,25 +401,61 @@ struct PDFViewer: View {
     let url: URL
     
     var body: some View {
-        VStack {
-            if let pdfDocument = PDFDocument(url: url) {
-                PDFKitView(pdfDocument: pdfDocument)
-            } else {
-                Text("Failed to load PDF")
-            }
-            
-            HStack {
-                Button(action: {
-                    sharePDF()
-                }) {
-                    Image(systemName: "square.and.arrow.up")
-                        .frame(width: 24, height: 24)
+        NavigationStack{
+            VStack {
+                if let pdfDocument = PDFDocument(url: url) {
+                    PDFKitView(pdfDocument: pdfDocument)
+                } else {
+                    Text("Failed to load PDF")
                 }
-                .padding()
+                
+                HStack {
+                    
+                    
+                    Button(action: {
+                        sharePDF()
+                    }) {
+                        Image(systemName: "square.and.arrow.up")
+                            .frame(width: 24, height: 24)
+                    }
+                    .padding()
+                }
+            }
+        }
+        
+    }
+    func navigateToDashboard() {
+        DispatchQueue.main.async {
+            if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = scene.windows.first,
+               let rootVC = window.rootViewController {
+
+                // Dismiss the PDF Viewer
+                rootVC.dismiss(animated: true) {
+                    if let tabBarController = self.findTabBarController(from: rootVC) {
+                        tabBarController.selectedIndex = 0  // Switch to Home tab
+                    }
+                }
             }
         }
     }
-    
+
+    // Helper function to find UITabBarController in the view hierarchy
+    func findTabBarController(from rootVC: UIViewController) -> UITabBarController? {
+        if let tabBarController = rootVC as? UITabBarController {
+            return tabBarController
+        }
+        
+        for child in rootVC.children {
+            if let tabBarController = child as? UITabBarController {
+                return tabBarController
+            }
+        }
+        
+        return nil
+    }
+
+
     private func sharePDF() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
