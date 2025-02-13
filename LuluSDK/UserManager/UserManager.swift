@@ -24,4 +24,5 @@ class UserManager {
     var gettransferType:TransferType?
     var getTransactionalData:CreateTransactionData?
     var getLoginUserData:[String:String]?
+    var getBankList:MasterBanksList?
 }

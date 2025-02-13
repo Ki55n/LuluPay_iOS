@@ -262,24 +262,75 @@ extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource
 //                "branch": "784826"
             ]
         let detail = UserManager.shared.getReceiverData
-        let filteredText = txtFieldAmount?.text?.filter { $0.isNumber }
+//        let filteredText:String = txtFieldAmount?.text?.filter { $0.isNumber } ?? "0"
         var requestBody = [String: String]()
 
         if let countryCode = ReceiverData?.country_code,
-           let receivingMode = ReceiverData?.receiveMode?.uppercased(),
+           let receivingMode = ReceiverData?.receiveMode?.uppercased().trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""),
            let swiftCode = ReceiverData?.swiftCode,
            let chooseInstrument = ReceiverData?.chooseInstrument?.uppercased(),
            let filteredText = txtFieldAmount?.text?.filter({ $0.isNumber }),
            let routingCode = ReceiverData?.routingCode {
-                
-            switch countryCode {
-            case "IN": // For India Bank Transfer
-                if let routingCode = ReceiverData?.routingCode {
+            if receivingMode == "BANK"{
+                switch countryCode {
+                case "IN": // For India Bank Transfer
+                    if let routingCode = ReceiverData?.routingCode {
+                        requestBody = [
+                            "sending_country_code": "AE",
+                            "sending_currency_code": "AED",
+                            "receiving_country_code": "IN",
+                            "receiving_currency_code": "INR",
+                            "sending_amount": filteredText,
+                            "receiving_mode": receivingMode,
+                            "routing_code": routingCode,
+                            "iso_code": swiftCode,
+                            "type": "SEND",
+                            "instrument": chooseInstrument
+                        ]
+                    }
+                    
+                case "PK": // For Pakistan Bank Transfer
                     requestBody = [
                         "sending_country_code": "AE",
                         "sending_currency_code": "AED",
-                        "receiving_country_code": "IN",
-                        "receiving_currency_code": "INR",
+                        "receiving_country_code": "PK",
+                        "receiving_currency_code": "PKR",
+                        "sending_amount": filteredText,
+                        "receiving_mode": receivingMode,
+                        "iso_code": swiftCode,
+                        "type": "SEND",
+                        "instrument": chooseInstrument
+                    ]
+                case "CH": // For China Bank Transfer
+                    requestBody = [
+                        "sending_country_code": "AE",
+                        "sending_currency_code": "AED",
+                        "receiving_country_code": "CH",
+                        "receiving_currency_code": "CNY",
+                        "sending_amount": filteredText,
+                        "receiving_mode": receivingMode,
+                        "iso_code": swiftCode,
+                        "type": "SEND",
+                        "instrument": chooseInstrument
+                    ]
+                case "EG": // For Egypt Bank Transfer
+                    requestBody = [
+                        "sending_country_code": "AE",
+                        "sending_currency_code": "AED",
+                        "receiving_country_code": "EG",
+                        "receiving_currency_code": "EGP",
+                        "sending_amount": filteredText,
+                        "receiving_mode": receivingMode,
+                        "iso_code": swiftCode,
+                        "type": "SEND",
+                        "instrument": chooseInstrument
+                    ]
+                case "PH": // For Philippines Bank Transfer
+                    requestBody = [
+                        "sending_country_code": "AE",
+                        "sending_currency_code": "AED",
+                        "receiving_country_code": "PH",
+                        "receiving_currency_code": "PHP",
                         "sending_amount": filteredText,
                         "receiving_mode": receivingMode,
                         "routing_code": routingCode,
@@ -287,58 +338,25 @@ extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource
                         "type": "SEND",
                         "instrument": chooseInstrument
                     ]
+                case "SL": // For Pakistan Bank Transfer
+                    requestBody = [
+                        "sending_country_code": "AE",
+                        "sending_currency_code": "AED",
+                        "receiving_country_code": "SL",
+                        "receiving_currency_code": "LKR",
+                        "sending_amount": filteredText,
+                        "receiving_mode": receivingMode,
+                        "iso_code": swiftCode,
+                        "type": "SEND",
+                        "instrument": chooseInstrument
+                    ]
+                    
+                    
+                default:
+                    print("Unsupported country code.")
                 }
-
-            case "PK": // For Pakistan Bank Transfer
-                requestBody = [
-                    "sending_country_code": "AE",
-                    "sending_currency_code": "AED",
-                    "receiving_country_code": "PK",
-                    "receiving_currency_code": "PKR",
-                    "sending_amount": filteredText,
-                    "receiving_mode": receivingMode,
-                    "iso_code": swiftCode,
-                    "type": "SEND",
-                    "instrument": chooseInstrument
-                ]
-            case "CH": // For China Bank Transfer
-                requestBody = [
-                    "sending_country_code": "AE",
-                    "sending_currency_code": "AED",
-                    "receiving_country_code": "CH",
-                    "receiving_currency_code": "CNY",
-                    "sending_amount": filteredText,
-                    "receiving_mode": receivingMode,
-                    "iso_code": swiftCode,
-                    "type": "SEND",
-                    "instrument": chooseInstrument
-                ]
-            case "EG": // For Egypt Bank Transfer
-                requestBody = [
-                    "sending_country_code": "AE",
-                    "sending_currency_code": "AED",
-                    "receiving_country_code": "EG",
-                    "receiving_currency_code": "EGP",
-                    "sending_amount": filteredText,
-                    "receiving_mode": receivingMode,
-                    "iso_code": swiftCode,
-                    "type": "SEND",
-                    "instrument": chooseInstrument
-                ]
-            case "PH": // For Philippines Bank Transfer
-                requestBody = [
-                    "sending_country_code": "AE",
-                    "sending_currency_code": "AED",
-                    "receiving_country_code": "PH",
-                    "receiving_currency_code": "PHP",
-                    "sending_amount": filteredText,
-                    "receiving_mode": receivingMode,
-                    "routing_code": routingCode,
-                    "iso_code": swiftCode,
-                    "type": "SEND",
-                    "instrument": chooseInstrument
-                ]
-            case "SL": // For Pakistan Bank Transfer
+            }else if receivingMode == "CASHPICKUP"{
+let correspondent = UserManager.shared.getServiceCorridorData?.first?.corridor_currencies?.first?.correspondent ?? ""
                 requestBody = [
                     "sending_country_code": "AE",
                     "sending_currency_code": "AED",
@@ -346,16 +364,13 @@ extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource
                     "receiving_currency_code": "LKR",
                     "sending_amount": filteredText,
                     "receiving_mode": receivingMode,
-                    "iso_code": swiftCode,
                     "type": "SEND",
-                    "instrument": chooseInstrument
+                    "instrument": chooseInstrument,
+                    "correspondent": correspondent,
+                    "correspondent_id": "11232",
+                    "correspondent_location_id": "213505"
                 ]
-
-
-            default:
-                print("Unsupported country code.")
             }
-            
             print("Payload: \(requestBody)")
         } else {
             print("Invalid ReceiverData or missing input values.")

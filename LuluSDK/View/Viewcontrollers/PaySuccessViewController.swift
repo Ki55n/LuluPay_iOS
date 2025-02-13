@@ -133,6 +133,7 @@ extension PaySuccessViewController: UITableViewDelegate, UITableViewDataSource {
             // Ensure label supports multi-line
             cell.lblTitle.numberOfLines = 0
             cell.imgPrtofile.image = UIImage(named: "CheckCircle")
+            
             return cell
 
 
@@ -141,7 +142,7 @@ extension PaySuccessViewController: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellbutton", for: indexPath) as? ButtonCell else {
                 fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
             }
-            cell.btnCancel.isHidden = false
+            cell.btnCancel.isHidden = true
             cell.btnTitle.setTitle("Receipt", for: .normal)
             cell.btnTitle.addTarget(self, action: #selector(self.Submit), for: .touchUpInside)
             return cell

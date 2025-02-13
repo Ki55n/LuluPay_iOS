@@ -38,9 +38,9 @@ class SendMoneyViewController: UIViewController {
         "Sri Lanka": "^(?:\\+94)7[0-9]{8}$" // +94
     ]
 
-    var receiveModeList: [String] { ["Bank", "Cash Pickup"] }
-    var accountTypeList: [String] { ["Savings"] }
-    var instrumentList: [String] { ["Remittance"] }
+    var receiveModeList: [Receiving_modes]?// { ["Bank", "Cash Pickup"] }
+    var accountTypeList: [Account_types]?
+    var instrumentList: [Instruments]?
     var selectedReceiveMode: String?
     var showIbanField: Bool = false
     var showAccountType: Bool = false
@@ -89,7 +89,13 @@ class SendMoneyViewController: UIViewController {
         routingCodeField?.delegate = self
         chooseInstrumentField?.delegate = self
         
-
+        getInstruments()
+        getAccountType()
+        getReceivingModes()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1){
+            self.tableView.reloadData()
+        }
     }
     func addDoneButtonToTextField(_ textField: UITextField?) {
         guard let textField = textField else { return }
@@ -178,7 +184,7 @@ class SendMoneyViewController: UIViewController {
         let range = NSRange(location: 0, length: phoneNumber.count)
         return regex?.firstMatch(in: phoneNumber, options: [], range: range) != nil
     }
-
+// MARK: API
     @objc func Submit() {
         if let firstName = receiverDetails.firstName, firstName.isEmpty {
             showToast(message: "First Name field is required")
@@ -204,20 +210,45 @@ class SendMoneyViewController: UIViewController {
             showToast(message: "Routing code is required!")
         }
         else{
-            let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/accounts/validation?receiving_country_code=PK&receiving_mode=BANK&first_name=first name&middle_name=middle name&last_name=last name&iso_code=ALFHPKKA068&iban=PK12ABCD1234567891234567"
-            let params = ["first_name":receiverDetails.firstName,"last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased(),"iso_code":receiverDetails.swiftCode,"iban":receiverDetails.iban,"route_code":receiverDetails.routingCode,"account_number":receiverDetails.accountNumber,"account_type":receiverDetails.accountType?.uppercased()]
+            let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/accounts/validation"//?receiving_country_code=PK&receiving_mode=BANK&first_name=first name&middle_name=middle name&last_name=last name&iso_code=ALFHPKKA068&iban=PK12ABCD1234567891234567"
+            var params = [String:String?]()
+            let receiverdata = UserManager.shared.getReceiverData
+            if receiverdata?.receiveMode == "Bank"{
+                // For receiving mode with bank transfer
+
+                if receiverdata?.country_code == "IN"{
+                    // For countries that accept routing code and account number
+                     params = ["first_name":receiverDetails.firstName,"last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased().trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""),"route_code":receiverDetails.routingCode,"account_number":receiverDetails.accountNumber]
+
+                }else if receiverdata?.country_code == "PK" || receiverdata?.country_code == "EG" || receiverdata?.country_code == "LK"{
+                    // For countries that accept isoCode(BIC/SWIFT CODE) and iban
+
+                    params = ["first_name":receiverDetails.firstName,"last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased().trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""),"iso_code":receiverDetails.swiftCode,"iban":receiverDetails.iban]
+
+                }else{
+                    // For countries that accept isocode(Bic/Swift Code) and account number
+                    params = ["first_name":receiverDetails.firstName,"last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased().trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""),"iso_code":receiverDetails.swiftCode,"account_number":receiverDetails.accountNumber]
+
+                }
+            }else{
+                // For receiving mode with Cash pickup or Mobile wallet
+                
+                 params = ["first_name":receiverDetails.firstName,"last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased().trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""),"iso_code":receiverDetails.swiftCode]
+
+            }
+//            let params = ["first_name":receiverDetails.firstName,"last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased(),"iso_code":receiverDetails.swiftCode,"iban":receiverDetails.iban,"route_code":receiverDetails.routingCode,"account_number":receiverDetails.accountNumber,"account_type":receiverDetails.accountType?.uppercased()]
             let filteredParams = params.compactMapValues { $0?.isEmpty == true ? nil : $0 }
             
             print(params)
             //            let receiverDetails = ReceiverDetails(firstName: receiverDetails.firstName,middleName: receiverDetails.middleName,lastName: receiverDetails.lastName,phoneNumber: receiverDetails.phoneNumber,country: receiverDetails.country,country_code: receiverDetails.country_code,receiveMode: receiverDetails.receiveMode, accountType: receiverDetails.accountType, swiftCode: receiverDetails.swiftCode, iban: receiverDetails.iban, routingCode: receiverDetails.routingCode, accountNumber: receiverDetails.accountNumber,chooseInstrument: receiverDetails.chooseInstrument)
             
             let headers1:[String:String]? = [
-                //                            "Content-Type": "application/x-www-form-urlencoded",
+                "Content-Type": "application/json",
                 "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
                 
             ]
             LoadingIndicatorManager.shared.showLoading(on: self.view)
-            APIService.shared.request(url: url1, method: .get, parameters: filteredParams, headers: headers1) { result in
+            APIService.shared.requestParamasCodable(url: url1, method: .get, parameters: filteredParams, headers: headers1) { result in
                 LoadingIndicatorManager.shared.hideLoading(on: self.view)
                 
                 switch result {
@@ -264,7 +295,202 @@ class SendMoneyViewController: UIViewController {
          */
         
     }
+    func getReceivingModes(){
+        let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/codes"
+        var params = [String:String?]()
+        
+        
+        params = ["code":"RECEIVING_MODES","service_type":"C2C"]
+        let filteredParams = params.compactMapValues { $0?.isEmpty == true ? nil : $0 }
+        
+        print(params)
+        //            let receiverDetails = ReceiverDetails(firstName: receiverDetails.firstName,middleName: receiverDetails.middleName,lastName: receiverDetails.lastName,phoneNumber: receiverDetails.phoneNumber,country: receiverDetails.country,country_code: receiverDetails.country_code,receiveMode: receiverDetails.receiveMode, accountType: receiverDetails.accountType, swiftCode: receiverDetails.swiftCode, iban: receiverDetails.iban, routingCode: receiverDetails.routingCode, accountNumber: receiverDetails.accountNumber,chooseInstrument: receiverDetails.chooseInstrument)
+        
+        let headers1:[String:String]? = [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
+            
+        ]
+        LoadingIndicatorManager.shared.showLoading(on: self.view)
+        APIService.shared.requestParamasCodable(url: url1, method: .get, parameters: filteredParams, headers: headers1) { result in
+            LoadingIndicatorManager.shared.hideLoading(on: self.view)
+            
+            switch result {
+            case .success(let data):
+                if let responseString = String(data: data, encoding: .utf8) {
+                    do {
+                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                        
+                        if let receivingModesData = jsonObject?["receiving_modes"] as? [[String: Any]] {
+                            let jsonData = try JSONSerialization.data(withJSONObject: receivingModesData)
+                            let decodedList = try JSONDecoder().decode([Receiving_modes].self, from: jsonData)
+                            self.receiveModeList = decodedList
+                            self.tableView.reloadRows(at: [IndexPath(row: 6, section: 0)], with: .automatic)
+                        }
+                        
+                    } catch {
+                        print("Failed to decode JSON: \(error)")
+                    }                 
+                }
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+            }
+        }
     
+    
+    }
+    func getInstruments(){
+        let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/codes"
+        var params = [String:String?]()
+        params = ["code":"INSTRUMENTS","service_type":"C2C"]
+        let filteredParams = params.compactMapValues { $0?.isEmpty == true ? nil : $0 }
+        
+        print(params)
+        //            let receiverDetails = ReceiverDetails(firstName: receiverDetails.firstName,middleName: receiverDetails.middleName,lastName: receiverDetails.lastName,phoneNumber: receiverDetails.phoneNumber,country: receiverDetails.country,country_code: receiverDetails.country_code,receiveMode: receiverDetails.receiveMode, accountType: receiverDetails.accountType, swiftCode: receiverDetails.swiftCode, iban: receiverDetails.iban, routingCode: receiverDetails.routingCode, accountNumber: receiverDetails.accountNumber,chooseInstrument: receiverDetails.chooseInstrument)
+        
+        let headers1:[String:String]? = [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
+            
+        ]
+        LoadingIndicatorManager.shared.showLoading(on: self.view)
+        APIService.shared.requestParamasCodable(url: url1, method: .get, parameters: filteredParams, headers: headers1) { result in
+            LoadingIndicatorManager.shared.hideLoading(on: self.view)
+            
+            switch result {
+            case .success(let data):
+                if let responseString = String(data: data, encoding: .utf8) {
+                    do {
+                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                        
+                        if let receivingModesData = jsonObject?["instruments"] as? [[String: Any]] {
+                            let jsonData = try JSONSerialization.data(withJSONObject: receivingModesData)
+                            let decodedList = try JSONDecoder().decode([Instruments].self, from: jsonData)
+                            self.instrumentList = decodedList
+                            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .automatic)
+                        }
+                        
+                    } catch {
+                        print("Failed to decode JSON: \(error)")
+                    }
+                }
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+    
+    
+    }
+//    func getListofBanks(){
+//        let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/banks"
+//        let country_code = receiverDetails.country_code?.isEmpty == false ? receiverDetails.country_code : nil
+//        let receiveMode = receiverDetails.receiveMode?.isEmpty == false ? receiverDetails.receiveMode : nil
+////
+////        var params: [String: String?] = [:]
+////
+////        // Adding parameters for country code and receive mode if they are not nil or empty
+////        params["receiving_country_code"] = country_code?.isEmpty == false ? country_code : nil
+////        params["receiving_mode"] = receiveMode?.isEmpty == false ? receiveMode : nil
+////
+////        // Filtering out empty values from the dictionary
+////        let filteredParams = params.compactMapValues { $0?.isEmpty == true ? nil : $0 }
+////
+////        print("Filtered Params: \(filteredParams)")
+//        let bankRequest = GetBankListRequest(
+//            receiving_country_code: country_code,
+//            receiving_mode: receiveMode
+//        )
+//
+//        let headers1:[String:String]? = [
+//            "Content-Type": "application/json",
+//            "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
+//        ]
+//        
+//        LoadingIndicatorManager.shared.showLoading(on: self.view)
+//        
+//        APIService.shared.requestParamasCodable(url: url1, method: .get, parameters: bankRequest, headers: headers1) { result in
+//            
+//            LoadingIndicatorManager.shared.hideLoading(on: self.view)
+//            
+//            switch result {
+//            case .success(let data):
+//                if let responseString = String(data: data, encoding: .utf8) {
+//                    do {
+//                        // Successfully received the data
+//                        if let responseString = String(data: data, encoding: .utf8) {
+//                            print("Response: \(responseString)")
+//                        }
+//                        
+//                        DispatchQueue.main.async {
+//                            do {
+//                                let jsonDecoder = JSONDecoder()
+//                                // Decoding the response data into RatesModel
+//                                let banks = try jsonDecoder.decode(MasterBanksModel.self, from: data)
+//                                UserManager.shared.getBankList = banks.data?.list
+//                                
+//                            } catch {
+//                                print("Failed to decode JSON: \(error.localizedDescription)")
+//                            }
+//                        }
+//
+//                    } catch {
+//                        print("Failed to decode JSON: \(error)")
+//                    }
+//                }
+//            case .failure(let error):
+//                print("Error: \(error.localizedDescription)")
+//            }
+//        }
+//    
+//    
+//    }
+
+
+    func getAccountType(){
+        let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/codes"
+        var params = [String:String?]()
+        
+        
+        params = ["code":"ACCOUNT_TYPES","service_type":"C2C"]
+        let filteredParams = params.compactMapValues { $0?.isEmpty == true ? nil : $0 }
+        
+        print(params)
+        //            let receiverDetails = ReceiverDetails(firstName: receiverDetails.firstName,middleName: receiverDetails.middleName,lastName: receiverDetails.lastName,phoneNumber: receiverDetails.phoneNumber,country: receiverDetails.country,country_code: receiverDetails.country_code,receiveMode: receiverDetails.receiveMode, accountType: receiverDetails.accountType, swiftCode: receiverDetails.swiftCode, iban: receiverDetails.iban, routingCode: receiverDetails.routingCode, accountNumber: receiverDetails.accountNumber,chooseInstrument: receiverDetails.chooseInstrument)
+        
+        let headers1:[String:String]? = [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
+            
+        ]
+        LoadingIndicatorManager.shared.showLoading(on: self.view)
+        APIService.shared.requestParamasCodable(url: url1, method: .get, parameters: filteredParams, headers: headers1) { result in
+            LoadingIndicatorManager.shared.hideLoading(on: self.view)
+            
+            switch result {
+            case .success(let data):
+                if let responseString = String(data: data, encoding: .utf8) {
+                    do {
+                        let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                        
+                        if let receivingModesData = jsonObject?["instruments"] as? [[String: Any]] {
+                            let jsonData = try JSONSerialization.data(withJSONObject: receivingModesData)
+                            let decodedList = try JSONDecoder().decode([Account_types].self, from: jsonData)
+                            self.accountTypeList = decodedList
+                            self.tableView.reloadRows(at: [IndexPath(row: 7, section: 1)], with: .automatic)
+                        }
+                        
+                    } catch {
+                        print("Failed to decode JSON: \(error)")
+                    }
+                }
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+    
+    
+    }
+
 //    private func configurePicker(for textField: UITextField?, picker: UIPickerView?, data: [String]) {
 //        guard let textField = textField, let picker = picker else { return }
 //        picker.delegate = self
@@ -353,8 +579,8 @@ class SendMoneyViewController: UIViewController {
     @objc private func dismissinstrumentPicker() {
         chooseInstrumentField?.resignFirstResponder()
         if chooseInstrumentField?.text == ""{
-            chooseInstrumentField?.text = instrumentList[0]
-            receiverDetails.chooseInstrument = instrumentList[0]
+            chooseInstrumentField?.text = instrumentList?[0].code
+            receiverDetails.chooseInstrument = instrumentList?[0].code
 
         }
 //        tableView.reloadRows(at: [IndexPath(row: 5, section: 0)], with: .automatic)
@@ -386,8 +612,8 @@ class SendMoneyViewController: UIViewController {
     @objc private func dismissReceiveModePicker() {
         receiveModeField?.resignFirstResponder()
         if receiveModeField?.text == ""{
-            receiveModeField?.text = receiveModeList[0]
-            receiverDetails.receiveMode = receiveModeList[0]
+            receiveModeField?.text = receiveModeList?[0].code
+            receiverDetails.receiveMode = receiveModeList?[0].code
         }
 
         tableView.reloadRows(at: [IndexPath(row: 6, section: 0)], with: .automatic)
@@ -398,11 +624,11 @@ class SendMoneyViewController: UIViewController {
     @objc private func dismissAccountTypePicker() {
         chooseAccountTypeField?.resignFirstResponder()
         if chooseAccountTypeField?.text == ""{
-            chooseAccountTypeField?.text = accountTypeList[0]
-            receiverDetails.accountType = accountTypeList[0]
+            chooseAccountTypeField?.text = accountTypeList?[0].code
+            receiverDetails.accountType = accountTypeList?[0].code
             
-            var selectedReceiveModeValue = receiveModeList[0]
-            showAccountType = (selectedReceiveModeValue == "Bank")
+            var selectedReceiveModeValue = receiveModeList?[0].code
+            showAccountType = (selectedReceiveModeValue == "BANK")
 
         }
         
@@ -640,6 +866,18 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
         }
         cell.txtFieldAmount.setLeftPadding(10)
     }
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        if indexPath.section == 0 {
+//            if indexPath.row == 6{
+//                getReceivingModes()
+//            }
+//        }else
+//        {
+//            if indexPath.row == 0{
+//                getInstruments()
+//            }
+//        }
+//    }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section{
         case 0:
@@ -688,11 +926,11 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
         case countryPicker:
             return countryList.count
         case receivingPicker:
-            return receiveModeList.count
+            return receiveModeList?.count ?? 0
         case accountTypePicker:
-            return accountTypeList.count
+            return accountTypeList?.count ?? 0
         case chooseInstrumentPicker:
-            return instrumentList.count
+            return instrumentList?.count ?? 0
 
         default:
             return 0 // Or handle the case where it's an unknown picker
@@ -704,11 +942,11 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
         case countryPicker:
             return countryList[row].name
         case receivingPicker:
-            return receiveModeList[row]
+            return receiveModeList?[row].code
         case accountTypePicker:
-            return accountTypeList[row]
+            return accountTypeList?[row].code
         case chooseInstrumentPicker:
-            return instrumentList[row]
+            return instrumentList?[row].code
 
         default:
             return nil
@@ -732,27 +970,27 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
                tableView.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
 
            } else if pickerView == receivingPicker {
-               let selectedReceiveModeValue = receiveModeList[row]
-               receiverDetails.receiveMode = selectedReceiveModeValue
-               receiveModeField?.text = selectedReceiveModeValue
+               let selectedReceiveModeValue = receiveModeList?[row]
+               receiverDetails.receiveMode = selectedReceiveModeValue?.code
+               receiveModeField?.text = selectedReceiveModeValue?.code
                // Show account type field if "Bank Account" is selected
-               showAccountType = (selectedReceiveModeValue == "Bank")
+               showAccountType = (selectedReceiveModeValue?.code == "BANK")
 //               tableView.reloadRows(at: [IndexPath(row: 6, section: 0)], with: .automatic)
 
                let sectionIndex = 0 // Replace with the target section number
                tableView.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
            }else if pickerView == accountTypePicker {
-               let selectedReceiveModeValue = accountTypeList[row]
-               receiverDetails.accountType = selectedReceiveModeValue
-               chooseAccountTypeField?.text = selectedReceiveModeValue
+               let selectedReceiveModeValue = accountTypeList?[row]
+               receiverDetails.accountType = selectedReceiveModeValue?.code
+               chooseAccountTypeField?.text = selectedReceiveModeValue?.code
 
 //               tableView.reloadData()
                tableView.reloadRows(at: [IndexPath(row: 7, section: 0)], with: .automatic)
 
            }else if pickerView == chooseInstrumentPicker {
-               let selectedReceiveModeValue = instrumentList[row]
-               receiverDetails.chooseInstrument = selectedReceiveModeValue
-               chooseInstrumentField?.text = selectedReceiveModeValue
+               let selectedReceiveModeValue = instrumentList?[row]
+               receiverDetails.chooseInstrument = selectedReceiveModeValue?.code
+               chooseInstrumentField?.text = selectedReceiveModeValue?.code
 
 //               tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
            }
@@ -912,15 +1150,15 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
     }
 
     @objc func doneButtonTappedForReceiveMode() {
-        let selectedReceiveMode = receiveModeList[receivingPicker?.selectedRow(inComponent: 0) ?? 0]
-        receiverDetails.receiveMode = selectedReceiveMode
-        receiveModeField?.text = selectedReceiveMode
+        let selectedReceiveMode = receiveModeList?[receivingPicker?.selectedRow(inComponent: 0) ?? 0]
+        receiverDetails.receiveMode = selectedReceiveMode?.code
+        receiveModeField?.text = selectedReceiveMode?.code
         receiveModeField?.resignFirstResponder()  // Close the picker
     }
     @objc func doneButtonTappedForAccountType() {
-        let selectedReceiveMode = accountTypeList[accountTypePicker?.selectedRow(inComponent: 0) ?? 0]
-        receiverDetails.accountType = selectedReceiveMode
-        chooseAccountTypeField?.text = selectedReceiveMode
+        let selectedReceiveMode = accountTypeList?[accountTypePicker?.selectedRow(inComponent: 0) ?? 0]
+        receiverDetails.accountType = selectedReceiveMode?.code
+        chooseAccountTypeField?.text = selectedReceiveMode?.code
         chooseAccountTypeField?.resignFirstResponder()  // Close the picker
     }
 

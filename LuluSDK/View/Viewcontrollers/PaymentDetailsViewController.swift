@@ -201,7 +201,7 @@ class PaymentDetailsViewController: UIViewController {
         var mobileWalletDetails: MobileWalletDetails?
         var cashPickupDetails: CashPickupDetails?
 
-        if let receiveMode = receiverData.receiveMode, receiveMode.contains("Bank") {
+        if let receiveMode = receiverData.receiveMode, receiveMode.contains("BANK") {
              bankDetails = BankDetails()
 
                 // If at least one field has value, create bankDetails
@@ -222,16 +222,18 @@ class PaymentDetailsViewController: UIViewController {
                 bankId: receiverData.bankId ?? "",
                 branchId: receiverData.branchId ?? ""
             )
-        }
+        } */
 
-        if receiverData.receiveMode.contains("CASHPICKUP") {
+        if let receiveMode = receiverData.receiveMode, receiveMode.contains("CASHPICKUP") {
+            let correspondent = UserManager.shared.getServiceCorridorData?.first?.corridor_currencies?.first?.correspondent ?? ""
+
             cashPickupDetails = CashPickupDetails(
-                correspondentId: receiverData.bankId ?? "",
-                correspondent: receiverData.correspondent ?? "",
-                correspondentLocationId: receiverData.branchId ?? ""
+                correspondentId: "11232",
+                correspondent: correspondent,
+                correspondentLocationId: "213505"
             )
         }
-        */
+        
 
         
         let senderDetails = Sender(customerNumber: "7841001220007002", agentCustomerNumber: "AGENT" + generateUniqueId())

@@ -6,6 +6,16 @@
 //
 
 import Foundation
+
+struct GetBankListRequest:Codable{
+    let receiving_country_code:String?
+    let receiving_mode:String?
+    enum CodingKeys: String, CodingKey {
+        case receiving_country_code = "receiving_country_code"
+        case receiving_mode = "receiving_mode"
+    }
+
+}
 struct MasterBanksModel : Codable {
     let status : String?
     let status_code : Int?

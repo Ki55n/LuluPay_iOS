@@ -252,13 +252,7 @@ class APIService {
             
             task.resume()
         }
-    func requestParamasCodable(url: String,
-                     method: LuHTTPMethod,
-                     parameters: Any? = nil,
-                     headers: [String: String]? = nil,
-                     isJsonRequest: Bool = false,
-                     isFormURLEncoded: Bool = false,  // Flag to indicate if body should be JSON
-                 completion: @escaping (Result<Data, Error>) -> Void) {
+func requestParamasCodable(url: String,method: LuHTTPMethod,parameters: Any? = nil,headers: [String: String]? = nil,isJsonRequest: Bool = false,isFormURLEncoded: Bool = false,completion: @escaping (Result<Data, Error>) -> Void) {
     
         guard let url = URL(string: url) else {
             completion(.failure(APIError.invalidURL))
