@@ -159,57 +159,62 @@ public class APIService {
         }
     
     func newRequestPdfData(url: String,
-                     method: LuHTTPMethod,
-                     parameters: [String: Any]? = nil,
-                     headers: [String: String]? = nil,
-                     completion: @escaping (Result<Data, Error>) -> Void) {
-            
-            guard var urlComponents = URLComponents(string: url) else {
-                completion(.failure(APIError.invalidURL))
-                return
-            }
-            
-        if method == .get, let parameters = parameters {
-                urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
-            }
-            
-            guard let finalURL = urlComponents.url else {
-                completion(.failure(APIError.invalidURL))
-                return
-            }
-            
-            var request = URLRequest(url: finalURL)
-            request.httpMethod = method.rawValue
-            
-            // Set Headers
-            headers?.forEach { request.setValue($0.value, forHTTPHeaderField: $0.key) }
-            
-            // If method is POST/PUT, add parameters in body
-            if method.rawValue != "GET", let parameters = parameters {
-                do {
-                    request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
-                } catch {
-                    completion(.failure(APIError.decodingFailed))
-                    return
-                }
-            }
-            print("URL",url)
-            print("Params",parameters)
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                
-                print("Response-",response)
-                if let error = error {
-                    DispatchQueue.main.async { completion(.failure(error)) }
-                    return
-                }
-                guard let data = data else {
-                    DispatchQueue.main.async { completion(.failure(APIError.noData)) }
-                    return
-                }
-                DispatchQueue.main.async { completion(.success(data)) }
-            }
-            task.resume()
-        }
+                           method: HTTPMethod,
+                           headers: [String: String]? = nil,
+                           completion: @escaping (Result<Data, Error>) -> Void) {
+                  
+                  guard let url = URL(string: url) else {
+                      completion(.failure(APIError.invalidURL))
+                      return
+                  }
+
+                  var request = URLRequest(url: url)
+                  request.httpMethod = method.rawValue
+
+                  // Set headers
+                  headers?.forEach { request.setValue($1, forHTTPHeaderField: $0) }
+                  
+                  // Print request details for debugging
+                  print("Request URL: \(url.absoluteString)")
+                  print("Headers: \(headers ?? [:])")
+
+                  let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                      if let error = error {
+                          DispatchQueue.main.async {
+                              completion(.failure(error))
+                          }
+                          return
+                      }
+                      
+                      guard let httpResponse = response as? HTTPURLResponse else {
+                          DispatchQueue.main.async {
+                              completion(.failure(APIError.invalidResponse(statusCode: 0)))
+                          }
+                          return
+                      }
+
+                      // Check if response status code is 2xx
+                      guard (200...299).contains(httpResponse.statusCode) else {
+                          DispatchQueue.main.async {
+                              completion(.failure(APIError.invalidResponse(statusCode: httpResponse.statusCode)))
+                          }
+                          return
+                      }
+
+                      guard let data = data else {
+                          DispatchQueue.main.async {
+                              completion(.failure(APIError.noData))
+                          }
+                          return
+                      }
+                      
+                      DispatchQueue.main.async {
+                          completion(.success(data))
+                      }
+                  }
+                  
+                  task.resume()
+              }
 func requestParamasCodable(url: String,method: LuHTTPMethod,parameters: Any? = nil,headers: [String: String]? = nil,isJsonRequest: Bool = false,isFormURLEncoded: Bool = false,completion: @escaping (Result<Data, Error>) -> Void) {
     
         guard let url = URL(string: url) else {
