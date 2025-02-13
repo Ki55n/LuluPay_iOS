@@ -357,19 +357,97 @@ extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource
                 }
             }else if receivingMode == "CASHPICKUP"{
 let correspondent = UserManager.shared.getServiceCorridorData?.first?.corridor_currencies?.first?.correspondent ?? ""
-                requestBody = [
-                    "sending_country_code": "AE",
-                    "sending_currency_code": "AED",
-                    "receiving_country_code": "SL",
-                    "receiving_currency_code": "LKR",
-                    "sending_amount": filteredText,
-                    "receiving_mode": receivingMode,
-                    "type": "SEND",
-                    "instrument": chooseInstrument,
-                    "correspondent": correspondent,
-                    "correspondent_id": "11232",
-                    "correspondent_location_id": "213505"
-                ]
+                switch countryCode{
+                case "IN": // For India Bank Transfer
+                    requestBody = [
+                        "sending_country_code": "AE",
+                        "sending_currency_code": "AED",
+                        "receiving_country_code": "IN",
+                        "receiving_currency_code": "INR",
+                        "sending_amount": filteredText,
+                        "receiving_mode": receivingMode,
+                        "type": "SEND",
+                        "instrument": chooseInstrument,
+                        "correspondent": correspondent,
+                        "correspondent_id": "11232",
+                        "correspondent_location_id": "213505"
+                    ]
+                    
+                case "PK": // For Pakistan Bank Transfer
+                    requestBody = [
+                        "sending_country_code": "AE",
+                        "sending_currency_code": "AED",
+                        "receiving_country_code": "PK",
+                        "receiving_currency_code": "PKR",
+                        "sending_amount": filteredText,
+                        "receiving_mode": receivingMode,
+                        "type": "SEND",
+                        "instrument": chooseInstrument,
+                        "correspondent": correspondent,
+                        "correspondent_id": "11232",
+                        "correspondent_location_id": "213505"
+                    ]
+                case "CH": // For China Bank Transfer
+                    requestBody = [
+                        "sending_country_code": "AE",
+                        "sending_currency_code": "AED",
+                        "receiving_country_code": "CN",
+                        "receiving_currency_code": "CNY",
+                        "sending_amount": filteredText,
+                        "receiving_mode": receivingMode,
+                        "type": "SEND",
+                        "instrument": chooseInstrument,
+                        "correspondent": correspondent,
+                        "correspondent_id": "11232",
+                        "correspondent_location_id": "213505"
+                    ]
+                case "EG": // For Egypt Bank Transfer
+                    requestBody = [
+                        "sending_country_code": "AE",
+                        "sending_currency_code": "AED",
+                        "receiving_country_code": "EG",
+                        "receiving_currency_code": "EGP",
+                        "sending_amount": filteredText,
+                        "receiving_mode": receivingMode,
+                        "type": "SEND",
+                        "instrument": chooseInstrument,
+                        "correspondent": correspondent,
+                        "correspondent_id": "11232",
+                        "correspondent_location_id": "213505"
+                    ]
+                case "PH": // For Philippines Bank Transfer
+                    requestBody = [
+                        "sending_country_code": "AE",
+                        "sending_currency_code": "AED",
+                        "receiving_country_code": "PH",
+                        "receiving_currency_code": "PHP",
+                        "sending_amount": filteredText,
+                        "receiving_mode": receivingMode,
+                        "type": "SEND",
+                        "instrument": chooseInstrument,
+                        "correspondent": correspondent,
+                        "correspondent_id": "10400",
+                        "correspondent_location_id": "213505"
+                    ]
+                case "SL": // For Pakistan Bank Transfer
+                    requestBody = [
+                        "sending_country_code": "AE",
+                        "sending_currency_code": "AED",
+                        "receiving_country_code": "SL",
+                        "receiving_currency_code": "LKR",
+                        "sending_amount": filteredText,
+                        "receiving_mode": receivingMode,
+                        "type": "SEND",
+                        "instrument": chooseInstrument,
+                        "correspondent": correspondent,
+                        "correspondent_id": "11232",
+                        "correspondent_location_id": "213505"
+                    ]
+                default:
+                    print("Unsupported country code.")
+
+                }
+
             }
             print("Payload: \(requestBody)")
         } else {

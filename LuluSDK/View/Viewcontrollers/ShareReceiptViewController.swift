@@ -50,7 +50,6 @@ class ShareReceiptViewController: UIViewController {
         }
         
         
-        
         tableView.bounces = false
         // Add the custom background view to the table view
         tableView.backgroundColor = .clear
@@ -62,11 +61,6 @@ class ShareReceiptViewController: UIViewController {
         tableView.sectionFooterHeight = 0
         tableView.contentInset = .zero
 
-
-
-
-
-        
     }
     @objc func moveBack(){
         self.navigationController?.popViewController(animated: true)
@@ -88,7 +82,7 @@ class ShareReceiptViewController: UIViewController {
         ]
         LoadingIndicatorManager.shared.showLoading(on: self.view)
 
-        APIService.shared.newRequestPdfData(url: url, method: "GET", parameters: parameters, headers: headers) { result in
+        APIService.shared.newRequestPdfData(url: url, method: .get, parameters: parameters, headers: headers) { result in
             LoadingIndicatorManager.shared.hideLoading(on: self.view)
             switch result {
             case .success(let data):
@@ -138,6 +132,20 @@ class ShareReceiptViewController: UIViewController {
 
 }
 extension ShareReceiptViewController: UITableViewDelegate, UITableViewDataSource {
+    func emojiToImage(emoji: String, size: CGFloat = 40) -> UIImage? {
+        let label = UILabel()
+        label.text = emoji
+        label.font = UIFont.systemFont(ofSize: size)
+        label.sizeToFit()
+        
+        UIGraphicsBeginImageContextWithOptions(label.bounds.size, false, 0.0)
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+        label.layer.render(in: context)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
+    }
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
@@ -164,16 +172,43 @@ extension ShareReceiptViewController: UITableViewDelegate, UITableViewDataSource
                     fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
                 }
                 cell.lblTitle.text = "Payment Details"
-                return cell
+                cell.lblTitle.font = UIFont.systemFont(ofSize: 15, weight: .bold)
 
+                return cell
+                
             }else{
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellPaymentDetail", for: indexPath) as? PaymentDetailCell else {
                     fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
                 }
+                let getQuote = UserManager.shared.getQuotesData
+            
+                cell.lblAmount.text = String(getQuote?.receiving_amount ?? 0)
+                cell.lblTitle.text = "Amount"
+                cell.lblCurrencyCode.text = getQuote?.receiving_country_code
+                if let countryCode = getQuote?.receiving_country_code {
+                    var emoji = ""
+                    switch countryCode {
+                    case "CH":
+                        emoji = "🇨🇳" // China flag emoji
+                    case "EG":
+                        emoji = "🇪🇬" // Egypt flag emoji
+                    case "PH":
+                        emoji = "🇵🇭" // Philippines flag emoji
+                    case "SL":
+                        emoji = "🇱🇰" // Sri Lanka flag emoji
+                    case "PK":
+                        emoji = "🇵🇰" // Pakistan flag emoji
+                    default:
+                        emoji = "🏳️" // Default emoji
+                    }
+                    cell.imgCurrency.image = emojiToImage(emoji: emoji)
+                }
+                
                 
                 return cell
-
+                
             }
+            
         case 1:
             if indexPath.row == 0{
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellTitle", for: indexPath) as? TitleCell else {
@@ -183,29 +218,74 @@ extension ShareReceiptViewController: UITableViewDelegate, UITableViewDataSource
                 return cell
 
             }else{
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellDetail", for: indexPath) as? TransactionDetailCell else {
-                    fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
-                }
-                if indexPath.row == 1{
-                    cell.lblTitle.text = "Transaction Number"
-                }else if indexPath.row == 2{
-                    cell.lblTitle.text = "Transaction Date"
-                }else if indexPath.row == 3{
-                    cell.lblTitle.text = "Recipient"
-                }else if indexPath.row == 4{
-                    cell.lblTitle.text = "Amount"
-                }else if indexPath.row == 5{
-                    cell.lblTitle.text = "Commission Amount"
-                }else if indexPath.row == 5{
-                    cell.lblTitle.text = "Processing Fee"
-                }else if indexPath.row == 5{
-                    cell.lblTitle.text = "Total Amount"
-                }else if indexPath.row == 5{
-                    cell.lblTitle.text = "Reference"
-                }
-            
-            return cell
+                
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellPaymentDetail", for: indexPath) as? PaymentDetailCell else {
+                        fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
+                    }
+                    
+                    if indexPath.row == 1{
+                        cell.lblTitle.text = "Transaction Number"
+                        cell.lblAmount.text = "#"+(UserManager.shared.getTransactionalData?.transaction_ref_number ?? "")
+                        cell.lblAmount.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+                    } else if indexPath.row == 2{
+                        cell.lblTitle.text = "Transaction Date"
+                        cell.lblAmount.text = UserManager.shared.getTransactionalData?.transaction_date
 
+                    }else if indexPath.row == 3{
+                        cell.lblTitle.text = "Transaction Receipient"
+                        cell.lblAmount.text = UserManager.shared.getTransactionalData?.transaction_date
+
+                    }else if indexPath.row == 4{
+                        cell.lblTitle.text = "Amount"
+                        cell.lblAmount.text = String(UserManager.shared.getQuotesData?.sending_amount ?? 0)
+
+                    }else if indexPath.row == 5{
+                        cell.lblTitle.text = "Commission Fee"
+                        if let feeDetails = UserManager.shared.getQuotesData?.fee_details {
+                            if let commissionDetail = feeDetails.first(where: { $0.type as? String == "COMMISSION" }) {
+                                if let amount = commissionDetail.amount as? Double {
+                                    print("Commission amount: \(amount)")
+                                    cell.lblAmount.text = String(amount)
+
+                                } else {
+                                    print("Commission amount not found")
+                                }
+                            } else {
+                                print("No commission type found in fee_details")
+                            }
+                        }
+
+
+                    }else if indexPath.row == 6{
+                        cell.lblTitle.text = "Processing Fee"
+                        if let feeDetails = UserManager.shared.getQuotesData?.fee_details {
+                            if let commissionDetail = feeDetails.first(where: { $0.type as? String == "TAX" }) {
+                                if let amount = commissionDetail.amount as? Double {
+                                    print("Tax amount: \(amount)")
+                                    cell.lblAmount.text = String(amount)
+
+                                } else {
+                                    print("Commission amount not found")
+                                }
+                            } else {
+                                print("No commission type found in fee_details")
+                            }
+                        }
+
+                    }else if indexPath.row == 7{
+                        cell.lblTitle.text = "Total Amount"
+                        cell.lblAmount.text = String(UserManager.shared.getQuotesData?.total_payin_amount ?? 0)
+                        cell.lblAmount.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+
+
+                    }else{
+                        cell.lblTitle.text = "Reference Number"
+                        cell.lblAmount.text = "REF12345567"
+
+                    }
+                    return cell
+
+                
             }
 
         case 2:
@@ -230,10 +310,14 @@ extension ShareReceiptViewController: UITableViewDelegate, UITableViewDataSource
             if indexPath.row == 0{
                 return 40
             }else{
-                return 50
+                return 60
             }
         case 1:
+            if indexPath.row == 0{
                 return 40
+            }else{
+                return 60
+            }
         case 2:
             return 50
         default:

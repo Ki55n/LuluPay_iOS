@@ -511,3 +511,83 @@ class TransactionRequestTests: XCTestCase {
         
     }
 }
+
+
+class MockAPIService: APIService {
+    var shouldReturnError = false
+    var mockData: Data?
+
+    // Add an accessible initializer
+    public init(mockData: Data? = nil, shouldReturnError: Bool = false) {
+        super.init()
+        self.mockData = mockData
+        self.shouldReturnError = shouldReturnError
+    }
+
+    func requestParamasCodable(url: String, method: LuHTTPMethod, parameters: [String: String], headers: [String: String]?, completion: @escaping (Result<Data, Error>) -> Void) {
+        if shouldReturnError {
+            completion(.failure(NSError(domain: "", code: 400, userInfo: [NSLocalizedDescriptionKey: "Mock API Error"])))
+        } else if let mockData = mockData {
+            completion(.success(mockData))
+        } else {
+            completion(.failure(NSError(domain: "", code: 500, userInfo: [NSLocalizedDescriptionKey: "No mock data"])))
+        }
+    }
+}
+
+class GetAccountTypeTests: XCTestCase {
+    var viewController: SendMoneyViewController!
+    var mockAPIService: MockAPIService!
+
+    override func setUp() {
+        super.setUp()
+        viewController = SendMoneyViewController()
+        // Initialize MockAPIService with mock data or error condition as needed
+        mockAPIService = MockAPIService(mockData: nil, shouldReturnError: false)
+        
+        // Replace the real service with the mock
+        APIService.shared = mockAPIService
+    }
+
+    override func tearDown() {
+        viewController = nil
+        mockAPIService = nil
+        super.tearDown()
+    }
+
+    func testGetAccountType_Success() {
+        let jsonResponse = """
+        {
+            "instruments": [
+                {"id": "1", "name": "Savings"},
+                {"id": "2", "name": "Current"}
+            ]
+        }
+        """.data(using: .utf8)!
+
+        mockAPIService.mockData = jsonResponse
+
+        let expectation = self.expectation(description: "Completion handler invoked")
+
+        viewController.getAccountType {
+            XCTAssertFalse(((self.viewController.accountTypeList?.isEmpty) != nil), "Account types should be populated")
+            XCTAssertEqual(self.viewController.accountTypeList?.count, 2, "Should contain 2 account types")
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 3, handler: nil)
+    }
+
+    func testGetAccountType_Failure() {
+        mockAPIService.shouldReturnError = true
+
+        let expectation = self.expectation(description: "Completion handler invoked")
+
+        viewController.getAccountType {
+            XCTAssertTrue(((self.viewController.accountTypeList?.isEmpty) != nil), "Account types should be empty on failure")
+            expectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 3, handler: nil)
+    }
+}

@@ -8,10 +8,10 @@
 import Foundation
 import Alamofire
 
-class APIService {
-    static let shared = APIService()  // Singleton instance
+public class APIService {
+    static var shared = APIService()  // Singleton instance
     
-    private init() {}  // Private initializer to enforce singleton pattern
+    public init() {}  // Private initializer to enforce singleton pattern
     
 //    func request(url: String,
 //                 method: HTTPMethod,
@@ -159,7 +159,7 @@ class APIService {
         }
     
     func newRequestPdfData(url: String,
-                     method: String,
+                     method: LuHTTPMethod,
                      parameters: [String: Any]? = nil,
                      headers: [String: String]? = nil,
                      completion: @escaping (Result<Data, Error>) -> Void) {
@@ -169,7 +169,7 @@ class APIService {
                 return
             }
             
-            if method == "GET", let parameters = parameters {
+        if method == .get, let parameters = parameters {
                 urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
             }
             
@@ -179,13 +179,13 @@ class APIService {
             }
             
             var request = URLRequest(url: finalURL)
-            request.httpMethod = method
+            request.httpMethod = method.rawValue
             
             // Set Headers
             headers?.forEach { request.setValue($0.value, forHTTPHeaderField: $0.key) }
             
             // If method is POST/PUT, add parameters in body
-            if method != "GET", let parameters = parameters {
+            if method.rawValue != "GET", let parameters = parameters {
                 do {
                     request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
                 } catch {
@@ -193,8 +193,11 @@ class APIService {
                     return
                 }
             }
-            
+            print("URL",url)
+            print("Params",parameters)
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                
+                print("Response-",response)
                 if let error = error {
                     DispatchQueue.main.async { completion(.failure(error)) }
                     return
@@ -237,6 +240,7 @@ func requestParamasCodable(url: String,method: LuHTTPMethod,parameters: Any? = n
                         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                     } catch {
                         completion(.failure(error))
+                        
                         return
                     }
                 } else {
@@ -286,6 +290,7 @@ func requestParamasCodable(url: String,method: LuHTTPMethod,parameters: Any? = n
                     urlComponents?.queryItems = queryItems
     
                     if let finalURL = urlComponents?.url {
+                        print("Final url-",finalURL)
                         request.url = finalURL
                     } else {
                         completion(.failure(NSError(domain: "Invalid URL", code: 400, userInfo: nil)))
@@ -301,6 +306,10 @@ func requestParamasCodable(url: String,method: LuHTTPMethod,parameters: Any? = n
         print("URL-",request.url)
         print("Param-",parameters)
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            print("data",data)
+            print("response",response)
+            print("error",error)
+
             if let error = error {
                 DispatchQueue.main.async {
                     completion(.failure(error))

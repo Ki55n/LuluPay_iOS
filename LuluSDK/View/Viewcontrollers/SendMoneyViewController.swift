@@ -89,11 +89,26 @@ class SendMoneyViewController: UIViewController {
         routingCodeField?.delegate = self
         chooseInstrumentField?.delegate = self
         
-        getInstruments()
-        getAccountType()
-        getReceivingModes()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1){
+        let dispatchGroup = DispatchGroup()
+
+        dispatchGroup.enter()
+        print("Instrument Api call started....")
+        getInstruments {
+            
+            dispatchGroup.leave()
+        }
+
+        dispatchGroup.enter()
+        getAccountType {
+            dispatchGroup.leave()
+        }
+
+        dispatchGroup.enter()
+        getReceivingModes {
+            dispatchGroup.leave()
+        }
+
+        dispatchGroup.notify(queue: .main) {
             self.tableView.reloadData()
         }
     }
@@ -184,6 +199,12 @@ class SendMoneyViewController: UIViewController {
         let range = NSRange(location: 0, length: phoneNumber.count)
         return regex?.firstMatch(in: phoneNumber, options: [], range: range) != nil
     }
+    func isValidPhoneNumber(_ phoneNo: String) -> Bool {
+        let phoneNumberRegex = "^(\\+|0)[0-9]{3,15}$"
+        let predicate = NSPredicate(format: "SELF MATCHES %@", phoneNumberRegex)
+        return predicate.evaluate(with: phoneNo)
+    }
+
 // MARK: API
     @objc func Submit() {
         if let firstName = receiverDetails.firstName, firstName.isEmpty {
@@ -192,7 +213,7 @@ class SendMoneyViewController: UIViewController {
             showToast(message: "Last Name field is required")
         } else if let phoneNumber = receiverDetails.phoneNumber, phoneNumber.isEmpty {
             showToast(message: "Phone Number field is required")
-        } else if !isPhoneNumberValid(for: receiverDetails.country ?? "", phoneNumber: receiverDetails.phoneNumber ?? "") {
+        } else if !isValidPhoneNumber(receiverDetails.phoneNumber ?? "") {
             showToast(message: "Invalid phone number for \(receiverDetails.country)")
         } else if let iban = receiverDetails.iban ,iban.isEmpty && showIbanField {
                 showToast(message: "Receiver account number or iban is required!")
@@ -295,7 +316,7 @@ class SendMoneyViewController: UIViewController {
          */
         
     }
-    func getReceivingModes(){
+    func getReceivingModes(completion: @escaping () -> Void){
         let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/codes"
         var params = [String:String?]()
         
@@ -319,18 +340,41 @@ class SendMoneyViewController: UIViewController {
             case .success(let data):
                 if let responseString = String(data: data, encoding: .utf8) {
                     do {
+                        // Parse the JSON response
                         let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                        print("JsonObject:", jsonObject ?? "nil")
                         
-                        if let receivingModesData = jsonObject?["receiving_modes"] as? [[String: Any]] {
-                            let jsonData = try JSONSerialization.data(withJSONObject: receivingModesData)
-                            let decodedList = try JSONDecoder().decode([Receiving_modes].self, from: jsonData)
-                            self.receiveModeList = decodedList
-                            self.tableView.reloadRows(at: [IndexPath(row: 6, section: 0)], with: .automatic)
+                        // Check if status is "success"
+                        if let status = jsonObject?["status"] as? String, status == "success" {
+                            // Access the data key
+                            if let data = jsonObject?["data"] as? [String: Any] {
+                                // Access the 'receiving_modes' array from data
+                                if let receivingModesData = data["receiving_modes"] as? [[String: Any]] {
+                                    print("Receiving Modes: \(receivingModesData)")
+                                    
+                                    // Now decode the 'receiving_modes' data
+                                    do {
+                                        let jsonData = try JSONSerialization.data(withJSONObject: receivingModesData)
+                                        let decodedList = try JSONDecoder().decode([Receiving_modes].self, from: jsonData)
+                                        print("Decoded Receiving Modes: \(decodedList)")
+                                        self.receiveModeList = decodedList
+                                        // Here you can update the UI or handle the decoded data
+                                        
+                                    } catch {
+                                        print("Failed to decode receiving modes: \(error)")
+                                    }
+                                } else {
+                                    print("Error: 'receiving_modes' not found in data")
+                                }
+                            } else {
+                                print("Error: 'data' key is missing or malformed")
+                            }
+                        } else {
+                            print("Error: Status is not 'success' or missing")
                         }
-                        
                     } catch {
-                        print("Failed to decode JSON: \(error)")
-                    }                 
+                        print("Error during JSON serialization: \(error)")
+                    }
                 }
             case .failure(let error):
                 print("Error: \(error.localizedDescription)")
@@ -339,7 +383,7 @@ class SendMoneyViewController: UIViewController {
     
     
     }
-    func getInstruments(){
+    func getInstruments(completion: @escaping () -> Void){
         let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/codes"
         var params = [String:String?]()
         params = ["code":"INSTRUMENTS","service_type":"C2C"]
@@ -361,17 +405,40 @@ class SendMoneyViewController: UIViewController {
             case .success(let data):
                 if let responseString = String(data: data, encoding: .utf8) {
                     do {
+                        // Parse the JSON response
                         let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                        print("JsonObject:", jsonObject ?? "nil")
                         
-                        if let receivingModesData = jsonObject?["instruments"] as? [[String: Any]] {
-                            let jsonData = try JSONSerialization.data(withJSONObject: receivingModesData)
-                            let decodedList = try JSONDecoder().decode([Instruments].self, from: jsonData)
-                            self.instrumentList = decodedList
-                            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .automatic)
+                        // Check if status is "success"
+                        if let status = jsonObject?["status"] as? String, status == "success" {
+                            // Access the data key
+                            if let data = jsonObject?["data"] as? [String: Any] {
+                                // Access the 'receiving_modes' array from data
+                                if let receivingModesData = data["instruments"] as? [[String: Any]] {
+                                    print("Receiving Modes: \(receivingModesData)")
+                                    
+                                    // Now decode the 'receiving_modes' data
+                                    do {
+                                        let jsonData = try JSONSerialization.data(withJSONObject: receivingModesData)
+                                        let decodedList = try JSONDecoder().decode([Instruments].self, from: jsonData)
+                                        print("Decoded Receiving Modes: \(decodedList)")
+                                        self.instrumentList = decodedList
+                                        // Here you can update the UI or handle the decoded data
+                                        
+                                    } catch {
+                                        print("Failed to decode receiving modes: \(error)")
+                                    }
+                                } else {
+                                    print("Error: 'receiving_modes' not found in data")
+                                }
+                            } else {
+                                print("Error: 'data' key is missing or malformed")
+                            }
+                        } else {
+                            print("Error: Status is not 'success' or missing")
                         }
-                        
                     } catch {
-                        print("Failed to decode JSON: \(error)")
+                        print("Error during JSON serialization: \(error)")
                     }
                 }
             case .failure(let error):
@@ -446,7 +513,7 @@ class SendMoneyViewController: UIViewController {
 //    }
 
 
-    func getAccountType(){
+    func getAccountType(completion: @escaping () -> Void){
         let url1 = "https://drap-sandbox.digitnine.com/raas/masters/v1/codes"
         var params = [String:String?]()
         
@@ -470,17 +537,33 @@ class SendMoneyViewController: UIViewController {
             case .success(let data):
                 if let responseString = String(data: data, encoding: .utf8) {
                     do {
+                        // Parse the JSON response
                         let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
                         
-                        if let receivingModesData = jsonObject?["instruments"] as? [[String: Any]] {
-                            let jsonData = try JSONSerialization.data(withJSONObject: receivingModesData)
-                            let decodedList = try JSONDecoder().decode([Account_types].self, from: jsonData)
-                            self.accountTypeList = decodedList
-                            self.tableView.reloadRows(at: [IndexPath(row: 7, section: 1)], with: .automatic)
+                        // Check if 'instruments' exists in the response
+                        if let receivingModesData = jsonObject?["account_types"] as? [[String: Any]] {
+                            print("Instruments Data: \(receivingModesData)")
+                            
+                            // Attempt to decode the instruments data into an array of Instruments objects
+                            do {
+                                let jsonData = try JSONSerialization.data(withJSONObject: receivingModesData)
+                                let decodedList = try JSONDecoder().decode([Account_types].self, from: jsonData)
+                                self.accountTypeList = decodedList
+                                
+                                // Reload table view row with the updated data
+                                self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .automatic)
+                                
+                                // Call the completion handler
+                                completion()
+                                
+                            } catch {
+                                print("Failed to decode instruments data: \(error)")
+                            }
+                        } else {
+                            print("Error: 'instruments' key not found in the response")
                         }
-                        
                     } catch {
-                        print("Failed to decode JSON: \(error)")
+                        print("Error during JSON serialization: \(error)")
                     }
                 }
             case .failure(let error):
