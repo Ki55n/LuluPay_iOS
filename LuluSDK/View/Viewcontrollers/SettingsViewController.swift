@@ -28,9 +28,6 @@ class SettingsViewController: UIViewController,UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        setStatusBar(backgroundColor: UIColor(named: "customCyanColor") ?? .white, style: .darkContent)
-        // Register header view
-        
         if let bundle = Bundle(identifier: "com.finance.LuluSDK") {
             let headerNib = UINib(nibName: "CustomHeaderView", bundle: bundle)
             tblList.register(headerNib, forHeaderFooterViewReuseIdentifier: "CustomHeaderView")
@@ -65,13 +62,7 @@ class SettingsViewController: UIViewController,UITableViewDelegate, UITableViewD
             }
             
         }
-       
-        
-        
-        
-       
-        
-        
+  
         tblList.bounces = false
         tblList.sectionHeaderTopPadding = 0
         // Add the custom background view to the table view

@@ -55,7 +55,6 @@ class PaymentDetailsViewController: UIViewController {
         
         self.getQuote = UserManager.shared.getQuotesData
         self.ReceiverData = UserManager.shared.getReceiverData
-        print("ReceiverData assigned",ReceiverData)
         tableView.bounces = true
         // Add the custom background view to the table view
         tableView.backgroundColor = .clear
@@ -77,105 +76,7 @@ class PaymentDetailsViewController: UIViewController {
         createTransactionID()
 
     }
-    
-//    func createTransactionID() {
-//        guard let url = URL(string: "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/createtransaction") else { return }
-//        guard let receiverData = ReceiverData else {
-//            print("Invalid ReceiverData or missing input values.")
-//            return
-//        }
-////        let senderDetails: [String: Any] = [
-////            "customer_number": "7841001220007002"
-////        ]
-////        
-////        let bankDetailsDict: [String: Any] = [
-////            "account_type_code": "1",
-////            "iso_code": "ALFHPKKA068",
-////            "iban": "PK12ABCD1234567891234567"
-////        ]
-////        
-////        let receiverDetails: [String: Any] = [
-////            "mobile_number": receiverData.phoneNumber ?? "",
-////            "first_name": receiverData.firstName ?? "",
-////            "last_name": receiverData.lastName ?? "",
-////            "nationality": receiverData.country_code ?? "",
-////            "relation_code": "32",
-////            "bank_details": bankDetailsDict
-////        ]
-////        
-////        let transactionDetails: [String: Any] = [
-////            "quote_id": getQuote?.quote_id ?? "",
-////            "agent_transaction_ref_number": getQuote?.quote_id ?? ""
-////        ]
-////        
-////        let requestBody: [String: Any] = [
-////            "type": UserManager.shared.gettransferType?.rawValue ?? "",
-////            "source_of_income": "SLRY",
-////            "purpose_of_txn": "SAVG",
-////            "instrument": receiverData.chooseInstrument?.uppercased() ?? "",
-////            "message": "Agency transaction",
-////            "sender": senderDetails,
-////            "receiver": receiverDetails,
-////            "transaction": transactionDetails
-////        ]
-//        let requestBody = TransactionRequest(
-//            type: UserManager.shared.gettransferType?.rawValue ?? "",
-//            source_of_income: "SLRY",
-//            purpose_of_txn: "SAVG",
-//            instrument: receiverData.chooseInstrument?.uppercased() ?? "",
-//            message: "Agency transaction",
-//            sender: Sender(customer_number: "7841001220007002"),
-//            receiver: Receiver(
-//                mobile_number: receiverData.phoneNumber ?? "",
-//                first_name: receiverData.firstName ?? "",
-//                last_name: receiverData.lastName ?? "",
-//                nationality: receiverData.country_code ?? "",
-//                relation_code: "32",
-//                bank_details: BankDetails(
-//                    account_type_code: "1",
-//                    iso_code: "ALFHPKKA068",
-//                    iban: "PK12ABCD1234567891234567"
-//                )
-//            ),
-//            transaction: Transaction(
-//                quote_id: getQuote?.quote_id ?? "",
-//                agent_transaction_ref_number: getQuote?.quote_id ?? ""
-//            )
-//        )
-//        print("requestBody: ", requestBody)
-//        var request = URLRequest(url: url)
-//        request.httpMethod = "POST"
-//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//        request.addValue("Direct", forHTTPHeaderField: "channel")
-//        request.addValue("784825", forHTTPHeaderField: "company")
-//        request.addValue("784826", forHTTPHeaderField: "branch")
-//        request.addValue("Bearer \(UserManager.shared.loginModel?.access_token ?? "")", forHTTPHeaderField: "Authorization")
-//        
-//        do {
-//            request.httpBody = try JSONEncoder().encode(requestBody)
-//        } catch {
-//            print("Failed to encode request body: \(error)")
-//            return
-//        }
-//        
-//        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-//            if let error = error {
-//                print("Error: \(error.localizedDescription)")
-//                return
-//            }
-//            
-//            if let httpResponse = response as? HTTPURLResponse {
-//                print("HTTP Response Status: \(httpResponse.statusCode)")
-//            }
-//            
-//            if let data = data {
-//                let responseString = String(data: data, encoding: .utf8)
-//                print("Response Data: \(responseString ?? "No Data")")
-//            }
-//        }
-//        
-//        task.resume()
-//    }
+
     func generateUniqueId() -> String {
         return UUID().uuidString // Using UUID to generate a unique ID
     }
@@ -195,7 +96,6 @@ class PaymentDetailsViewController: UIViewController {
             print("Invalid ReceiverData or missing input values.")
             return
         }
-        print("ReceiverData-",receiverData)
         
         var bankDetails: BankDetails?
         var mobileWalletDetails: MobileWalletDetails?
@@ -213,17 +113,6 @@ class PaymentDetailsViewController: UIViewController {
             
         }
 
-        // Uncomment and fill in details for mobile wallet or cash pickup if necessary
-        /*
-        if receiverData.receiveMode.contains("MOBILEWALLET") {
-            mobileWalletDetails = MobileWalletDetails(
-                walletId: receiverData.walletId ?? "",
-                correspondent: receiverData.correspondent ?? "",
-                bankId: receiverData.bankId ?? "",
-                branchId: receiverData.branchId ?? ""
-            )
-        } */
-
         if let receiveMode = receiverData.receiveMode, receiveMode.contains("CASHPICKUP") {
             let correspondent = UserManager.shared.getServiceCorridorData?.first?.corridor_currencies?.first?.correspondent ?? ""
 
@@ -234,11 +123,8 @@ class PaymentDetailsViewController: UIViewController {
             )
         }
         
-
-        
         let senderDetails = Sender(customerNumber: "7841001220007002", agentCustomerNumber: "AGENT" + generateUniqueId())
-
-
+        
         let receiverDetails = Receiver(
             mobileNumber: receiverData.phoneNumber ?? "",
             firstName: receiverData.firstName ?? "",
@@ -663,12 +549,6 @@ extension PaymentDetailsViewController: UITableViewDelegate, UITableViewDataSour
                     
                     if keyIndex < keys.count {
                         let key = keys[keyIndex]
-                        //    let type: String?
-//                        let model: String?
-//                        let amount: Double?
-//                        let description: String?
-//                        let currency_code: String?
-
                         switch key {
                         case "type":
                             cell.lblTitle.text = "Type"
@@ -800,89 +680,5 @@ extension PaymentDetailsViewController: UITableViewDelegate, UITableViewDataSour
         }
         
     }
-    
 }
 
-
-//        let transactionRequest = CreateTransactionRequest(
-//            type: UserManager.shared.gettransferType?.rawValue ?? "",
-//            sourceOfIncome: "SLRY",
-//            purposeOfTxn: "SAVG",
-//            instrument: receiverData.chooseInstrument?.uppercased(),
-//            message: UserManager.shared.getReferenceText ?? "",
-//            sender: Sender(customerNumber: "1000001220000001", agentCustomerNumber: ""),
-//            receiver: Receiver(
-//                mobileNumber: receiverData.phoneNumber,
-//                firstName: receiverData.firstName,
-//                lastName: receiverData.lastName,
-//                nationality: receiverData.country_code,
-//                bankDetails: bankDetails,
-//                mobileWalletDetails: mobileWalletDetails,
-//                cashPickupDetails: cashPickupDetails
-//            ),
-//            transaction: Transaction(
-//                quoteId: getQuote?.quote_id ?? "",
-//                agentTransactionRefNumber: getQuote?.quote_id ?? ""
-//            )
-//        )
-//        let transactionRequest: [String: Any] = [
-//            "type": UserManager.shared.gettransferType?.rawValue ?? "",
-//            "source_of_income": "SLRY",
-//            "purpose_of_txn": "SAVG",
-//            "instrument": receiverData.chooseInstrument?.uppercased() ?? "",
-//            "message": UserManager.shared.getReferenceText ?? "",
-//            "sender": [
-//                "customer_number": "1000001220000001"
-//            ],
-//            "receiver": [
-//                "mobile_number": receiverData.phoneNumber ?? "",
-//                "first_name": receiverData.firstName ?? "",
-//                "last_name": receiverData.lastName ?? "",
-//                "nationality": receiverData.country_code ?? "",
-//                "relation_code": "32",
-//                "bank_details": [
-//                    "account_type_code": bankDetails?.accountTypeCode ?? "",
-//                    "iso_code": bankDetails?.isoCode ?? "",
-//                    "iban": bankDetails?.iban
-//                ]
-//            ],
-//            "transaction": [
-//                "quote_id": getQuote?.quote_id ?? "",
-//                "agent_transaction_ref_number" : getQuote?.quote_id ?? ""
-//            ]
-//        ]
-
-//struct Sender: Codable {
-//    let customer_number: String
-//}
-//
-//struct BankDetails: Codable {
-//    let account_type_code: String
-//    let iso_code: String
-//    let iban: String
-//}
-//
-//struct Receiver: Codable {
-//    let mobile_number: String
-//    let first_name: String
-//    let last_name: String
-//    let nationality: String
-//    let relation_code: String
-//    let bank_details: BankDetails
-//}
-//
-//struct Transaction: Codable {
-//    let quote_id: String
-//    let agent_transaction_ref_number: String
-//}
-//
-//struct TransactionRequest: Codable {
-//    let type: String
-//    let source_of_income: String
-//    let purpose_of_txn: String
-//    let instrument: String
-//    let message: String
-//    let sender: Sender
-//    let receiver: Receiver
-//    let transaction: Transaction
-//}

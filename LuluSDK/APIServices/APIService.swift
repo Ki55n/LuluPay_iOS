@@ -246,7 +246,6 @@ public class APIService {
                     urlComponents?.queryItems = queryItems
                     
                     if let finalURL = urlComponents?.url {
-                        print("Final url-",finalURL)
                         request.url = finalURL
                     } else {
                         completion(.failure(NSError(domain: "Invalid URL", code: 400, userInfo: nil)))

@@ -151,8 +151,6 @@ class RequestAuthorizationViewController: UIViewController, UITableViewDataSourc
         return UITableView.automaticDimension
     }
     @objc func moveToForgotPin(){
-//        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "RequestSuccessViewController") as! RequestSuccessViewController
-//        navigationController?.pushViewController(vc, animated: true)
 
     }
 

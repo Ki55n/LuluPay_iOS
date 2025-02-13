@@ -92,7 +92,6 @@ class SendMoneyViewController: UIViewController {
         let dispatchGroup = DispatchGroup()
         
         dispatchGroup.enter()
-        print("Instrument Api call started....")
         getInstruments {
             
             dispatchGroup.leave()
@@ -176,23 +175,6 @@ class SendMoneyViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    //    @objc func dismissPicker() {
-    //        if countryField?.isFirstResponder == true  {
-    //            // Resign first responder and update text before reloading row
-    //            countryField?.resignFirstResponder()
-    //            // Slight delay to allow the picker dismissal to complete
-    ////            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-    ////                self.tableView.reloadRows(at: [IndexPath(row: 5, section: 0)], with: .automatic)
-    ////            }
-    //        } else if receiveModeField?.isFirstResponder == true {
-    //            // Resign first responder and update text before reloading row
-    //            receiveModeField?.resignFirstResponder()
-    //            // Slight delay to allow the picker dismissal to complete
-    ////            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-    ////                self.tableView.reloadRows(at: [IndexPath(row: 6, section: 0)], with: .automatic)
-    ////            }
-    //        }
-    //    }
     func isPhoneNumberValid(for country: String, phoneNumber: String) -> Bool {
         guard let pattern = countryPhonePatterns[country] else { return false }
         let regex = try? NSRegularExpression(pattern: pattern)
@@ -231,7 +213,7 @@ class SendMoneyViewController: UIViewController {
             showToast(message: "Routing code is required!")
         }
         else{
-            let url1 = UserManager.shared.setBaseURL+"/raas/masters/v1/accounts/validation"//?receiving_country_code=PK&receiving_mode=BANK&first_name=first name&middle_name=middle name&last_name=last name&iso_code=ALFHPKKA068&iban=PK12ABCD1234567891234567"
+            let url1 = UserManager.shared.setBaseURL+"/raas/masters/v1/accounts/validation"
             var params = [String:String?]()
             let receiverdata = UserManager.shared.getReceiverData
             if receiverdata?.receiveMode == "Bank"{
@@ -249,20 +231,13 @@ class SendMoneyViewController: UIViewController {
                 }else{
                     // For countries that accept isocode(Bic/Swift Code) and account number
                     params = ["first_name":receiverDetails.firstName,"last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased().trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""),"iso_code":receiverDetails.swiftCode,"account_number":receiverDetails.accountNumber]
-                    
                 }
             }else{
-                // For receiving mode with Cash pickup or Mobile wallet
-                
                 params = ["first_name":receiverDetails.firstName,"last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased().trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""),"iso_code":receiverDetails.swiftCode]
                 
             }
-            //            let params = ["first_name":receiverDetails.firstName,"last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased(),"iso_code":receiverDetails.swiftCode,"iban":receiverDetails.iban,"route_code":receiverDetails.routingCode,"account_number":receiverDetails.accountNumber,"account_type":receiverDetails.accountType?.uppercased()]
+           
             let filteredParams = params.compactMapValues { $0?.isEmpty == true ? nil : $0 }
-            
-            print(params)
-            //            let receiverDetails = ReceiverDetails(firstName: receiverDetails.firstName,middleName: receiverDetails.middleName,lastName: receiverDetails.lastName,phoneNumber: receiverDetails.phoneNumber,country: receiverDetails.country,country_code: receiverDetails.country_code,receiveMode: receiverDetails.receiveMode, accountType: receiverDetails.accountType, swiftCode: receiverDetails.swiftCode, iban: receiverDetails.iban, routingCode: receiverDetails.routingCode, accountNumber: receiverDetails.accountNumber,chooseInstrument: receiverDetails.chooseInstrument)
-            
             let headers1:[String:String]? = [
                 "Content-Type": "application/json",
                 "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
@@ -286,46 +261,14 @@ class SendMoneyViewController: UIViewController {
                 }
             }
         }
-        /*
-         
-         
-         
-         let headers1:HTTPHeaders = [
-         //                            "Content-Type": "application/x-www-form-urlencoded",
-         "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
-         
-         ]
-         LoadingIndicatorManager.shared.showLoading(on: self.view)
-         APIService.shared.makeAlamofireRequest(url: url1, parameters: receiverDetails,headers: headers1,encoding: URLEncoding.queryString) { result in
-         switch result {
-         case .success(let data):
-         if let responseString = String(data: data, encoding: .utf8) {
-         UserManager.shared.getReceiverData = self.receiverDetails
-         guard let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "SendReqMoneyViewController") as? SendReqMoneyViewController else { return }
-         vc.hidesBottomBarWhenPushed = true
-         self.navigationController?.pushViewController(vc, animated: true)
-         print("Response: \(responseString)")
-         }
-         case .failure(let error):
-         print("Error: \(error.localizedDescription)")
-         }
-         }
-         
-         }
-         
-         */
-        
     }
     func getReceivingModes(completion: @escaping () -> Void){
         let url1 = UserManager.shared.setBaseURL+"/raas/masters/v1/codes"
         var params = [String:String?]()
         
-        
         params = ["code":"RECEIVING_MODES","service_type":"C2C"]
         let filteredParams = params.compactMapValues { $0?.isEmpty == true ? nil : $0 }
-        
-        print(params)
-        //            let receiverDetails = ReceiverDetails(firstName: receiverDetails.firstName,middleName: receiverDetails.middleName,lastName: receiverDetails.lastName,phoneNumber: receiverDetails.phoneNumber,country: receiverDetails.country,country_code: receiverDetails.country_code,receiveMode: receiverDetails.receiveMode, accountType: receiverDetails.accountType, swiftCode: receiverDetails.swiftCode, iban: receiverDetails.iban, routingCode: receiverDetails.routingCode, accountNumber: receiverDetails.accountNumber,chooseInstrument: receiverDetails.chooseInstrument)
+    
         
         let headers1:[String:String]? = [
             "Content-Type": "application/json",
@@ -338,12 +281,9 @@ class SendMoneyViewController: UIViewController {
             
             switch result {
             case .success(let data):
-                if let responseString = String(data: data, encoding: .utf8) {
                     do {
                         // Parse the JSON response
                         let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-                        print("JsonObject:", jsonObject ?? "nil")
-                        
                         // Check if status is "success"
                         if let status = jsonObject?["status"] as? String, status == "success" {
                             // Access the data key
@@ -375,7 +315,6 @@ class SendMoneyViewController: UIViewController {
                     } catch {
                         print("Error during JSON serialization: \(error)")
                     }
-                }
             case .failure(let error):
                 print("Error: \(error.localizedDescription)")
             }
@@ -388,14 +327,9 @@ class SendMoneyViewController: UIViewController {
         var params = [String:String?]()
         params = ["code":"INSTRUMENTS","service_type":"C2C"]
         let filteredParams = params.compactMapValues { $0?.isEmpty == true ? nil : $0 }
-        
-        print(params)
-        //            let receiverDetails = ReceiverDetails(firstName: receiverDetails.firstName,middleName: receiverDetails.middleName,lastName: receiverDetails.lastName,phoneNumber: receiverDetails.phoneNumber,country: receiverDetails.country,country_code: receiverDetails.country_code,receiveMode: receiverDetails.receiveMode, accountType: receiverDetails.accountType, swiftCode: receiverDetails.swiftCode, iban: receiverDetails.iban, routingCode: receiverDetails.routingCode, accountNumber: receiverDetails.accountNumber,chooseInstrument: receiverDetails.chooseInstrument)
-        
         let headers1:[String:String]? = [
             "Content-Type": "application/json",
             "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
-            
         ]
         LoadingIndicatorManager.shared.showLoading(on: self.view)
         APIService.shared.requestParamasCodable(url: url1, method: .get, parameters: filteredParams, headers: headers1) { result in
@@ -421,7 +355,6 @@ class SendMoneyViewController: UIViewController {
                                     do {
                                         let jsonData = try JSONSerialization.data(withJSONObject: receivingModesData)
                                         let decodedList = try JSONDecoder().decode([Instruments].self, from: jsonData)
-                                        print("Decoded Receiving Modes: \(decodedList)")
                                         self.instrumentList = decodedList
                                         // Here you can update the UI or handle the decoded data
                                         
@@ -506,19 +439,6 @@ class SendMoneyViewController: UIViewController {
         
     }
     
-    //    private func configurePicker(for textField: UITextField?, picker: UIPickerView?, data: [String]) {
-    //        guard let textField = textField, let picker = picker else { return }
-    //        picker.delegate = self
-    //           picker.dataSource = self
-    //           picker.tag = textField.tag
-    //           textField.inputView = picker
-    //
-    //           let toolbar = UIToolbar()
-    //           toolbar.sizeToFit()
-    //           let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissPicker))
-    //           toolbar.setItems([UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), doneButton], animated: true)
-    //           textField.inputAccessoryView = toolbar
-    //       }
     private func configureCountryPicker() {
         guard let countryField = countryField else { return }
         
@@ -646,11 +566,6 @@ class SendMoneyViewController: UIViewController {
             showAccountType = (selectedReceiveModeValue == "BANK")
             
         }
-        
-        //        tableView.reloadRows(at: [IndexPath(row: 7, section: 0)], with: .automatic)
-        //        let sectionIndex = 0 // Replace with the target section number
-        //        tableView.reloadSections(IndexSet(integer: sectionIndex), with: .automatic)
-        
     }
     
 }

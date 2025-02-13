@@ -115,25 +115,16 @@ class RequestSuccessViewController: UIViewController {
 
     // MARK: - Button Actions
     @objc private func goToCardsTapped() {
-        print("Go to Cards tapped")
         if let targetViewController = navigationController?.viewControllers.first(where: { $0 is CardsMangementViewController }) {
             navigationController?.popToViewController(targetViewController, animated: true)
         }
     }
 
     @objc private func goHomeTapped() {
-        print("Go Home tapped")
-//        if let targetViewController = navigationController?.viewControllers.first(where: { $0 is CardsMangementViewController }) {
-//            navigationController?.popToViewController(targetViewController, animated: true)
-//        }   
         // Access the parent UITabBarController
         if let tabBarController = self.tabBarController {
             // Switch to Tab 0
             tabBarController.selectedIndex = 0
         }
-
     }
-
-    
-
 }

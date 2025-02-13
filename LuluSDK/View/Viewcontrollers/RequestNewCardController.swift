@@ -65,10 +65,6 @@ class RequestNewCardController: UIViewController,UITableViewDelegate,UITableView
             }
         }
         
-
-        
-       
-        
         tblList.bounces = false
         // Add the custom background view to the table view
         tblList.backgroundColor = .clear
@@ -178,7 +174,6 @@ class RequestNewCardController: UIViewController,UITableViewDelegate,UITableView
     }
 
     @objc func submitButtonTapped() {
-        print("Submit button tapped")
         // Handle form submission
         let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "RequestAuthorizationViewController") as! RequestAuthorizationViewController
         vc.hidesBottomBarWhenPushed = true

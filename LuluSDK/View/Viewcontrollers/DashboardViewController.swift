@@ -20,7 +20,7 @@ class DashboardViewController: UIViewController {
         if let bundle = Bundle(identifier: "com.finance.LuluSDK") {
             // Register custom cells
             tableView.register(UINib(nibName: "HeaderViewCell", bundle: bundle), forCellReuseIdentifier: "cellHeader")
-            tableView.register(UINib(nibName: "ExchangeRateCell", bundle: bundle), forCellReuseIdentifier: "rateExchange")
+//            tableView.register(UINib(nibName: "ExchangeRateCell", bundle: bundle), forCellReuseIdentifier: "rateExchange")
             tableView.register(UINib(nibName: "TransferCell", bundle: bundle), forCellReuseIdentifier: "cellTransfer")
             tableView.register(UINib(nibName: "RecentTransactionCell", bundle: bundle), forCellReuseIdentifier: "cellTransaction")
 
@@ -51,11 +51,8 @@ class DashboardViewController: UIViewController {
             
             switch result {
             case .success(let data):
-                // Successfully received the data
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("Response: \(responseString)")
-                }
                 
+                // Successfully received the data
                 DispatchQueue.main.async {
                     do {
                         let jsonDecoder = JSONDecoder()
@@ -77,14 +74,8 @@ class DashboardViewController: UIViewController {
                             self.exchangeRates = []
                         }
                         
-                        // Debugging the updated exchange rates
-                        print("Updated Exchange Rates: ", self.exchangeRates)
-                        
                         // Reload the table view with updated data
                         self.tableView.reloadData()
-
-                        // Debugging UserManager's updated rates data
-                        print("UserManager.shared.getRatesData: ", UserManager.shared.getRatesData ?? nil)
                     } catch {
                         print("Failed to decode JSON: \(error.localizedDescription)")
                     }
@@ -146,29 +137,25 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
             cell.viewTransfer.addGestureRecognizer(tapGesture)
             return cell
 
-        case 2:
-            if indexPath.row == 0 {
-                let titleCell = tableView.dequeueReusableCell(withIdentifier: "cellTitle", for: indexPath) as! TitleCell
-                titleCell.lblTitle.text = "Exchange Rates"
-                return titleCell
-            } else if indexPath.row < exchangeRates.count {
-                let rateCell = tableView.dequeueReusableCell(withIdentifier: "rateExchange", for: indexPath) as! ExchangeRateCell
-                let rate = exchangeRates[indexPath.row]
-                if indexPath.row == 1{
-                    rateCell.viewHeader.isHidden = false
-                }else{
-                    rateCell.viewHeader.isHidden = true
-                }
-//                rateCell.flagImageView.image = UIImage(named: rate.flag)
-//                rateCell.currencyLabel.text = rate.currency
-//                rateCell.buyRateLabel.text = rate.buy
-//                rateCell.sellRateLabel.text = rate.sell
-                return rateCell
-            } else {
-                return UITableViewCell() // Fallback for unexpected rows
-            }
+//        case 2:
+//            if indexPath.row == 0 {
+//                let titleCell = tableView.dequeueReusableCell(withIdentifier: "cellTitle", for: indexPath) as! TitleCell
+//                titleCell.lblTitle.text = "Exchange Rates"
+//                return titleCell
+//            } else if indexPath.row < exchangeRates.count {
+//                let rateCell = tableView.dequeueReusableCell(withIdentifier: "rateExchange", for: indexPath) as! ExchangeRateCell
+//                let rate = exchangeRates[indexPath.row]
+//                if indexPath.row == 1{
+//                    rateCell.viewHeader.isHidden = false
+//                }else{
+//                    rateCell.viewHeader.isHidden = true
+//                }
+//                return rateCell
+//            } else {
+//                return UITableViewCell() // Fallback for unexpected rows
+//            }
 
-        case 3:
+        case 2:
             if indexPath.row == 0 {
                 let titleCell = tableView.dequeueReusableCell(withIdentifier: "cellTitle", for: indexPath) as! TitleCell
                 titleCell.lblTitle.text = "Recent Transactions"
@@ -195,15 +182,15 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
             return 60
         case 1:
             return 110
+//        case 2:
+//            if indexPath.row == 0{
+//               return 40
+//            }else if indexPath.row == 1{
+//                return 60
+//            }else{
+//                return 30
+//            }
         case 2:
-            if indexPath.row == 0{
-               return 40
-            }else if indexPath.row == 1{
-                return 60
-            }else{
-                return 30
-            }
-        case 3:
             if indexPath.row == 0{
                return 40
             }else{
@@ -216,12 +203,7 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
     }
     @objc func handleViewTransferTap(_ sender: UITapGestureRecognizer) {
         guard let view = sender.view else { return }
-        
-        // Perform actions when viewTransfer is tapped
-        print("viewTransfer tapped: \(view)")
-        
         let url = UserManager.shared.setBaseURL+"/raas/masters/v1/codes?"
-
         let headers = [
             "Content-Type": "application/x-www-form-urlencoded",
             "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")"
@@ -234,7 +216,6 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
             switch result {
             case .success(let data):
                 if let responseString = String(data: data, encoding: .utf8) {
-                    print("Response: \(responseString)")
                     DispatchQueue.main.async {
                         let jsonDecoder = JSONDecoder()
                         self.getCodeInfo = try? jsonDecoder.decode(GetCodesModel.self, from: data)
@@ -254,12 +235,10 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
                             switch result {
                             case .success(let data):
                                 if let responseString = String(data: data, encoding: .utf8) {
-                                    print("Response: \(responseString)")
                                     DispatchQueue.main.async {
                                         let jsonDecoder = JSONDecoder()
                                         self.getServiceCorriderInfo = try? jsonDecoder.decode(ServiceCorriderModel.self, from: data)
                                         UserManager.shared.getServiceCorridorData = self.getServiceCorriderInfo?.data
-                                        print("UserManager.shared.getServiceCorridorData: ", UserManager.shared.getServiceCorridorData ?? [])
                                         let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "TransferMoneyViewController") as! TransferMoneyViewController
                                         self.navigationController?.pushViewController(vc, animated: true)
                                     }
@@ -275,13 +254,6 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
                 print("Error: \(error.localizedDescription)")
             }
         }
-        
-        
-
-        // Example: Navigate to another screen
-        // navigationController?.pushViewController(NextViewController(), animated: true)
-        
-        
     }
 
 }

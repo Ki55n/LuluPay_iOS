@@ -27,7 +27,6 @@ class SendReqMoneyViewController: UIViewController {
             tableView.register(UINib(nibName: "ProfileTCell", bundle: bundle), forCellReuseIdentifier: "profileCell")
             tableView.register(UINib(nibName: "TitleCell", bundle: bundle), forCellReuseIdentifier: "cellTitle")
 
-//            tableView.regiLuluSDK.frameworkster(UINib(nibName: "ReferenceCell", bundle: bundle), forCellReuseIdentifier: "cellReference")
 
             if let headerView = bundle.loadNibNamed("CustomHeaderView", owner: self, options: nil)?.first as? CustomHeaderView {
 
@@ -56,13 +55,6 @@ class SendReqMoneyViewController: UIViewController {
                 
             }
             
-//            if let footerView = UINib(nibName: "ReferenceCell", bundle: bundle).instantiate(withOwner: self, options: nil).first as? ReferenceCell {
-//                footerView.txtFieldRef.setLeftPadding(10)
-//                footerView = footerView
-//                footerView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 60)
-//                tableView.tableFooterView = footerView
-//            }
-
         }
         
         
@@ -147,9 +139,7 @@ class SendReqMoneyViewController: UIViewController {
         
         // Payment mode options
         let agencyPaymentAction = UIAlertAction(title: "Agency Payment", style: .default) { _ in
-            print("Agency Payment selected")
             // Perform related tasks here
-            
             self.createQuoteID()
         }
         
@@ -185,10 +175,6 @@ class SendReqMoneyViewController: UIViewController {
     @objc func moveBack(){
         self.navigationController?.popViewController(animated: true)
     }
-
-
-   
-
 }
 extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -202,9 +188,7 @@ extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource
         default:
             return 0
         }
-        
-        
-        
+ 
     }
     func getRates() {
         
@@ -221,14 +205,12 @@ extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource
             switch result {
             case .success(let data):
                 if let responseString = String(data: data, encoding: .utf8) {
-                    print("Response: \(responseString)")
                     DispatchQueue.main.async {
                         let jsonDecoder = JSONDecoder()
                         let decodedData = try? jsonDecoder.decode(RatesModel.self, from: data)
                         self.getCurrentRateInfo = decodedData?.data?.rates ?? []
                         UserManager.shared.getCurrentRate = self.getCurrentRateInfo
                         self.ReceiverData = UserManager.shared.getReceiverData
-                        print("UserManager.shared.getCodesData: ", UserManager.shared.getCodesData ?? nil)
                         for i in self.getCurrentRateInfo{
                             if i.to_country_name == self.ReceiverData?.country{
                                 self.currentRate = i
@@ -256,13 +238,8 @@ extension SendReqMoneyViewController: UITableViewDelegate, UITableViewDataSource
         let headers = [
                 "Content-Type": "application/json",
                 "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")",
-//                "sender": "testagentae",
-//                "channel": "Direct",
-//                "company": "784825",
-//                "branch": "784826"
             ]
         let detail = UserManager.shared.getReceiverData
-//        let filteredText:String = txtFieldAmount?.text?.filter { $0.isNumber } ?? "0"
         var requestBody = [String: String]()
 
         if let countryCode = ReceiverData?.country_code,
@@ -449,7 +426,6 @@ let correspondent = UserManager.shared.getServiceCorridorData?.first?.corridor_c
                 }
 
             }
-            print("Payload: \(requestBody)")
         } else {
             print("Invalid ReceiverData or missing input values.")
         }
@@ -461,10 +437,6 @@ let correspondent = UserManager.shared.getServiceCorridorData?.first?.corridor_c
             
             switch result {
             case .success(let data):
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("Response: \(responseString)")
-                }
-                
                 DispatchQueue.main.async {
                     let jsonDecoder = JSONDecoder()
                     
@@ -497,14 +469,6 @@ let correspondent = UserManager.shared.getServiceCorridorData?.first?.corridor_c
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "cellTitle", for: indexPath) as? TitleCell else {
                 fatalError("Unable to dequeue HeaderViewCell with identifier 'cellHeader'")
             }
-//            if let arrRate = UserManager.shared.getCurrentRate{
-//                
-//                for i in arrRate{
-//                    if i.toCountry == "PK"{
-//                        cell.lblTitle.text = "Current Exchange Rate \n1 AED = \(i.rate)"
-//                    }
-//                }
-//            }
             let rate:String = String(currentRate?.rate ?? 0.0)
             cell.lblTitle.text = "Current Exchange Rate \n1 AED = \(rate)"
             cell.lblTitle.numberOfLines = 0
@@ -521,7 +485,6 @@ let correspondent = UserManager.shared.getServiceCorridorData?.first?.corridor_c
             let middleName = self.ReceiverData?.middleName ?? ""
             let lastName = self.ReceiverData?.lastName ?? ""
             let accountType = self.ReceiverData?.accountType ?? ""
-            print(accountType,ReceiverData?.accountType)
             let title = "\(firstName) \(middleName) \(lastName)".trimmingCharacters(in: .whitespaces)
             let subtitle = "from \(accountType)".trimmingCharacters(in: .whitespaces)
 

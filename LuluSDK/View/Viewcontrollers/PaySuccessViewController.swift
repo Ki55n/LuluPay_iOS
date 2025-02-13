@@ -27,8 +27,6 @@ class PaySuccessViewController: UIViewController {
                 } else {
                     headerView.viewMain.backgroundColor = .cyan// Fallback color if custom color isn't found
                 }
-
-                
                 tableView.tableHeaderView = headerView
                 
                 let backgroundView = UIView()
@@ -45,8 +43,6 @@ class PaySuccessViewController: UIViewController {
             
         }
         
-        
-        
         tableView.bounces = false
         // Add the custom background view to the table view
         tableView.backgroundColor = .clear
@@ -57,8 +53,6 @@ class PaySuccessViewController: UIViewController {
         tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 0
         tableView.contentInset = .zero
-
-
 
     }
     

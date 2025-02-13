@@ -111,26 +111,11 @@ class ProfileViewController: UIViewController,UITableViewDelegate, UITableViewDa
         }
 
     }
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        
-//        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tblList.frame.width, height: 60))
-//        headerView.backgroundColor = UIColor.white
-////        if section == 0{
-////            let cornerRadius: CGFloat = 30
-////            headerView.layer.cornerRadius = cornerRadius
-////            headerView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-////            headerView.layer.masksToBounds = true
-////        }
-//        return headerView
-//    }
-//    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0{
             return 100
         }
         return 40
     }
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        return 60
-//    }
+
 }

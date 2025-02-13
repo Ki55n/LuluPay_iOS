@@ -157,10 +157,8 @@ class ContactListViewController: UIViewController {
     }
 
     @objc func handleSubmit() {
-        print("Submit button pressed")
         dismissOverlayView()
     }
-
 }
 
 extension ContactListViewController: UITableViewDelegate, UITableViewDataSource {
@@ -174,7 +172,7 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource 
             return 1
         case 1:
             let listCount = isSearching ? filteredRelationships.count : relationships.count
-            return 1 + listCount
+            return 0
         case 2:
             return 1
         default:

@@ -101,22 +101,6 @@ class ShareReceiptViewController: UIViewController {
             
             switch result {
             case .success(let data):
-//                if let responseString = String(data: data, encoding: .utf8) {
-//                    print("Response: \(responseString)")
-//                    
-//                    DispatchQueue.main.async {
-//                        let fileName = "Receipt"
-//                        if let fileURL = self.savePDFToFile(pdfData: data, fileName: "\(fileName).pdf") {
-//                            let pdfViewer = PDFViewer(url: fileURL)
-//                            let hostingController = UIHostingController(rootView: pdfViewer)
-//                            if let topController = self.topViewController() {
-//                                topController.present(hostingController, animated: true, completion: nil)
-//                            } else {
-//                                print("Failed to find an active top view controller")
-//                            }
-//                        }
-//                    }
-//                }
                 do {
                     // Decode JSON response
                     if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
@@ -146,10 +130,6 @@ class ShareReceiptViewController: UIViewController {
                 print("Error: \(error.localizedDescription)")
             }
         }
-        
-        //        let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "RequestNewCardController") as! RequestNewCardController
-        //        vc.hidesBottomBarWhenPushed = true
-        //        navigationController?.popToRootViewController(animated: true) 
     }
 
     func topViewController() -> UIViewController? {
@@ -310,7 +290,7 @@ extension ShareReceiptViewController: UITableViewDelegate, UITableViewDataSource
                         cell.lblTitle.text = "Processing Fee"
                         if let feeDetails = UserManager.shared.getQuotesData?.fee_details {
                             if let commissionDetail = feeDetails.first(where: { $0.type as? String == "TAX" }) {
-                                if let amount = commissionDetail.amount as? Double {
+                                if let amount = commissionDetail.amount {
                                     print("Tax amount: \(amount)")
                                     cell.lblValue.text = String(amount)
 
