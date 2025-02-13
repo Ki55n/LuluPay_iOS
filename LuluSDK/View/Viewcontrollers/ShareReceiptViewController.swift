@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import SwiftUI
+import PDFKit
 
 class ShareReceiptViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
@@ -70,13 +72,68 @@ class ShareReceiptViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     @objc func Submit(){
-        let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "RequestNewCardController") as! RequestNewCardController
-        vc.hidesBottomBarWhenPushed = true
-        navigationController?.popToRootViewController(animated: true)
+        let url = "https://drap-sandbox.digitnine.com/api/v1_0/ras/transaction-receipt"
+
+        let headers = [
+            "Content-Type": "application/json",
+            "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")",
+            "sender": UserManager.shared.getLoginUserData?["username"] ?? "",
+            "channel": "Direct",
+            "company": "784825",
+            "branch": "784826"
+        ]
+
+        let parameters: [String: Any] = [
+            "transaction_ref_number": UserManager.shared.getTransactionalData?.transaction_ref_number ?? "",
+        ]
+        LoadingIndicatorManager.shared.showLoading(on: self.view)
+
+        APIService.shared.newRequestPdfData(url: url, method: "GET", parameters: parameters, headers: headers) { result in
+            LoadingIndicatorManager.shared.hideLoading(on: self.view)
+            switch result {
+            case .success(let data):
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("Response: \(responseString)")
+                    DispatchQueue.main.async {
+                        // Patientname_YYYY_MM_DD T HH:MM:SS
+                        let fileName = "Receipt"
+                        if let fileURL = self.savePDFToFile(pdfData: data, fileName: "\(fileName).pdf") {
+                            //                                                                shareAndDownloadPDF(pdfData: pdfData, fileName: "\(fileName).pdf")
+                            let pdfViewer = PDFViewer(url: fileURL)
+                            let hostingController = UIHostingController(rootView: pdfViewer)
+                            if let windowScene = UIApplication.shared.connectedScenes
+                                .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene,
+                               let rootViewController = windowScene.windows.first?.rootViewController {
+                                rootViewController.present(hostingController, animated: true, completion: nil)
+                            } else {
+                                print("Failed to find an active UIWindowScene or rootViewController")
+                            }
+                        }
+                    }
+                }
+            case .failure(let error):
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+//        let vc = MyStoryboardLoader.getStoryboard(name: "Lulu")?.instantiateViewController(withIdentifier: "RequestNewCardController") as! RequestNewCardController
+//        vc.hidesBottomBarWhenPushed = true
+//        navigationController?.popToRootViewController(animated: true)
 
     }
 
-
+    func savePDFToFile(pdfData: Data, fileName: String) -> URL? {
+        do {
+            if let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+                let fileURL = documentDirectory.appendingPathComponent(fileName)
+                try pdfData.write(to: fileURL)
+                print("PDF saved to: \(fileURL)")
+                return fileURL
+            }
+        } catch {
+            print("Error saving PDF: \(error.localizedDescription)")
+        }
+        return nil
+    }
    
 
 }
@@ -207,4 +264,59 @@ extension ShareReceiptViewController: UITableViewDelegate, UITableViewDataSource
         
     }
     
+}
+
+struct PDFViewer: View {
+    let url: URL
+    
+    var body: some View {
+        VStack {
+            if let pdfDocument = PDFDocument(url: url) {
+                PDFKitView(pdfDocument: pdfDocument)
+            } else {
+                Text("Failed to load PDF")
+            }
+            
+            HStack {
+                Button(action: {
+                    sharePDF()
+                }) {
+                    Image(systemName: "square.and.arrow.up")
+                        .frame(width: 24, height: 24)
+                }
+                .padding()
+            }
+        }
+    }
+    
+    private func sharePDF() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+            if let viewController = UIApplication.shared.windows.first?.rootViewController?.presentedViewController {
+                viewController.present(activityViewController, animated: true, completion: nil)
+            } else if let viewController = UIApplication.shared.windows.first?.rootViewController {
+                viewController.present(activityViewController, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    private func downloadPDF() {
+        // PDF is already saved to url when this function is called
+        print("PDF saved to: \(url)")
+    }
+}
+
+struct PDFKitView: UIViewRepresentable {
+    let pdfDocument: PDFDocument
+    
+    func makeUIView(context: Context) -> PDFView {
+        let pdfView = PDFView()
+        pdfView.document = pdfDocument
+        pdfView.autoScales = true
+        return pdfView
+    }
+    
+    func updateUIView(_ uiView: PDFView, context: Context) {
+        // No update necessary
+    }
 }
