@@ -86,7 +86,7 @@ class ShareReceiptViewController: UIViewController {
         let headers: [String: String] = [
             "Content-Type": "application/json",
             "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")",
-            "sender": UserManager.shared.getLoginUserData?["username"] ?? "testagentae",
+            "sender": SecureStorageManager.shared.retrieveFromKeychain(key: Constants.kUserName) ?? "",
             "channel": "Direct",
             "company": "784825",
             "branch": "784826"

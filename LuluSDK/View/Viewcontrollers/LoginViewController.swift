@@ -17,14 +17,82 @@ class LoginViewController: UIViewController {
         let isUserLoggedIn = UserDefaults.standard.bool(forKey: "isUserLoggedIn")
         if isUserLoggedIn {
             let url = "https://drap-sandbox.digitnine.com/auth/realms/cdp/protocol/openid-connect/token"
+            
+            let headers = [
+                "Content-Type": "application/x-www-form-urlencoded"
+            ]
+            
+            let parameters = [
+                "username": SecureStorageManager.shared.retrieveFromKeychain(key: Constants.kUserName),
+                "password": SecureStorageManager.shared.retrieveFromKeychain(key: Constants.kPassword),
+                "grant_type": "password",
+                "client_id": "cdp_app",
+                "client_secret": "mSh18BPiMZeQqFfOvWhgv8wzvnNVbj3Y"
+            ]
+            LoadingIndicatorManager.shared.showLoading(on: self.view)
+            
+            APIService.shared.request(url: url, method: .post, parameters: parameters, headers: headers) { result in
+                LoadingIndicatorManager.shared.hideLoading(on: self.view)
+                switch result {
+                case .success(let data):
+                    if let responseString = String(data: data, encoding: .utf8) {
+                        print("Response: \(responseString)")
+                        DispatchQueue.main.async {
+                            let jsonDecoder = JSONDecoder()
+                            self.loginInfo = try? jsonDecoder.decode(LoginModel.self, from: data)
+                            
+                            SecureStorageManager.shared.saveToKeychain(key: Constants.kUserName, value: self.usernameTF.text ?? "")
+                            SecureStorageManager.shared.saveToKeychain(key: Constants.kPassword, value: self.passwordTF.text ?? "")
+                            
+                            UserManager.shared.loginModel = self.loginInfo
+                            //                            let dic = ["username":"testagentae"]
+                            //                            UserManager.shared.getLoginUserData =                             SecureStorageManager.shared.saveToKeychain(key: Constants.kUserName, value: self.usernameTF.text ?? "")
+                            
+                            UserDefaults.standard.setValue(true, forKey: "isUserLoggedIn")
+                            //                        let parameters1 = [
+                            //
+                            //                            "receiving_country_code": "PK",
+                            //                            "receiving_mode": "BANK",
+                            //                            "first_name": "first name",
+                            //                            "middle_name": "middle name",
+                            //                            "last_name": "last name",
+                            //                            "iso_code": "ALFHPKKA068",
+                            //                            "iban": "PK12ABCD1234567891234567"
+                            //                        ]
+                            
+                            let storyboard = MyStoryboardLoader.getStoryboard(name: "Lulu")
+                            // Instantiate the initial view controller
+                            guard let tabbarVC = storyboard?.instantiateViewController(withIdentifier: "mainTabbar") as? UITabBarController else {
+                                fatalError("Could not instantiate initial view controller from MyStoryboard.")
+                            }
+                            self.navigationController?.navigationBar.isHidden = true
+                            self.navigationController?.pushViewController(tabbarVC, animated: true)
+                            
+                        }
+                        
+                    }
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
+                }
+            }
+        }
+        // Do any additional setup after loading the view.
+    }
+    
+    
+    @IBAction func loginBtnAction(_sender: UIButton) {
+        if usernameTF.text == "" || passwordTF.text == ""{
+            showToast(message: "Please enter username and password")
+        }else{
+            let url = UserManager.shared.setBaseURL+"/auth/realms/cdp/protocol/openid-connect/token"
 
             let headers = [
                 "Content-Type": "application/x-www-form-urlencoded"
             ]
 
             let parameters = [
-                "username": "testagentae",
-                "password": "Admin@123",
+                "username": usernameTF.text ?? "",
+                "password": passwordTF.text ?? "",
                 "grant_type": "password",
                 "client_id": "cdp_app",
                 "client_secret": "mSh18BPiMZeQqFfOvWhgv8wzvnNVbj3Y"
@@ -41,8 +109,11 @@ class LoginViewController: UIViewController {
                             let jsonDecoder = JSONDecoder()
                             self.loginInfo = try? jsonDecoder.decode(LoginModel.self, from: data)
                             UserManager.shared.loginModel = self.loginInfo
-                            let dic = ["username":"testagentae"]
-                            UserManager.shared.getLoginUserData = dic
+    //                        let dic = ["username":"testagentae"]
+    //                        UserManager.shared.getLoginUserData = dic
+                            SecureStorageManager.shared.saveToKeychain(key: Constants.kUserName, value: self.usernameTF.text ?? "")
+                            SecureStorageManager.shared.saveToKeychain(key: Constants.kPassword, value: self.passwordTF.text ?? "")
+
                             UserDefaults.standard.setValue(true, forKey: "isUserLoggedIn")
     //                        let parameters1 = [
     //
@@ -71,67 +142,9 @@ class LoginViewController: UIViewController {
                 }
             }
         }
-        // Do any additional setup after loading the view.
-    }
-    
 
-    @IBAction func loginBtnAction(_sender: UIButton) {
-        let url = UserManager.shared.setBaseURL+"/auth/realms/cdp/protocol/openid-connect/token"
+        
 
-        let headers = [
-            "Content-Type": "application/x-www-form-urlencoded"
-        ]
-
-        let parameters = [
-            "username": "testagentae",
-            "password": "Admin@123",
-            "grant_type": "password",
-            "client_id": "cdp_app",
-            "client_secret": "mSh18BPiMZeQqFfOvWhgv8wzvnNVbj3Y"
-        ]
-        LoadingIndicatorManager.shared.showLoading(on: self.view)
-
-        APIService.shared.request(url: url, method: .post, parameters: parameters, headers: headers) { result in
-            LoadingIndicatorManager.shared.hideLoading(on: self.view)
-            switch result {
-            case .success(let data):
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("Response: \(responseString)")
-                    DispatchQueue.main.async {
-                        let jsonDecoder = JSONDecoder()
-                        self.loginInfo = try? jsonDecoder.decode(LoginModel.self, from: data)
-                        UserManager.shared.loginModel = self.loginInfo
-                        let dic = ["username":"testagentae"]
-                        UserManager.shared.getLoginUserData = dic
-                        UserDefaults.standard.setValue(true, forKey: "isUserLoggedIn")
-//                        let parameters1 = [
-//                                           
-//                            "receiving_country_code": "PK",
-//                            "receiving_mode": "BANK",
-//                            "first_name": "first name",
-//                            "middle_name": "middle name",
-//                            "last_name": "last name",
-//                            "iso_code": "ALFHPKKA068",
-//                            "iban": "PK12ABCD1234567891234567"
-//                        ]
-                        
-                                    let storyboard = MyStoryboardLoader.getStoryboard(name: "Lulu")
-                                    // Instantiate the initial view controller
-                                    guard let tabbarVC = storyboard?.instantiateViewController(withIdentifier: "mainTabbar") as? UITabBarController else {
-                                        fatalError("Could not instantiate initial view controller from MyStoryboard.")
-                                    }
-                                    self.navigationController?.navigationBar.isHidden = true
-                                    self.navigationController?.pushViewController(tabbarVC, animated: true)
-                                
-                    }
-                    
-                }
-            case .failure(let error):
-                print("Error: \(error.localizedDescription)")
-            }
         }
-    }
-
-    
 
 }
