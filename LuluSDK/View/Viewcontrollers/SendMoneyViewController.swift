@@ -71,6 +71,8 @@ class SendMoneyViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 
         setupTableView()
         setupHeaderView()
@@ -112,6 +114,59 @@ class SendMoneyViewController: UIViewController {
             self.tableView.reloadData()
         }
     }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let userInfo = notification.userInfo else { return }
+        guard let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+
+        let keyboardHeight = keyboardFrame.height
+
+        // Adjust contentInset of tableView when the keyboard appears
+        if let tableView = self.tableView {
+            var contentInset = tableView.contentInset
+            contentInset.bottom = keyboardHeight
+            tableView.contentInset = contentInset
+            tableView.scrollIndicatorInsets = contentInset
+        }
+        
+        // Optionally scroll to the active text field
+        if let activeTextField = allTextFields.first(where: { $0?.isFirstResponder == true }) {
+            if let activeTextField = activeTextField {
+                let activeIndexPath = indexPath(for: activeTextField)  // You need to calculate the indexPath for the active text field
+                if let indexPath = activeIndexPath {
+                    tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
+                }
+            }
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        // Reset the contentInset when the keyboard hides
+        if let tableView = self.tableView {
+            var contentInset = tableView.contentInset
+            contentInset.bottom = 0
+            tableView.contentInset = contentInset
+            tableView.scrollIndicatorInsets = contentInset
+        }
+    }
+
+    // Helper method to get the indexPath for the active text field
+    func indexPath(for textField: UITextField) -> IndexPath? {
+        // Find the indexPath for the textField in the table view
+        if let tableView = self.tableView {
+            for indexPath in tableView.indexPathsForVisibleRows ?? [] {
+                if let cell = tableView.cellForRow(at: indexPath),
+                   let textFieldInCell = cell.viewWithTag(textField.tag) as? UITextField {
+                    return indexPath
+                }
+            }
+        }
+        return nil
+    }
+
     func addDoneButtonToTextField(_ textField: UITextField?) {
         guard let textField = textField else { return }
 
@@ -862,6 +917,7 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
             cell.txtFieldAmount.text = receiverDetails.phoneNumber // Use model value
             cell.txtFieldAmount.addTarget(self, action: #selector(updateFirstName(_:)), for: .editingChanged)
             cell.txtFieldAmount.tag = 4
+            cell.txtFieldAmount.keyboardType = .phonePad
             phoneNumberField = cell.txtFieldAmount
             addDoneButtonToTextField(phoneNumberField)
 
@@ -1277,4 +1333,19 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
         return toolbar
     }
 
+}
+extension UIView {
+    func findFirstResponder() -> UIResponder? {
+        if isFirstResponder {
+            return self
+        }
+        
+        for subview in subviews {
+            if let responder = subview.findFirstResponder() {
+                return responder
+            }
+        }
+        
+        return nil
+    }
 }

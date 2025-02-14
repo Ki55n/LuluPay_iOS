@@ -7,13 +7,18 @@
 
 import UIKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController,UITextFieldDelegate {
     
     @IBOutlet weak var usernameTF: UITextField!
     @IBOutlet weak var passwordTF: UITextField!
     var loginInfo: LoginModel?
     override func viewDidLoad() {
         super.viewDidLoad()
+        usernameTF.delegate = self
+        passwordTF.delegate = self
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        self.view.addGestureRecognizer(tapGesture)
+
         let isUserLoggedIn = UserDefaults.standard.bool(forKey: "isUserLoggedIn")
         if isUserLoggedIn {
             let url = "https://drap-sandbox.digitnine.com/auth/realms/cdp/protocol/openid-connect/token"
@@ -78,8 +83,24 @@ class LoginViewController: UIViewController {
         }
         // Do any additional setup after loading the view.
     }
-    
-    
+    @objc func dismissKeyboard() {
+        self.view.endEditing(true) // Dismiss the keyboard
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+        case usernameTF:
+            // Move to the password field when the user presses return on the username field
+            passwordTF.becomeFirstResponder()
+        case passwordTF:
+            // Dismiss the keyboard when the user presses return on the password field
+            passwordTF.resignFirstResponder()
+        default:
+            break
+        }
+        return true
+    }
+
     @IBAction func loginBtnAction(_sender: UIButton) {
         if usernameTF.text == "" || passwordTF.text == ""{
             showToast(message: "Please enter username and password")
