@@ -8,11 +8,25 @@
 import Foundation
 import Alamofire
 
+/// APIService is a singleton class that handles network requests using URLSession and Alamofire.
+/// It provides functions to make API calls with various configurations including JSON and x-www-form-urlencoded formats.
 public class APIService {
+    
+    /// Shared singleton instance of APIService
     static var shared = APIService()  // Singleton instance
     
+    /// Private initializer to enforce the singleton pattern
     public init() {}  // Private initializer to enforce singleton pattern
     
+    
+    /// Makes a network request using URLSession.
+    /// - Parameters:
+    ///   - url: The URL string of the API endpoint.
+    ///   - method: The HTTP method to use.
+    ///   - parameters: Optional request parameters.
+    ///   - headers: Optional request headers.
+    ///   - isJsonRequest: Flag indicating if the request body should be JSON.
+    ///   - completion: Completion handler with success or failure result.
     func request(url: String,
                  method: LuHTTPMethod,
                  parameters: [String: Any]? = nil,
@@ -102,6 +116,12 @@ public class APIService {
         task.resume()
     }
     
+    /// Makes a request to download PDF data.
+    /// - Parameters:
+    ///   - url: The URL string of the PDF file.
+    ///   - method: The HTTP method to use.
+    ///   - headers: Optional headers for the request.
+    ///   - completion: Completion handler with success or failure result.
     func newRequestPdfData(url: String,
                            method: HTTPMethod,
                            headers: [String: String]? = nil,

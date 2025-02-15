@@ -1,0 +1,12 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/boyapatikumar/Documents/GitHub/LuluPay_iOS/LuluSDK/MyStoryboardLoader.swift",
+      "line": 11,
+      "symbol": "MyStoryboardLoader",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/boyapatikumar/Documents/GitHub/LuluPay_iOS"
+}

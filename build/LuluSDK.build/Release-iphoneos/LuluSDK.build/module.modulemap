@@ -1,0 +1,6 @@
+framework module LuluSDK {
+  umbrella header "LuluSDK.h"
+  export *
+
+  module * { export * }
+}
