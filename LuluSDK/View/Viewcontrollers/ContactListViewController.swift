@@ -241,12 +241,13 @@ extension ContactListViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section{
         case 0:
-            return 70
+            return 0//70
         case 1:
-            if indexPath.row == 0{
-                return 50
-            }
-            return 80
+//            if indexPath.row == 0{
+//                return 50
+//            }
+//            return 80
+            return 0
         case 2:
             return 55
         default:

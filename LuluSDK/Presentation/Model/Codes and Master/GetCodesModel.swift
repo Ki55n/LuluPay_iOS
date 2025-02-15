@@ -214,7 +214,25 @@ struct Purposes_of_transactions : Codable {
     }
 
 }
+struct AccountType_Response: Codable {
+    let status: String
+    let statusCode: Int
+    let data: AccountTypesData
+    enum CodingKeys: String, CodingKey {
+        case status
+        case statusCode = "status_code"
+        case data
+    }
+}
 
+struct AccountTypesData: Codable {
+    let accountTypes: [Account_types]
+    
+    // This key needs to match the JSON key `account_types` exactly.
+    enum CodingKeys: String, CodingKey {
+        case accountTypes = "account_types"
+    }
+}
 struct Account_types : Codable {
     let code : String?
     let name : String?

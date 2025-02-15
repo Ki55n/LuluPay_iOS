@@ -35,7 +35,7 @@ class ShareReceiptViewController: UIViewController {
                 tableView.tableHeaderView = headerView
                 
                 let backgroundView = UIView()
-                backgroundView.frame = CGRect(x: 0, y: headerView.frame.minY, width: tableView.frame.width, height: tableView.frame.height/2)                
+                backgroundView.frame = CGRect(x: 0, y: headerView.frame.minY, width: tableView.frame.width, height: tableView.frame.height/2)
                 
                 if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
                     backgroundView.backgroundColor = customColor
@@ -66,7 +66,7 @@ class ShareReceiptViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     @objc func Submit() {
-        let baseURL = UserManager.shared.setBaseURL+"/amr/ras/api/v1_0/ras/transaction-receipt"
+        let baseURL = "https://drap-sandbox.digitnine.com/amr/ras/api/v1_0/ras/transaction-receipt"
         
         guard let transactionRef = UserManager.shared.getTransactionalData?.transaction_ref_number,
               !transactionRef.isEmpty else {
@@ -86,7 +86,7 @@ class ShareReceiptViewController: UIViewController {
         let headers: [String: String] = [
             "Content-Type": "application/json",
             "Authorization": "Bearer \(UserManager.shared.loginModel?.access_token ?? "")",
-            "sender": UserManager.shared.getLoginUserData?["username"] ?? "testagentae",
+            "sender": SecureStorageManager.shared.retrieveFromKeychain(key: Constants.kUserName) ?? "",
             "channel": "Direct",
             "company": "784825",
             "branch": "784826"
@@ -101,6 +101,22 @@ class ShareReceiptViewController: UIViewController {
             
             switch result {
             case .success(let data):
+//                if let responseString = String(data: data, encoding: .utf8) {
+//                    print("Response: \(responseString)")
+//
+//                    DispatchQueue.main.async {
+//                        let fileName = "Receipt"
+//                        if let fileURL = self.savePDFToFile(pdfData: data, fileName: "\(fileName).pdf") {
+//                            let pdfViewer = PDFViewer(url: fileURL)
+//                            let hostingController = UIHostingController(rootView: pdfViewer)
+//                            if let topController = self.topViewController() {
+//                                topController.present(hostingController, animated: true, completion: nil)
+//                            } else {
+//                                print("Failed to find an active top view controller")
+//                            }
+//                        }
+//                    }
+//                }
                 do {
                     // Decode JSON response
                     if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
@@ -130,6 +146,7 @@ class ShareReceiptViewController: UIViewController {
                 print("Error: \(error.localizedDescription)")
             }
         }
+        
     }
 
     func topViewController() -> UIViewController? {
@@ -263,7 +280,7 @@ extension ShareReceiptViewController: UITableViewDelegate, UITableViewDataSource
 
                     }else if indexPath.row == 3{
                         cell.lblTitle.text = "Transaction Receipient"
-                        cell.lblValue.text = UserManager.shared.getTransactionalData?.transaction_date
+                        cell.lblValue.text = UserManager.shared.getReceiverData?.firstName
 
                     }else if indexPath.row == 4{
                         cell.lblTitle.text = "Amount"
@@ -290,7 +307,7 @@ extension ShareReceiptViewController: UITableViewDelegate, UITableViewDataSource
                         cell.lblTitle.text = "Processing Fee"
                         if let feeDetails = UserManager.shared.getQuotesData?.fee_details {
                             if let commissionDetail = feeDetails.first(where: { $0.type as? String == "TAX" }) {
-                                if let amount = commissionDetail.amount {
+                                if let amount = commissionDetail.amount as? Double {
                                     print("Tax amount: \(amount)")
                                     cell.lblValue.text = String(amount)
 
@@ -384,25 +401,61 @@ struct PDFViewer: View {
     let url: URL
     
     var body: some View {
-        VStack {
-            if let pdfDocument = PDFDocument(url: url) {
-                PDFKitView(pdfDocument: pdfDocument)
-            } else {
-                Text("Failed to load PDF")
-            }
-            
-            HStack {
-                Button(action: {
-                    sharePDF()
-                }) {
-                    Image(systemName: "square.and.arrow.up")
-                        .frame(width: 24, height: 24)
+        NavigationStack{
+            VStack {
+                if let pdfDocument = PDFDocument(url: url) {
+                    PDFKitView(pdfDocument: pdfDocument)
+                } else {
+                    Text("Failed to load PDF")
                 }
-                .padding()
+                
+                HStack {
+                    
+                    
+                    Button(action: {
+                        sharePDF()
+                    }) {
+                        Image(systemName: "square.and.arrow.up")
+                            .frame(width: 24, height: 24)
+                    }
+                    .padding()
+                }
+            }
+        }
+        
+    }
+    func navigateToDashboard() {
+        DispatchQueue.main.async {
+            if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let window = scene.windows.first,
+               let rootVC = window.rootViewController {
+
+                // Dismiss the PDF Viewer
+                rootVC.dismiss(animated: true) {
+                    if let tabBarController = self.findTabBarController(from: rootVC) {
+                        tabBarController.selectedIndex = 0  // Switch to Home tab
+                    }
+                }
             }
         }
     }
-    
+
+    // Helper function to find UITabBarController in the view hierarchy
+    func findTabBarController(from rootVC: UIViewController) -> UITabBarController? {
+        if let tabBarController = rootVC as? UITabBarController {
+            return tabBarController
+        }
+        
+        for child in rootVC.children {
+            if let tabBarController = child as? UITabBarController {
+                return tabBarController
+            }
+        }
+        
+        return nil
+    }
+
+
     private func sharePDF() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)

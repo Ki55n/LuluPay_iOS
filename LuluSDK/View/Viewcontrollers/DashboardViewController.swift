@@ -32,7 +32,7 @@ class DashboardViewController: UIViewController {
         } else {
             print("Error: SDK Bundle not found.")
         }
-        getRates()
+//        getRates()
     
     }
 
@@ -113,7 +113,7 @@ extension DashboardViewController: UITableViewDelegate, UITableViewDataSource {
             return 1 // Header and Card have one cell each
         }
         else if section == 2{
-            return exchangeRates.count
+            return 0//exchangeRates.count
         }// Exchange Rates is dynamic
         else{
             return 2
