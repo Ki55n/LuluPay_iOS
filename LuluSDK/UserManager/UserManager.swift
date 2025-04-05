@@ -64,4 +64,5 @@ class UserManager {
     
     /// Development base URL.
     var setBaseURL = "https://drap-sandbox.digitnine.com" // Dev URL
+    var accountTypes : [Account_types]?
 }

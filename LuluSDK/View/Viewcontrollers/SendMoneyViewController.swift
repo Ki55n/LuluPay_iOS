@@ -216,17 +216,39 @@ class SendMoneyViewController: UIViewController {
             headerView.lblTitle.text = "Send Money"
             headerView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 110)
             headerView.btnBack.addTarget(self, action: #selector(moveBack), for: .touchUpInside)
-            headerView.viewMain.backgroundColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) ?? .cyan
+            headerView.viewMain.backgroundColor = ThemeManager.shared.getThemeColor()// Fallback color if custom color isn't found
+
             tableView.tableHeaderView = headerView
 
-            let backgroundView = UIView()
-            backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tableView.frame.width, height: tableView.frame.height / 5)
-            backgroundView.backgroundColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) ?? .cyan
-            view.addSubview(backgroundView)
-            view.bringSubviewToFront(tableView)
+//            let backgroundView = UIView()
+//            backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tableView.frame.width, height: tableView.frame.height / 5)
+//            backgroundView.backgroundColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) ?? .cyan
+//            view.addSubview(backgroundView)
+//            view.bringSubviewToFront(tableView)
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(themeUpdated),
+                name: .themeColorUpdated,
+                object: nil
+            )
+        ThemeManager.shared.applySavedTheme()
+
         }
     }
-    
+    func updateHeaderView() {
+        if let headerView = self.tableView.tableHeaderView as? CustomHeaderView {
+            headerView.viewMain.backgroundColor = ThemeManager.shared.getThemeColor()
+        }
+    }
+    @objc private func themeUpdated() {
+        updateHeaderView()
+        tableView.reloadData()
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
+    }
+
+
+
     @objc func moveBack() {
         navigationController?.popViewController(animated: true)
     }

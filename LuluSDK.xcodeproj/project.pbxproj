@@ -66,8 +66,10 @@
 		B869532C2D4A05AD0088B538 /* SettingsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B86953022D4A05AD0088B538 /* SettingsCell.xib */; };
 		B869532D2D4A05AD0088B538 /* TitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B86953032D4A05AD0088B538 /* TitleCell.xib */; };
 		B869532E2D4A05AD0088B538 /* TransferCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B86953042D4A05AD0088B538 /* TransferCell.xib */; };
+		B89B82BD2DA029BB0060D931 /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89B82BC2DA029BB0060D931 /* ScanViewController.swift */; };
+		B89C11AC2DA133DD0070F7D1 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89C11AB2DA133DD0070F7D1 /* ThemeManager.swift */; };
+		B89C11AE2DA1386B0070F7D1 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89C11AD2DA1386B0070F7D1 /* BaseViewController.swift */; };
 		B89D7E1A2D57C912008B6BE1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89D7E192D57C912008B6BE1 /* Extensions.swift */; };
-		B8B425A32D5B7B750026CE00 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = B8B425A22D5B7B750026CE00 /* Alamofire */; };
 		B8BB42862D5F618B00DDC128 /* Security.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8BB42852D5F618B00DDC128 /* Security.swift */; };
 		B8BB42882D5F626B00DDC128 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8BB42872D5F626B00DDC128 /* Constants.swift */; };
 		B8C07C912D51E1A4008D506B /* ContactListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07C902D51E1A4008D506B /* ContactListViewController.swift */; };
@@ -90,7 +92,11 @@
 		B8C07CB72D5262CB008D506B /* ConfirmPayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07CB62D5262CB008D506B /* ConfirmPayViewController.swift */; };
 		B8C07CB92D5264DF008D506B /* PaySuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07CB82D5264DF008D506B /* PaySuccessViewController.swift */; };
 		B8C07CBB2D5266F3008D506B /* ShareReceiptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C07CBA2D5266F3008D506B /* ShareReceiptViewController.swift */; };
+		B8CE6A5F2DA0EB7600B728EF /* AmountEntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8CE6A5E2DA0EB7600B728EF /* AmountEntryViewController.swift */; };
 		B8D7619C2D561ACC001F9852 /* LoadingIndicatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D7619B2D561ACC001F9852 /* LoadingIndicatorManager.swift */; };
+		B8F52CCA2D9AC3F400648914 /* BiometricAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F52CC92D9AC3F400648914 /* BiometricAuthManager.swift */; };
+		B8F52CCD2D9AD1B600648914 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = B8F52CCC2D9AD1B600648914 /* Alamofire */; };
+		B8FA090C2D9D1147009D5233 /* Theme Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8FA090B2D9D1147009D5233 /* Theme Manager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -165,6 +171,9 @@
 		B86953022D4A05AD0088B538 /* SettingsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsCell.xib; sourceTree = "<group>"; };
 		B86953032D4A05AD0088B538 /* TitleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TitleCell.xib; sourceTree = "<group>"; };
 		B86953042D4A05AD0088B538 /* TransferCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TransferCell.xib; sourceTree = "<group>"; };
+		B89B82BC2DA029BB0060D931 /* ScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
+		B89C11AB2DA133DD0070F7D1 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		B89C11AD2DA1386B0070F7D1 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		B89D7E192D57C912008B6BE1 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		B8BB42852D5F618B00DDC128 /* Security.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Security.swift; sourceTree = "<group>"; };
 		B8BB42872D5F626B00DDC128 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -188,7 +197,10 @@
 		B8C07CB62D5262CB008D506B /* ConfirmPayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPayViewController.swift; sourceTree = "<group>"; };
 		B8C07CB82D5264DF008D506B /* PaySuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaySuccessViewController.swift; sourceTree = "<group>"; };
 		B8C07CBA2D5266F3008D506B /* ShareReceiptViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareReceiptViewController.swift; sourceTree = "<group>"; };
+		B8CE6A5E2DA0EB7600B728EF /* AmountEntryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountEntryViewController.swift; sourceTree = "<group>"; };
 		B8D7619B2D561ACC001F9852 /* LoadingIndicatorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicatorManager.swift; sourceTree = "<group>"; };
+		B8F52CC92D9AC3F400648914 /* BiometricAuthManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometricAuthManager.swift; sourceTree = "<group>"; };
+		B8FA090B2D9D1147009D5233 /* Theme Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Theme Manager.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,7 +208,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B8B425A32D5B7B750026CE00 /* Alamofire in Frameworks */,
+				B8F52CCD2D9AD1B600648914 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,6 +276,7 @@
 				31FEF1562D510AC9004611F1 /* UserManager.swift */,
 				B8BB42852D5F618B00DDC128 /* Security.swift */,
 				B8BB42872D5F626B00DDC128 /* Constants.swift */,
+				B89C11AB2DA133DD0070F7D1 /* ThemeManager.swift */,
 			);
 			path = UserManager;
 			sourceTree = "<group>";
@@ -355,7 +368,10 @@
 				B8C07CB62D5262CB008D506B /* ConfirmPayViewController.swift */,
 				B8C07CB82D5264DF008D506B /* PaySuccessViewController.swift */,
 				B8C07CBA2D5266F3008D506B /* ShareReceiptViewController.swift */,
+				B8CE6A5E2DA0EB7600B728EF /* AmountEntryViewController.swift */,
 				B8513EA62D54B76200E431F0 /* SendMoneyViewController.swift */,
+				B89B82BC2DA029BB0060D931 /* ScanViewController.swift */,
+				B89C11AD2DA1386B0070F7D1 /* BaseViewController.swift */,
 			);
 			path = Viewcontrollers;
 			sourceTree = "<group>";
@@ -432,8 +448,10 @@
 		B869532F2D4A05B90088B538 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				B8F52CC92D9AC3F400648914 /* BiometricAuthManager.swift */,
 				B8D7619B2D561ACC001F9852 /* LoadingIndicatorManager.swift */,
 				B89D7E192D57C912008B6BE1 /* Extensions.swift */,
+				B8FA090B2D9D1147009D5233 /* Theme Manager.swift */,
 			);
 			path = "\U0010Services";
 			sourceTree = "<group>";
@@ -467,7 +485,7 @@
 			);
 			name = LuluSDK;
 			packageProductDependencies = (
-				B8B425A22D5B7B750026CE00 /* Alamofire */,
+				B8F52CCC2D9AD1B600648914 /* Alamofire */,
 			);
 			productName = LuluSDK;
 			productReference = 7DB84ECD2D3AC05800A2C2D6 /* LuluSDK.framework */;
@@ -519,7 +537,7 @@
 			);
 			mainGroup = 7DB84EC32D3AC05800A2C2D6;
 			packageReferences = (
-				B8B425A12D5B7B750026CE00 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				B8F52CCB2D9AD1B600648914 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 7DB84ECE2D3AC05800A2C2D6 /* Products */;
 			projectDirPath = "";
@@ -581,6 +599,7 @@
 				B89D7E1A2D57C912008B6BE1 /* Extensions.swift in Sources */,
 				B8C07C992D51E3E1008D506B /* SearchCell.swift in Sources */,
 				B869531A2D4A05AD0088B538 /* NumberPadCell.swift in Sources */,
+				B89B82BD2DA029BB0060D931 /* ScanViewController.swift in Sources */,
 				B8C07CA62D524E6B008D506B /* PaymentDetailCell.swift in Sources */,
 				7D43C8312D4D502B00C841C2 /* APIService.swift in Sources */,
 				317432A42D4B51D4001AD0BD /* BranchSearchModel.swift in Sources */,
@@ -597,7 +616,9 @@
 				317432A52D4B51D4001AD0BD /* GetCodesModel.swift in Sources */,
 				B8513EA72D54B76200E431F0 /* SendMoneyViewController.swift in Sources */,
 				B86953132D4A05AD0088B538 /* ButtonCell.swift in Sources */,
+				B8F52CCA2D9AC3F400648914 /* BiometricAuthManager.swift in Sources */,
 				B8BB42862D5F618B00DDC128 /* Security.swift in Sources */,
+				B8CE6A5F2DA0EB7600B728EF /* AmountEntryViewController.swift in Sources */,
 				B8C07C912D51E1A4008D506B /* ContactListViewController.swift in Sources */,
 				B86953182D4A05AD0088B538 /* HeaderViewCell.swift in Sources */,
 				B869530C2D4A05AD0088B538 /* ProfileViewController.swift in Sources */,
@@ -609,7 +630,9 @@
 				31FEF1572D510AC9004611F1 /* UserManager.swift in Sources */,
 				B86953152D4A05AD0088B538 /* CardCell.swift in Sources */,
 				317432A72D4B51D5001AD0BD /* RatesModel.swift in Sources */,
+				B89C11AE2DA1386B0070F7D1 /* BaseViewController.swift in Sources */,
 				B869531D2D4A05AD0088B538 /* RequestMoneyCell.swift in Sources */,
+				B8FA090C2D9D1147009D5233 /* Theme Manager.swift in Sources */,
 				B869530E2D4A05AD0088B538 /* RequestNewCardController.swift in Sources */,
 				B8C07CB92D5264DF008D506B /* PaySuccessViewController.swift in Sources */,
 				B86953202D4A05AD0088B538 /* TransferCell.swift in Sources */,
@@ -618,6 +641,7 @@
 				317432A92D4B51D5001AD0BD /* LoginModel.swift in Sources */,
 				B8BB42882D5F626B00DDC128 /* Constants.swift in Sources */,
 				B869531E2D4A05AD0088B538 /* SettingsCell.swift in Sources */,
+				B89C11AC2DA133DD0070F7D1 /* ThemeManager.swift in Sources */,
 				317432AB2D4B51D5001AD0BD /* QuoteModel.swift in Sources */,
 				B8C07CB12D525193008D506B /* PaymentDetailsViewController.swift in Sources */,
 				B86952D92D4A059E0088B538 /* Model.swift in Sources */,
@@ -694,6 +718,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -708,7 +733,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -760,6 +785,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -768,7 +794,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -792,11 +818,13 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_MODULE_VERIFIER = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LuluSDK/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -833,6 +861,7 @@
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -921,7 +950,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		B8B425A12D5B7B750026CE00 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+		B8F52CCB2D9AD1B600648914 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
 			requirement = {
@@ -932,9 +961,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		B8B425A22D5B7B750026CE00 /* Alamofire */ = {
+		B8F52CCC2D9AD1B600648914 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = B8B425A12D5B7B750026CE00 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			package = B8F52CCB2D9AD1B600648914 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */

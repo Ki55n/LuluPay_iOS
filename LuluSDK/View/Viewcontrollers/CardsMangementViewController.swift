@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CardsMangementViewController: UIViewController,UITableViewDelegate, UITableViewDataSource {
+class CardsMangementViewController: BaseViewController,UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var tblList: UITableView!
     
     
@@ -35,22 +35,24 @@ class CardsMangementViewController: UIViewController,UITableViewDelegate, UITabl
                 headerView.lblTitle.text = "LuLu Virtual Cards" // Customize the header text
                 headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 110)
                 
-                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
-                    headerView.viewMain.backgroundColor = customColor
-                } else {
-                    headerView.viewMain.backgroundColor = .cyan// Fallback color if custom color isn't found
-                }
-                
+//                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
+//                    headerView.viewMain.backgroundColor = customColor
+//                } else {
+//                    headerView.viewMain.backgroundColor = .cyan// Fallback color if custom color isn't found
+//                }
+                headerView.viewMain.backgroundColor = ThemeManager.shared.getThemeColor()// Fallback color if custom color isn't found
+
                 tblList.tableHeaderView = headerView
-                let backgroundView = UIView()
-                backgroundView.frame = CGRect(x: 0, y: headerView.frame.minY, width: tblList.frame.width, height: tblList.frame.height/5)
-                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
-                    backgroundView.backgroundColor = customColor
-                } else {
-                    backgroundView.backgroundColor = .cyan // Fallback color if custom color isn't found
-                }
-                view.addSubview(backgroundView)
-                view.bringSubviewToFront(tblList)
+//                let backgroundView = UIView()
+//                backgroundView.frame = CGRect(x: 0, y: headerView.frame.minY, width: tblList.frame.width, height: tblList.frame.height/5)
+//                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
+//                    backgroundView.backgroundColor = customColor
+//                } else {
+//                    backgroundView.backgroundColor = .cyan // Fallback color if custom color isn't found
+//                }
+
+//                view.addSubview(backgroundView)
+//                view.bringSubviewToFront(tblList)
                 
             }
         } else {
@@ -64,8 +66,32 @@ class CardsMangementViewController: UIViewController,UITableViewDelegate, UITabl
         tblList.delegate = self
         tblList.dataSource = self
         tblList.clipsToBounds = false
+        // Observe theme changes
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(themeUpdated),
+                name: .themeColorUpdated,
+                object: nil
+            )
+        ThemeManager.shared.applySavedTheme()
+
     }
-    
+    func updateHeaderView() {
+        if let headerView = tblList.tableHeaderView as? CustomHeaderView {
+            headerView.viewMain.backgroundColor = ThemeManager.shared.getThemeColor()
+        }
+    }
+    @objc private func themeUpdated() {
+        updateHeaderView()
+        tblList.reloadData()
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }

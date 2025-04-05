@@ -591,3 +591,60 @@ class GetAccountTypeTests: XCTestCase {
         waitForExpectations(timeout: 3, handler: nil)
     }
 }
+import XCTest
+
+class SettingsViewControllerTests: XCTestCase {
+
+    var viewController: SettingsViewController!
+
+    override func setUpWithError() throws {
+        super.setUp()
+        let bundle = Bundle(identifier: "com.finance.LuluSDK") // Replace with your bundle identifier
+        let storyboard = UIStoryboard(name: "Lulu", bundle: bundle) // This will not be optional
+
+        viewController = storyboard.instantiateViewController(identifier: "SettingsViewController") as? SettingsViewController
+        viewController.loadViewIfNeeded() // Load the view
+    }
+
+    override func tearDownWithError() throws {
+        viewController = nil
+        super.tearDown()
+    }
+
+    func testHeaderViewColorChanges() {
+        // Given: A new theme color
+        let newHexColor = "#FF5733"
+        ThemeManager.shared.saveThemeColor(hex: newHexColor)
+        
+        // When: Applying the saved theme
+        ThemeManager.shared.applySavedTheme()
+        
+        // Force the view to layout on the main thread
+        DispatchQueue.main.async {
+            self.viewController.view.setNeedsLayout()
+            self.viewController.view.layoutIfNeeded()
+            
+            // Then: Verify the header view's background color is updated
+            guard let headerView = self.viewController.tblList.tableHeaderView else {
+                XCTFail("Header view is nil")
+                return
+            }
+            
+            // Log to debug
+            print("Header view background color: \(String(describing: headerView.backgroundColor))")
+            
+            let expectedColor = UIColor(hexString: newHexColor)
+            headerView.backgroundColor = .blue
+            // Compare the colors by extracting RGB components
+            guard let headerColorComponents = headerView.backgroundColor?.getRGBComponents() else {
+                XCTFail("Header view background color is nil")
+                return
+            }
+            
+            let expectedColorComponents = expectedColor?.getRGBComponents()
+            
+            XCTAssertEqual(headerColorComponents, expectedColorComponents, "Header view background color did not update correctly")
+        }
+    }
+}
+

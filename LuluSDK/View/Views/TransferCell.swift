@@ -10,6 +10,8 @@ import UIKit
 class TransferCell: UITableViewCell {
     @IBOutlet weak var imgTransfer:UIImageView!
     @IBOutlet weak var viewTransfer:UIView!
+    @IBOutlet weak var viewScan:UIView!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

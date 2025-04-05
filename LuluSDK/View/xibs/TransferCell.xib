@@ -22,18 +22,19 @@
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="ZLL-jx-0gt">
                                 <rect key="frame" x="0.0" y="0.0" width="482" height="106"/>
                                 <subviews>
-                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H1c-wl-3or">
-                                        <rect key="frame" x="-20" y="0.0" width="20" height="106"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H1c-wl-3or">
+                                        <rect key="frame" x="0.0" y="0.0" width="236" height="106"/>
                                         <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="req_money" translatesAutoresizingMaskIntoConstraints="NO" id="9Gv-MJ-IFW">
-                                                <rect key="frame" x="-5" y="15" width="30" height="30"/>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="barcode.viewfinder" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="9Gv-MJ-IFW">
+                                                <rect key="frame" x="103" y="16.333333333333336" width="30" height="28"/>
+                                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="8FP-EG-eI4"/>
                                                     <constraint firstAttribute="width" constant="30" id="oLm-BV-5Dd"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Deposit" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="91t-RD-Vwa">
-                                                <rect key="frame" x="10" y="55" width="0.0" height="41"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scan and Pay" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="91t-RD-Vwa">
+                                                <rect key="frame" x="10" y="55" width="216" height="41"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -50,7 +51,7 @@
                                         </constraints>
                                     </view>
                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AkW-jp-BGe">
-                                        <rect key="frame" x="-20" y="0.0" width="20" height="106"/>
+                                        <rect key="frame" x="241" y="0.0" width="20" height="106"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="withdraw" translatesAutoresizingMaskIntoConstraints="NO" id="quV-DP-IWJ">
                                                 <rect key="frame" x="-5" y="15" width="30" height="30"/>
@@ -77,17 +78,17 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uch-vS-sz6">
-                                        <rect key="frame" x="0.0" y="0.0" width="482" height="106"/>
+                                        <rect key="frame" x="246" y="0.0" width="236" height="106"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="transfer" translatesAutoresizingMaskIntoConstraints="NO" id="65t-ng-zfh">
-                                                <rect key="frame" x="226" y="15" width="30" height="30"/>
+                                                <rect key="frame" x="103" y="15" width="30" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="hrn-w4-xv3"/>
                                                     <constraint firstAttribute="width" constant="30" id="puT-Bj-b0d"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Transfer" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rn5-9J-7ad">
-                                                <rect key="frame" x="10" y="55" width="462" height="41"/>
+                                                <rect key="frame" x="10" y="55" width="216" height="41"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -133,13 +134,14 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="imgTransfer" destination="9Gv-MJ-IFW" id="lA3-Vn-Rqh"/>
+                <outlet property="viewScan" destination="H1c-wl-3or" id="2gj-iE-hQ9"/>
                 <outlet property="viewTransfer" destination="Uch-vS-sz6" id="jty-bU-KkB"/>
             </connections>
             <point key="canvasLocation" x="241.22137404580153" y="9.1549295774647899"/>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="req_money" width="30" height="30"/>
+        <image name="barcode.viewfinder" catalog="system" width="128" height="115"/>
         <image name="transfer" width="22" height="24"/>
         <image name="withdraw" width="24" height="24"/>
     </resources>

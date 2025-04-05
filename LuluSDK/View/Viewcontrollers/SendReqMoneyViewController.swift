@@ -33,25 +33,26 @@ class SendReqMoneyViewController: UIViewController {
                 headerView.lblTitle.text = "Send Money" // Customize the header text
                 headerView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 110)
                 headerView.btnBack.addTarget(self, action: #selector(self.moveBack), for: .touchUpInside)
-                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
-                    headerView.viewMain.backgroundColor = customColor
-                } else {
-                    headerView.viewMain.backgroundColor = .cyan// Fallback color if custom color isn't found
-                }
+//                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
+//                    headerView.viewMain.backgroundColor = customColor
+//                } else {
+//                    headerView.viewMain.backgroundColor = .cyan// Fallback color if custom color isn't found
+//                }
 
-                
+                headerView.viewMain.backgroundColor = ThemeManager.shared.getThemeColor()// Fallback color if custom color isn't found
+
                 tableView.tableHeaderView = headerView
                 
-                let backgroundView = UIView()
-                backgroundView.frame = CGRect(x: 0, y: headerView.frame.minY, width: tableView.frame.width, height: tableView.frame.height/2)                
-                
-                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
-                    backgroundView.backgroundColor = customColor
-                } else {
-                    backgroundView.backgroundColor = .cyan // Fallback color if custom color isn't found
-                }
-                view.addSubview(backgroundView)
-                view.bringSubviewToFront(tableView)
+//                let backgroundView = UIView()
+//                backgroundView.frame = CGRect(x: 0, y: headerView.frame.minY, width: tableView.frame.width, height: tableView.frame.height/2)                
+//                
+//                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
+//                    backgroundView.backgroundColor = customColor
+//                } else {
+//                    backgroundView.backgroundColor = .cyan // Fallback color if custom color isn't found
+//                }
+//                view.addSubview(backgroundView)
+//                view.bringSubviewToFront(tableView)
                 
             }
             
@@ -73,9 +74,32 @@ class SendReqMoneyViewController: UIViewController {
 
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(themeUpdated),
+            name: .themeColorUpdated,
+            object: nil
+        )
+    ThemeManager.shared.applySavedTheme()
 
     }
-    
+    func updateHeaderView() {
+        if let headerView = self.tableView.tableHeaderView as? CustomHeaderView {
+            headerView.viewMain.backgroundColor = ThemeManager.shared.getThemeColor()
+        }
+    }
+    @objc private func themeUpdated() {
+        updateHeaderView()
+        tableView.reloadData()
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
+    }
+
+
+    deinit{
+        NotificationCenter.default.removeObserver(self)
+    }
+
     @objc func moveToNext(){
         if txtFieldAmount?.text != "AED - "{
             self.moveToNextAlert()
@@ -168,9 +192,6 @@ class SendReqMoneyViewController: UIViewController {
         }
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
 
     @objc func moveBack(){
         self.navigationController?.popViewController(animated: true)

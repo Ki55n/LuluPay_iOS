@@ -91,7 +91,23 @@ public class APIService {
                 }
                 return
             }
-            
+            if let httpResponse = response as? HTTPURLResponse {
+                print("📡 Status Code: \(httpResponse.statusCode)")
+                print("📬 Headers: \(httpResponse.allHeaderFields)")
+            }
+
+            if let data = data {
+                print("📦 Raw Data: \(data)")
+
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("✅ Response String:\n\(responseString)")
+                } else {
+                    print("❓ Couldn't decode response data to string")
+                }
+            } else {
+                print("⚠️ No data received")
+            }
+
             guard let data = data else {
                 DispatchQueue.main.async {
                     completion(.failure(APIError.noData))

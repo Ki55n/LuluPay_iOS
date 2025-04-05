@@ -9,17 +9,25 @@ class SecureStorageManager {
     
     // Keychain Access: Save Data
     func saveToKeychain(key: String, value: String) {
-        let data = value.data(using: .utf8)!
+        guard let data = value.data(using: .utf8) else { return }
+
         let query: [CFString: Any] = [
             kSecClass: kSecClassGenericPassword,
-            kSecAttrAccount: key,
-            kSecValueData: data
+            kSecAttrAccount: key
         ]
-        
-        // Delete any existing item for the key before adding a new one
+
+        // Delete existing entry if it exists
         SecItemDelete(query as CFDictionary)
-        
-        let status = SecItemAdd(query as CFDictionary, nil)
+
+        // Now, add the new value
+        let newQuery: [CFString: Any] = [
+            kSecClass: kSecClassGenericPassword,
+            kSecAttrAccount: key,
+            kSecValueData: data,
+            kSecAttrAccessible: kSecAttrAccessibleAfterFirstUnlock
+        ]
+
+        let status = SecItemAdd(newQuery as CFDictionary, nil)
         
         if status == errSecSuccess {
             print("Data saved successfully")
@@ -27,7 +35,7 @@ class SecureStorageManager {
             print("Error saving data to Keychain: \(status)")
         }
     }
-    
+
     // Keychain Access: Retrieve Data
     func retrieveFromKeychain(key: String) -> String? {
         let query: [CFString: Any] = [
@@ -35,6 +43,7 @@ class SecureStorageManager {
             kSecAttrAccount: key,
             kSecReturnData: kCFBooleanTrue!,
             kSecMatchLimit: kSecMatchLimitOne
+            
         ]
         
         var item: AnyObject?

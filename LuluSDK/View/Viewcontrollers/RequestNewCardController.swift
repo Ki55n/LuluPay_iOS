@@ -43,24 +43,25 @@ class RequestNewCardController: UIViewController,UITableViewDelegate,UITableView
                 headerView.btnBack.addTarget(self, action: #selector(self.moveBack), for: .touchUpInside)
                 headerView.frame = CGRect(x: 0, y: 0, width: tblList.frame.width, height: 110)
 
-                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
-                    headerView.viewMain.backgroundColor = customColor
-                } else {
-                    headerView.viewMain.backgroundColor = .cyan// Fallback color if custom color isn't found
-                }
+//                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
+//                    headerView.viewMain.backgroundColor = customColor
+//                } else {
+//                    headerView.viewMain.backgroundColor = .cyan// Fallback color if custom color isn't found
+//                }
+                headerView.viewMain.backgroundColor = ThemeManager.shared.getThemeColor()// Fallback color if custom color isn't found
 
                 
                 tblList.tableHeaderView = headerView
                 
-                let backgroundView = UIView()
-                backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: tblList.frame.height/5)
-                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
-                    backgroundView.backgroundColor = customColor
-                } else {
-                    backgroundView.backgroundColor = .cyan // Fallback color if custom color isn't found
-                }
-                view.addSubview(backgroundView)
-                view.bringSubviewToFront(tblList)
+//                let backgroundView = UIView()
+//                backgroundView.frame = CGRect(x: 0, y: headerView.frame.maxY, width: tblList.frame.width, height: tblList.frame.height/5)
+//                if let customColor = UIColor(named: "customCyanColor", in: bundle, compatibleWith: nil) {
+//                    backgroundView.backgroundColor = customColor
+//                } else {
+//                    backgroundView.backgroundColor = .cyan // Fallback color if custom color isn't found
+//                }
+//                view.addSubview(backgroundView)
+//                view.bringSubviewToFront(tblList)
 
             }
         }
@@ -72,9 +73,32 @@ class RequestNewCardController: UIViewController,UITableViewDelegate,UITableView
         tblList.dataSource = self
         tblList.clipsToBounds = false
         addFooterView()
-        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(themeUpdated),
+            name: .themeColorUpdated,
+            object: nil
+        )
+    ThemeManager.shared.applySavedTheme()
+
     }
-    
+    func updateHeaderView() {
+        if let headerView = self.tblList.tableHeaderView as? CustomHeaderView {
+            headerView.viewMain.backgroundColor = ThemeManager.shared.getThemeColor()
+        }
+    }
+    @objc private func themeUpdated() {
+        updateHeaderView()
+        tblList.reloadData()
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
+    }
+
+
+    deinit{
+        NotificationCenter.default.removeObserver(self)
+    }
+
     @objc func moveBack(){
         self.navigationController?.popViewController(animated: true)
     }

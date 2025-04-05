@@ -53,3 +53,38 @@ extension UIViewController {
         }
     }
 }
+import UIKit
+
+extension UIColor {
+    convenience init?(hexString: String) {
+        let hex = hexString.trimmingCharacters(in: .whitespacesAndNewlines)
+        let scanner = Scanner(string: hex)
+        
+        if hex.hasPrefix("#") {
+            scanner.currentIndex = hex.index(after: hex.startIndex)
+        }
+        
+        var rgbValue: UInt64 = 0
+        guard scanner.scanHexInt64(&rgbValue) else { return nil }
+        
+        let r = CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0
+        let g = CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0
+        let b = CGFloat(rgbValue & 0x0000FF) / 255.0
+        
+        self.init(red: r, green: g, blue: b, alpha: 1.0)
+    }
+}
+extension Notification.Name {
+    static let themeColorUpdated = Notification.Name("themeColorUpdated")
+}
+
+// UIViewController extension remains the same
+extension UIViewController {
+    func updateTableHeaderFooterBackground(with color: UIColor) {
+        if let tableView = view as? UITableView {
+            tableView.tableHeaderView?.backgroundColor = color
+            tableView.tableFooterView?.backgroundColor = color
+            tableView.reloadData()
+        }
+    }
+}
