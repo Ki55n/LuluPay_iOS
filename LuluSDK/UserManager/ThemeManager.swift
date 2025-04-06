@@ -6,7 +6,7 @@ public enum SDKTheme {
 }
 
 public struct SDKThemeColors {
-    public var primary: UIColor   // Button background
+    public var primary: UIColor
     public var background: UIColor
     public var text: UIColor
 
@@ -47,7 +47,6 @@ public class SDKThemeManager {
         let colors = themeColors()
         view.backgroundColor = colors.background
 
-        // Loop through all subviews to apply button/label styles
         for subview in view.subviews {
             if let label = subview as? UILabel {
                 label.textColor = colors.text
@@ -59,7 +58,6 @@ public class SDKThemeManager {
                 
             }
             else {
-                // Optional: recursively apply to nested views
                 applyTheme(to: subview)
             }
         }

@@ -148,7 +148,9 @@ class ShareReceiptViewController: UIViewController {
                     if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
                        let responseData = json["data"] as? String,
                        let pdfData = Data(base64Encoded: responseData, options: .ignoreUnknownCharacters) {
-                        
+                        var currentRefs = UserManager.shared.refNumbers
+                        currentRefs.append(transactionRef)
+                        UserManager.shared.refNumbers = currentRefs
                         // Save and display PDF
                         DispatchQueue.main.async {
                             let fileName = "Receipt.pdf"

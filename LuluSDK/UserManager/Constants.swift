@@ -14,4 +14,6 @@ class Constants{
     static let kbiometricEnabled = "isBiometricEnabled"
     static let kuserLogginIn = "isUserLoggedIn"
     static let kBiometricLogged = "biometricAuthenticated"
+    static let kCreateTrnData = "KcreateTransactionalData"
+    static let kQuotesData = "kQuotesData"
 }

@@ -53,7 +53,7 @@ class DashboardViewController: BaseViewController {
         print(biometricAuthenticated)
         
         NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
-
+        print("REF-",UserManager.shared.refNumbers)
     }
     func updateHeaderView() {
         if let headerView = self.tableView.tableHeaderView as? CustomHeaderView {

@@ -311,28 +311,48 @@ class SendMoneyViewController: UIViewController {
             let url1 = UserManager.shared.setBaseURL+"/raas/masters/v1/accounts/validation"
             var params = [String:String?]()
             let receiverdata = UserManager.shared.getReceiverData
-            if receiverdata?.receiveMode == "Bank"{
+            print("receiverdata",receiverdata)
+            print("receiverDetails",self.receiverDetails)
+            if receiverdata?.receiveMode == "BANK"{
                 // For receiving mode with bank transfer
 
                 if receiverdata?.country_code == "IN"{
                     // For countries that accept routing code and account number
-                     params = ["first_name":receiverDetails.firstName,"last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased().trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""),"route_code":receiverDetails.routingCode,"account_number":receiverDetails.accountNumber]
-
+                     params = ["receiver_first_name":receiverDetails.firstName,"receiver_last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased().trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""),"route_code":receiverDetails.routingCode,"account_number":receiverDetails.accountNumber]
+                    print(params,receiverdata?.country_code)
                 }else if receiverdata?.country_code == "PK" || receiverdata?.country_code == "EG" || receiverdata?.country_code == "LK"{
                     // For countries that accept isoCode(BIC/SWIFT CODE) and iban
-
-                    params = ["first_name":receiverDetails.firstName,"last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased().trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""),"iso_code":receiverDetails.swiftCode,"iban":receiverDetails.iban]
-
+                   
+                    params = ["receiver_first_name":receiverDetails.firstName,"receiver_last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased().trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""),"iso_code":receiverDetails.swiftCode,"iban":receiverDetails.iban]
+                    print(params,receiverdata?.country_code)
                 }else{
                     // For countries that accept isocode(Bic/Swift Code) and account number
-                    params = ["first_name":receiverDetails.firstName,"last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased().trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""),"iso_code":receiverDetails.swiftCode,"account_number":receiverDetails.accountNumber]
-
+                    params = ["receiver_first_name":receiverDetails.firstName,"receiver_last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased().trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""),"iso_code":receiverDetails.swiftCode,"account_number":receiverDetails.accountNumber]
+                    print(params,receiverdata?.country_code)
                 }
-            }else{
+            }else if receiverDetails.receiveMode ?? "" == "BANK"{
+                print("Receiver detail-Param")
+                if receiverDetails.country_code ?? "" == "IN"{
+                    // For countries that accept routing code and account number
+                     params = ["receiver_first_name":receiverDetails.firstName,"receiver_last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased().trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""),"route_code":receiverDetails.routingCode,"account_number":receiverDetails.accountNumber]
+                    print(params,receiverDetails.country_code ?? "")
+                }else if receiverDetails.country_code ?? "" == "PK" || receiverDetails.country_code ?? "" == "EG" || receiverDetails.country_code ?? "" == "LK"{
+                    // For countries that accept isoCode(BIC/SWIFT CODE) and iban
+                   
+                    params = ["receiver_first_name":receiverDetails.firstName,"receiver_last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased().trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""),"iso_code":receiverDetails.swiftCode,"iban":receiverDetails.iban]
+                    print("iban",receiverDetails.iban ?? "")
+                }else{
+                    // For countries that accept isocode(Bic/Swift Code) and account number
+                    params = ["receiver_first_name":receiverDetails.firstName,"receiver_last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased().trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""),"iso_code":receiverDetails.swiftCode,"account_number":receiverDetails.accountNumber]
+                    print(params,receiverDetails.country_code)
+                }
+
+            }
+            else{
                 // For receiving mode with Cash pickup or Mobile wallet
                 
-                 params = ["first_name":receiverDetails.firstName,"last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased().trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""),"iso_code":receiverDetails.swiftCode]
-
+                params = ["receiver_first_name":receiverDetails.firstName,"receiver_last_name":receiverDetails.lastName,"receiving_country_code":self.receiverDetails.country_code,"receiving_mode":self.receiverDetails.receiveMode?.uppercased().trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: ""),"iso_code":receiverDetails.swiftCode,"iban":receiverDetails.iban]
+                print(params,receiverDetails.country_code)
             }
             let filteredParams = params.compactMapValues { $0?.isEmpty == true ? nil : $0 }
             
@@ -1182,6 +1202,8 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
             receiverDetails.country = textField.text ?? ""
         }else if textField == self.ibanField{
             receiverDetails.iban = textField.text ?? ""
+            print("textfeild updated -",textField.text,receiverDetails.iban)
+
         }else if textField == self.accountNumberField{
             receiverDetails.accountNumber = textField.text ?? ""
         }else if textField == self.receiveModeField{
@@ -1276,6 +1298,7 @@ extension SendMoneyViewController: UITableViewDelegate, UITableViewDataSource, U
         }else if textField.tag == 6 {
             textField.resignFirstResponder()
             self.receiverDetails.iban = textField.text ?? ""
+            print("textfeild ended -",textField.text,receiverDetails.iban)
             textField.resignFirstResponder()
             
         }else if textField.tag == 100 {

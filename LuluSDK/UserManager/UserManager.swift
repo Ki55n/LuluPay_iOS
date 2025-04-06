@@ -38,7 +38,23 @@ class UserManager {
     var getReceiverData: ReceiverDetails?
     
     /// Stores quote data.
-    var getQuotesData: QuoteData?
+    var getQuotesData: QuoteData? {
+            get {
+                guard let storedData = SecureStorageManager.shared.retrieveDataFromKeychain(key: Constants.kQuotesData),
+                      let quoteData = try? JSONDecoder().decode(QuoteData.self, from: storedData) else {
+                    return nil
+                }
+                return quoteData
+            }
+            set {
+                if let newValue = newValue,
+                   let encodedData = try? JSONEncoder().encode(newValue) {
+                    SecureStorageManager.shared.saveDataToKeychain(key: Constants.kQuotesData, value: encodedData)
+                } else {
+                    SecureStorageManager.shared.deleteFromKeychain(key: Constants.kQuotesData)
+                }
+            }
+        }
     
     /// Stores reference text information.
     var getReferenceText: String?
@@ -50,8 +66,50 @@ class UserManager {
     var gettransferType: TransferType?
     
     /// Stores transactional data for the created transaction.
-    var getTransactionalData: CreateTransactionData?
-    
+    var getTransactionalData: CreateTransactionData? {
+        get {
+            guard let storedData = SecureStorageManager.shared.retrieveDataFromKeychain(key: Constants.kCreateTrnData),
+                  let transactionData = try? JSONDecoder().decode(CreateTransactionData.self, from: storedData) else {
+                return nil
+            }
+            return transactionData
+        }
+        set {
+            if let newValue = newValue,
+               let encodedData = try? JSONEncoder().encode(newValue) {
+                SecureStorageManager.shared.saveDataToKeychain(key: Constants.kCreateTrnData, value: encodedData)
+            } else {
+                SecureStorageManager.shared.deleteFromKeychain(key: Constants.kCreateTrnData)
+            }
+        }
+    }
+    /// stores tansactional ref numbers to get history
+    var refNumbers: [String] {
+        get {
+            guard let data = SecureStorageManager.shared.retrieveDataFromKeychain(key: "refNumbers") else {
+                return []
+            }
+            return (try? JSONDecoder().decode([String].self, from: data)) ?? []
+        }
+        set {
+//            if let encoded = try? JSONEncoder().encode(newValue) {
+//                SecureStorageManager.shared.saveDataToKeychain(key: "refNumbers", value: encoded)
+//            } else {
+//                SecureStorageManager.shared.deleteFromKeychain(key: "refNumbers")
+//            }
+            // Keep only the last 6 items
+            let trimmed = Array(newValue.suffix(6))
+            
+            if let encoded = try? JSONEncoder().encode(trimmed) {
+                SecureStorageManager.shared.saveDataToKeychain(key: "refNumbers", value: encoded)
+            } else {
+                SecureStorageManager.shared.deleteFromKeychain(key: "refNumbers")
+            }
+        }
+
+        
+    }
+
     /// Stores login user data in a dictionary with key-value pairs.
     var getLoginUserData: [String: String]?
     

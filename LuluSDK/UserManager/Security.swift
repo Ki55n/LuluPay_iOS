@@ -71,5 +71,48 @@ class SecureStorageManager {
             print("Error deleting data from Keychain: \(status)")
         }
     }
+    func saveDataToKeychain(key: String, value: Data) {
+        let query: [CFString: Any] = [
+            kSecClass: kSecClassGenericPassword,
+            kSecAttrAccount: key
+        ]
+        
+        SecItemDelete(query as CFDictionary)
+
+        let newQuery: [CFString: Any] = [
+            kSecClass: kSecClassGenericPassword,
+            kSecAttrAccount: key,
+            kSecValueData: value,
+            kSecAttrAccessible: kSecAttrAccessibleAfterFirstUnlock
+        ]
+        
+        let status = SecItemAdd(newQuery as CFDictionary, nil)
+        
+        if status == errSecSuccess {
+            print("Data saved successfully to Keychain")
+        } else {
+            print("Error saving data: \(status)")
+        }
+    }
+
+    func retrieveDataFromKeychain(key: String) -> Data? {
+        let query: [CFString: Any] = [
+            kSecClass: kSecClassGenericPassword,
+            kSecAttrAccount: key,
+            kSecReturnData: kCFBooleanTrue!,
+            kSecMatchLimit: kSecMatchLimitOne
+        ]
+        
+        var item: AnyObject?
+        let status = SecItemCopyMatching(query as CFDictionary, &item)
+        
+        if status == errSecSuccess, let data = item as? Data {
+            return data
+        } else {
+            print("Failed to retrieve data: \(status)")
+            return nil
+        }
+    }
+
 }
 

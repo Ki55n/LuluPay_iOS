@@ -31,11 +31,10 @@ class ScanViewController: UIViewController {
             return label
         }()
         
-        // Lulu SDK mock config (replace with actual details)
-        private let luluApiConfig = [
-            "baseUrl": "https://api.lulu.com", // Hypothetical
-            "accessToken": "your_access_token_here" // Replace with real token
-        ]
+//        private let luluApiConfig = [
+//            "baseUrl": "https://api.lulu.com", // Hypothetical
+//            "accessToken": "your_access_token_here" // Replace with real token
+//        ]
     var transactiondata : ConfirmTransactionModel?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,7 +97,6 @@ extension ScanViewController: PHPickerViewControllerDelegate {
     }
 }
 
-// QR Scanning and Payment
 extension ScanViewController {
 //    private func scanAndPay(from image: UIImage) {
 //        guard let ciImage = CIImage(image: image),
@@ -196,7 +194,6 @@ extension ScanViewController {
                 }
             } catch {
                 print("JSON decode failed, passing raw string")
-                // Fallback: Push raw string if not JSON
                 DispatchQueue.main.async {
                     let amountVC = AmountEntryViewController()
                     amountVC.transactionRef = rawString
